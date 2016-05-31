@@ -5,6 +5,8 @@
 #include "vec.h"
 #include "cam.h"
 #include "scene.h"
+#include "sphere.h"
+#include "ray.h"
 
 /*void		xyindent(double *x, double *y, double planewidth, double planeheight, double hres, double wres)*/
 /*{*/
@@ -46,6 +48,11 @@
 	/*return (v6);*/
 /*}*/
 
+void	w_byte(unsigned char b, int fd)
+{
+	write(fd, &b, 1);
+}
+
 int main(int ac, char **av)
 {
 	t_vec3d	camPos;
@@ -55,9 +62,13 @@ int main(int ac, char **av)
 	t_vec3d	rightvec;
 	t_cam	cam;
 	t_scene	scene;
+	t_ray	ray;
+	t_sphere	s;
 
-
-	vec_init(&cam.pos, 0.f, 0.f, -3.0f);
+	vec_init(&s.pos, 233.f, 290.f, 0.f);
+	s.radius = 100;
+	vec_init(&ray.dir, 0.f, 0.f, 1.f);
+	vec_init(&cam.pos, 0.f, 0.f, 0.0f);
 	vec_init(&cam.dirvec, 0.f, 0.f, 1.0f);
 	vec_init(&cam.upvec, 0.f, 1.f, 0.0f);
 	cam.wfov = 0.35;
@@ -71,17 +82,50 @@ int main(int ac, char **av)
 	xyratio(&xindent, &yindent, &cam, &scene);
 	char buf[256];
 
-	int fd = open(av[1], O_CREAT | O_WRONLY);
-	for (int x = 0 ; x< 50;++x) {
-		for (int y = 0 ; y< 30;++y) {
-			t_vec3d p = getplanepix(&cam, (double)x, (double)y, xindent, yindent);
-			vec_normalize(&p);
-			bzero(buf, 256);
-			sprintf(buf, "%lf,%lf,%lf\n", p.x, p.y, p.z);
-			write(fd, buf, strlen(buf));
-			printf("%d, %d\n", x, y);
+	if (ac < 2)
+		return 1;
+	int fptr = open(av[1], O_CREAT | O_WRONLY);
+	int width = 640;
+	int height = 480;
+	w_byte(0,fptr);
+	w_byte(0,fptr);
+	w_byte(2,fptr);                 //        [> uncompressed RGB <]
+	w_byte(0,fptr); w_byte(0,fptr);
+	w_byte(0,fptr); w_byte(0,fptr);
+	w_byte(0,fptr);
+	w_byte(0,fptr); w_byte(0,fptr);//           [> X origin <]
+	w_byte(0,fptr); w_byte(0,fptr);//           [> y origin <]
+	w_byte((width & 0x00FF),fptr);
+	w_byte((width & 0xFF00) / 256,fptr);
+	w_byte((height & 0x00FF),fptr);
+	w_byte((height & 0xFF00) / 256,fptr);
+	w_byte(24,fptr);//                        [> 24 bit bitmap <]
+	w_byte(0,fptr);
+
+	for (int x = 0 ; x< 480;++x) {
+		for (int y = 0 ; y< 640;++y) {
+			/*t_vec3d p = getplanepix(&cam, (double)x, (double)y, xindent, yindent);*/
+			/*vec_normalize(&p);*/
+			vec_init(&ray.pos, x, y, -1000.0f);
+			if (hit_sphere(&ray, (void*)&s))
+			{
+				w_byte((unsigned char)100,fptr);
+				w_byte((unsigned char)0,fptr);
+				w_byte((unsigned char)255,fptr);
+			}
+			else
+			{
+				w_byte((unsigned char)0,fptr);
+				w_byte((unsigned char)0,fptr);
+				w_byte((unsigned char)0,fptr);
+			}
+	
+			/*bzero(buf, 256);*/
+			/*sprintf(buf, "%lf,%lf,%lf\n", p.x, p.y, p.z);*/
+			/*write(fd, buf, strlen(buf));*/
+			/*printf("%d, %d\n", x, y);*/
 		}
 	}
-	close(fd);
+	close(fptr);
 	return 0;
 }

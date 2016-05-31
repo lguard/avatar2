@@ -48,6 +48,11 @@ t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
+double		vec_getsquare_length(const t_vec3d *a)
+{
+	return (a->x*a->x + a->y*a->y + a->z*a->z);
+}
+
 double		vec_dotproduct(const t_vec3d* a, const t_vec3d* b)
 {
 	return (a->x*b->x + a->y*b->y + a->z*b->z);
