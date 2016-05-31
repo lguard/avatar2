@@ -3,6 +3,8 @@
 
 # include "vec.h"
 # include "cam.h"
+# include "object.h"
+# include "list.h"
 
 typedef struct	s_scene
 {

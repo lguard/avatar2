@@ -73,10 +73,12 @@ void	list_dellast(t_list **root, void(*del)(void *))
 	ptr2 = ptr;
 	while (ptr->next)
 	{
-		ptr = ptr->next;
 		ptr2 = ptr;
+		ptr = ptr->next;
 	}
 	del(ptr->data);
+	ptr->next = NULL;
+	ptr->data = NULL;
 	free(ptr);
 	ptr2->next = NULL;
 }
