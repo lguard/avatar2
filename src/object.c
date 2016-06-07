@@ -1,17 +1,37 @@
 #include "object.h"
+#include "stdio.h"
 
-char	*getobjfun(t_obj *obj)
+void	hit_error(t_ray *ray, void *non, t_hit *hit)
 {
-	t_objfun a[] = { {'a', "sphere"}, {'b', "plane"} };
-	int		i = 0;
+	(void)ray;
+	(void)non;
+	(void)hit;
+	printf("Error: can't select object function %s\n", __FILE__);
+}
 
-	while (i < 2 && obj->type != a[i].type) {
-		++i;
+void	setobjfun(t_list *obj)
+{
+	while (obj)
+	{
+		switch (((t_obj*)(obj->data))->type)
+		{
+			case 's':
+				((t_obj*)(obj->data))->hit = &hit_sphere;
+				break ;
+			default :
+				((t_obj*)(obj->data))->hit = &hit_error;
+				break ;
+		}
+		obj = obj->next;
 	}
-	if (i < 2 && a[i].type == obj->type) {
-		return a[i].name;
-	}
-	else {
-		return NULL;
-	}
+}
+
+void	addobject(t_list **objlist, void *object, char type)
+{
+	t_obj	*new;
+
+	new = (t_obj*)malloc(sizeof(t_obj));
+	new->type = type;
+	new->object = object;
+	list_pushfront(objlist, (void*)new);
 }

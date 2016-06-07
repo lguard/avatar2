@@ -10,7 +10,7 @@ typedef struct	s_scene
 {
 	int		width;
 	int		height;
-	//t_list *obj;
+	t_list *obj;
 }				t_scene;
 
 #endif

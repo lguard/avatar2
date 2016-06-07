@@ -45,6 +45,8 @@ t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
 
 	c = vec_scale(b, (vec_dotproduct(a, b) * 2.f));
 	c = vec_sub(a, &c);
+	//todo pas sur que sa soit necessaire de normanlizer
+	vec_normalize(&c);
 	return (c);
 }
 

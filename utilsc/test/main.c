@@ -18,6 +18,7 @@ void	dell(void *data)
 
 int	main(void)
 {
+	t_list	*r2 = NULL;
 	t_list	*root = list_new("first");
 	plist(root);
 	list_pushback(&root, "second");
@@ -30,5 +31,10 @@ int	main(void)
 	plist(root);
 	list_delall(&root, &dell);
 	plist(root);
+	list_pushfront(&r2, "one");
+	list_pushfront(&r2, "two");
+	plist(r2);
+	list_delall(&r2, &dell);
+
 	return 0;
 }

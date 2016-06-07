@@ -1,21 +1,27 @@
 NAME = avatar2
 CC = gcc
 RM = rm -f
-LIB =  -L utilsc/ -lutilsc -I utilsc/include
-SDL = $(shell ~/.brew/Cellar/sdl2/2.0.4/bin/sdl2-config --libs) $(shell ~/.brew/Cellar/sdl2/2.0.4/bin/sdl2-config --cflags)
-CFLAGS = -pipe -I ./include
+LIB =  -L utilsc/ -lutilsc -lm $(shell sdl2-config --libs)
+INCLUDE = -I utilsc/include -I include $(shell sdl2-config --cflags)
+CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
 SRC = $(addprefix src/, $(shell ls src | grep .c -F))
+DEBUG =
+OPTI = #-O2
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
+debug: DEBUG += debug
+debug: CFLAGS += -g
+debug: $(NAME)
+
 $(NAME): $(OBJ)
-	make -j -C utilsc
-	$(CC) -O2 $(CFLAGS) $(LIB) $(SDL) -o $(NAME) $(OBJ) 
+	make -j -C utilsc $(DEBUG)
+	$(CC) $(OPTI) -o $(NAME) $(OBJ) $(CFLAGS) $(LIB)
 
 %.o: %.c
-	$(CC) -O2 -o $@ -c $< $(CFLAGS) -I utilsc/include $(shell ~/.brew/Cellar/sdl2/2.0.4/bin/sdl2-config --cflags)
+	$(CC) $(OPTI) -o $@ -c $< $(CFLAGS)
 
 clean:
 	make -C utilsc clean
