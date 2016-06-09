@@ -18,6 +18,7 @@ void	sdl_putpxl(t_env *e, int x, int y, unsigned char r, unsigned char g, unsign
 int		sdl_events(t_env *env);
 int		sdl_key_down(t_env *env);
 int		sdl_key_up(t_env *env);
+int		sdl_mouse_down(t_env *env);
 int		sdl_win_ev(t_env *env);
 int		sdl_main_loop(t_env *e);
 int		sdl_init(t_env *e);

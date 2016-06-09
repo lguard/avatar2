@@ -2,12 +2,12 @@
 #include <unistd.h>
 int		sdl_main_loop(t_env *e)
 {
-	SDL_RenderPresent(e->img);
 	while (1)
 	{
-		usleep(1);
+		usleep(100);
 		if (sdl_events(e))
 			return (0);
+		SDL_RenderPresent(e->img);
 	}
 }
 

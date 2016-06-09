@@ -8,6 +8,8 @@ int		sdl_events(t_env *env)
 			sdl_key_down(env);
 		if (env->event.type == SDL_KEYUP)
 			return (sdl_key_up(env));
+		if (env->event.type == SDL_MOUSEBUTTONDOWN)
+			sdl_mouse_down(env);
 		if (env->event.type == SDL_WINDOWEVENT)
 			sdl_win_ev(env);
 	}
@@ -24,6 +26,14 @@ int		sdl_key_up(t_env *env)
 {
 	if (env->event.key.keysym.sym == SDLK_ESCAPE)
 		return (1);
+	return (0);
+}
+
+
+int		sdl_mouse_down(t_env *env)
+{
+	/*single_trace(e, env->event.button.x, , env->event.button.y);*/
+	(void)env;
 	return (0);
 }
 

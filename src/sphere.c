@@ -29,7 +29,9 @@ void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit)
 	hit->didit = 1;
 	hit->mtl = &s->mtl;
 	hit->dir = ray->dir;
+	hit->reflect = s->mtl.reflect;
 	hit->normal = hit_normal(ray, s, hit);
+	hit->id = s->id;
 	return ;
 }
 // todo: metre toute les fonction de normal dans des list pour eviter de les calculer 2 fois

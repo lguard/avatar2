@@ -14,7 +14,7 @@ all: $(NAME)
 
 debug: DEBUG += debug
 debug: CFLAGS += -g
-debug: $(NAME)
+debug: re
 
 $(NAME): $(OBJ)
 	make -j -C utilsc $(DEBUG)

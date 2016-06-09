@@ -4,6 +4,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "sphere.h"
+# include "plane.h"
 # include "ray.h"
 # include "list.h"
 

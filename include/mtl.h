@@ -12,7 +12,7 @@ typedef struct	s_mtl
 {
 	t_color	color;
 	t_color	specular;
-	double	reflexion;
+	double	reflect;
 	double	power;
 }				t_mtl;
 

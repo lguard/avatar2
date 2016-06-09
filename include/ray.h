@@ -15,6 +15,7 @@ typedef struct	s_hit
 {
 	char	didit;
 	double	t;
+	double	reflect;
 	t_vec3d	dir;
 	t_vec3d	normal;
 	t_vec3d	hitpoint;

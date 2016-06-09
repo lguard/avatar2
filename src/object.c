@@ -18,6 +18,9 @@ void	setobjfun(t_list *obj)
 			case 's':
 				((t_obj*)(obj->data))->hit = &hit_sphere;
 				break ;
+			case 'p':
+				((t_obj*)(obj->data))->hit = &hit_plane;
+				break ;
 			default :
 				((t_obj*)(obj->data))->hit = &hit_error;
 				break ;

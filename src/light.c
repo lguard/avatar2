@@ -19,7 +19,7 @@ double	max(double a, double b)
 		return a;
 	return b;
 }
-#include <stdio.h>
+
 void	dotlight(t_vec3d *color, t_dotlight *light, t_hit *hit, t_list *objlst)
 {
 	t_hit	hitshadow = {0};
