@@ -101,6 +101,7 @@ int main(void)
 	t_dotlight	light;
 	t_dotlight	light2;
 	t_mtl		mtl;
+	t_color		ambiant;
 
 	vec_init(&s.pos, 233.f, 290.f, 400.f);
 	s.radius = 100;
@@ -109,6 +110,7 @@ int main(void)
 	vec_init(&ray.dir, 0.f, 0.f, 1.f);
 	scene.width = 640;
 	scene.height = 480;
+	ambiant.r = 1.3;ambiant.g = 1.3;ambiant.b = 1.3;
 	init_dotlight(&light, (t_vec3d){0.f, 0.f, -100.f}, (t_vec3d){0.5f, 0.5f, 0.72});
 	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_vec3d){0.4f, 0.6f, 0.0f});
 	mtl.color.r = 7.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
@@ -182,9 +184,15 @@ int main(void)
 					rc *= hit.reflect;
 				}
 				}
-				a[x][y].r = color.x + color2.x;
-				a[x][y].g = color.y + color2.y;
-				a[x][y].b = color.z + color2.z;
+				color.x += color2.x;
+				color.y += color2.y;
+				color.z += color2.z;
+				color.x = min(1.0f, color.x* ambiant.r);
+				color.y = min(1.0f, color.y* ambiant.g);
+				color.z = min(1.0f, color.z* ambiant.b);
+				a[x][y].r = color.x;
+				a[x][y].g = color.y;
+				a[x][y].b = color.z;
 				/*sdl_putpxl(&e, x, y, (unsigned char)(color.x*255.0f), (unsigned char)(color.y*255.0f), (unsigned char)(color.z*255.0f));*/
 			}
 		}
