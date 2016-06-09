@@ -2,8 +2,8 @@
 
 void	xyratio(double *x, double *y, const t_cam *cam, const t_scene *scene)
 {
-	*x = cam->wfov / scene->width;
-	*y = cam->hfov / scene->height;// peut etre a l'enver
+	*x = cam->wfov / (double)scene->width;
+	*y = cam->hfov / (double)scene->height;
 }
 
 t_vec3d	getupleft(t_cam *cam)
@@ -31,11 +31,13 @@ t_vec3d	getplanepix(t_cam *cam, double x, double y, double xindent, double yinde
 	t_vec3d	v2;
 	t_vec3d	v3;
 	t_vec3d	v4;
+	t_vec3d	v5;
 
 	v1 = vec_scale(&cam->rightvec, xindent * x);
 	v2 = vec_scale(&cam->upvec, yindent * y);
 	v3 = vec_add(&cam->viewplane_upleft, &v1);
 	v4 = vec_sub(&v3, &v2);
-	return v4;
+	v5 = vec_sub(&v4, &cam->pos);
+	return v5;
  /*viewPlaneUpLeft + rightVec*xIndent*x - upVec*yIndent*y*/
 }

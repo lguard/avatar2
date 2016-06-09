@@ -90,6 +90,7 @@ void	write_tga_header(int fd, t_scene *scene, t_color **src)
 int main(void)
 {
 	t_env		e;
+	t_cam		cam;
 	t_scene	scene;
 	t_ray	ray;
 	t_sphere	s;
@@ -102,17 +103,28 @@ int main(void)
 	t_dotlight	light2;
 	t_mtl		mtl;
 	t_color		ambiant;
+	double	xindent;
+	double	yindent;
 
+	vec_init(&cam.pos, 200.f, 200.f, -1000.f);
+	vec_init(&cam.dirvec, 0.f, 0.f, 1.f);
+	vec_init(&cam.upvec, 0.f, 1.f, 0.f);
+	cam.rightvec = vec_mul(&cam.dirvec, &cam.upvec);
+	cam.viewplane_upleft = getupleft(&cam);
+	cam.wfov = 0.640;
+	cam.hfov = 0.480;
+	cam.distance = 1.f;
 	vec_init(&s.pos, 233.f, 290.f, 400.f);
 	s.radius = 100;
-	vec_init(&s2.pos, 424.f, 290.f, 500.f);
+	vec_init(&s2.pos, 424.f, 290.f, 400.f);
 	s2.radius = 100;
 	vec_init(&ray.dir, 0.f, 0.f, 1.f);
 	scene.width = 640;
 	scene.height = 480;
-	ambiant.r = 1.3;ambiant.g = 1.3;ambiant.b = 1.3;
+	xyratio(&xindent, &yindent, &cam, &scene);
+	ambiant.r = 1.0;ambiant.g = 1.0;ambiant.b = 1.0;
 	init_dotlight(&light, (t_vec3d){0.f, 0.f, -100.f}, (t_vec3d){0.5f, 0.5f, 0.72});
-	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_vec3d){0.4f, 0.6f, 0.0f});
+	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_vec3d){1.0f, 1.0f, 1.0f});
 	mtl.color.r = 7.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 0.32f; mtl.specular.b = 0.0f; mtl.reflect = 0.4;
 	s.mtl = mtl;
@@ -122,13 +134,13 @@ int main(void)
 	s.id = 0;
 	s2.id = 1;
 	s2.mtl = mtl;
-	mtl.color.r = 0.2f; mtl.color.g = 0.0f; mtl.color.b = 0.0f;
-	mtl.specular.r = 0.5f; mtl.specular.g = 0.5f; mtl.specular.b = 0.5f; mtl.reflect = 0.7;
+	mtl.color.r = 0.5f; mtl.color.g = 0.5f; mtl.color.b = 0.5f;
+	mtl.specular.r = 0.5f; mtl.specular.g = 0.5f; mtl.specular.b = 0.5f; mtl.reflect = 1;
 	p1.mtl = mtl;
 	p1.id = 2;
-	vec_init(&p1.normal, 0.f, 0.f, -1.f);
+	vec_init(&p1.normal, 1.f, 0.f, -1.f);
 	vec_normalize(&p1.normal);
-	vec_init(&p1.pos, 0.f, 0.f, 500.f);
+	vec_init(&p1.pos, 300.f, 200.f, 800.f);
 	objlst = NULL;
 	lightlst = NULL;
 	addobject(&objlst, &s, 's');
@@ -146,11 +158,15 @@ int main(void)
 		for (int y = 0 ; y < scene.height;++y) {
 			t_vec3d color = {0.f, 0.f, 0.f};
 			t_vec3d color2 = {0.f, 0.f, 0.f};
+			t_vec3d planepix = getplanepix(&cam, x, y, xindent, yindent);
 			hit.t = 20000;
 			hit.didit = 0;
 			double	rc = 1.f;
-			vec_init(&ray.dir, 0.f, 0.f, 1.f);
-			vec_init(&ray.pos, x, y, -1000.0f);
+			vec_normalize(&planepix);
+			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
+			vec_init(&ray.pos, cam.pos.x, cam.pos.y, cam.pos.z);
+			/*vec_init(&ray.dir, 0, 0, 1.f);*/
+			/*vec_init(&ray.pos, x, y, -1000.0f);*/
 			ray_trace(&ray, objlst, &hit);
 			if (hit.didit)
 			{
@@ -163,8 +179,6 @@ int main(void)
 				color.x *= rc * (1 - hit.reflect);
 				color.y *= rc * (1 - hit.reflect);
 				color.z *= rc * (1 - hit.reflect);
-				if (hit.id != 2)
-				{
 				rc *= hit.reflect;
 				ray.dir = vec_reflect(&ray.dir, &hit.normal);
 				ray.pos = hit.hitpoint;
@@ -183,11 +197,10 @@ int main(void)
 					color2.z *= rc * (1 - hit.reflect);
 					rc *= hit.reflect;
 				}
-				}
 				color.x += color2.x;
 				color.y += color2.y;
 				color.z += color2.z;
-				color.x = min(1.0f, color.x* ambiant.r);
+				color.x = min(1.0f, color.x* ambiant.r);//remplacer color par la couleur du matriel pour l'illumination meme sans lumier et go relect dans une fonction/loop
 				color.y = min(1.0f, color.y* ambiant.g);
 				color.z = min(1.0f, color.z* ambiant.b);
 				a[x][y].r = color.x;

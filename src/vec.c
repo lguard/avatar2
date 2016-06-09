@@ -70,7 +70,7 @@ void		vec_init(t_vec3d* a, double x, double y, double z)
 
 void		vec_display(t_vec3d* a)
 {
-	printf("\033[32mx%lf | \033[31my%lf | \033[30mz%lf\033[0m\n", a->x, a->y, a->z);
+	printf("\033[32mx%lf | \033[31my%lf | \033[33mz%lf\033[0m\n", a->x, a->y, a->z);
 }
 
 void		vec_normalize(t_vec3d* a)
