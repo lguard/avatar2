@@ -2,7 +2,6 @@
 # define CAM_H
 
 #include "vec.h"
-#include "scene.h"
 
 typedef struct	s_cam
 {
@@ -17,7 +16,7 @@ typedef struct	s_cam
 }				t_cam;
 
 
-void	xyratio(double *, double *, const t_cam *, const t_scene *);
+void	xyratio(double *, double *, const t_cam *, const int width, const int height);
 t_vec3d	getupleft(t_cam *);
 t_vec3d	getplanepix(t_cam *, double, double, double, double);
 

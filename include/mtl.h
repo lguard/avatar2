@@ -1,12 +1,7 @@
 #ifndef MTL_H
 # define MTL_H
 
-typedef struct	s_color
-{
-	double	r;
-	double	g;
-	double	b;
-}				t_color;
+#include "color.h"
 
 typedef struct	s_mtl
 {

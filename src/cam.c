@@ -1,9 +1,9 @@
 #include "cam.h"
 
-void	xyratio(double *x, double *y, const t_cam *cam, const t_scene *scene)
+void	xyratio(double *x, double *y, const t_cam *cam, const int width, const int height)
 {
-	*x = cam->wfov / (double)scene->width;
-	*y = cam->hfov / (double)scene->height;
+	*x = cam->wfov / (double)width;
+	*y = cam->hfov / (double)height;
 }
 
 t_vec3d	getupleft(t_cam *cam)

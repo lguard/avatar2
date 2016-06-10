@@ -87,33 +87,81 @@ void	write_tga_header(int fd, t_scene *scene, t_color **src)
 	}
 }
 
+/*[>int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);<]*/
+/*[>write_tga_header(fd, &scene, b);<]*/
+
+void		light_and_reflect(t_ray ray, t_hit hit, t_scene *scene, t_color *colora)
+{
+	t_color colorb;
+	t_list	*ptr;
+	double	rc;
+
+	color_init(colora, 0, 0, 0);
+	rc = 1.f;
+	while(42)
+	{
+		color_init(&colorb, 0, 0, 0);
+		ray_trace(&ray, scene->obj, &hit);
+		if (!hit.didit)
+			break ;
+		ptr = scene->light;
+		while (ptr)
+		{
+			dotlight(&colorb, (t_dotlight*)ptr->data, &hit, scene->obj);
+			ptr = ptr->next;
+		}
+		color_scale(&colorb, (rc * (1- hit.reflect)));
+		rc *= hit.reflect;
+		ray.dir = vec_reflect(&ray.dir, &hit.normal);
+		ray.pos = hit.hitpoint;
+		hit.didit = 0;
+		color_add(colora, &colorb);
+	}
+}
+
+void	rt(t_scene *scene, t_color **a)
+{
+	t_hit hit;
+	t_ray ray;
+	double xindent;
+	double yindent;
+
+	xyratio(&xindent, &yindent, &scene->cam, scene->width, scene->height);
+	for (int x = 0 ; x < scene->width;++x) {
+		for (int y = 0 ; y < scene->height;++y) {
+			t_vec3d planepix = getplanepix(&scene->cam, x, y, xindent, yindent);
+			hit.t = 20000;
+			hit.didit = 0;
+			vec_normalize(&planepix);
+			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
+			vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
+			light_and_reflect(ray, hit, scene, &a[x][y]);
+		}
+	}
+}
+
 int main(void)
 {
 	t_env		e;
-	t_cam		cam;
 	t_scene	scene;
 	t_ray	ray;
 	t_sphere	s;
 	t_sphere	s2;
 	t_plane		p1;
-	t_list	*objlst;
-	t_list	*lightlst;
-	t_hit	hit;
 	t_dotlight	light;
 	t_dotlight	light2;
 	t_mtl		mtl;
-	t_color		ambiant;
 	double	xindent;
 	double	yindent;
 
-	vec_init(&cam.pos, 200.f, 200.f, -1000.f);
-	vec_init(&cam.dirvec, 0.f, 0.f, 1.f);
-	vec_init(&cam.upvec, 0.f, 1.f, 0.f);
-	cam.rightvec = vec_mul(&cam.dirvec, &cam.upvec);
-	cam.viewplane_upleft = getupleft(&cam);
-	cam.wfov = 0.640;
-	cam.hfov = 0.480;
-	cam.distance = 1.f;
+	vec_init(&scene.cam.pos, 200.f, 200.f, -1000.f);
+	vec_init(&scene.cam.dirvec, 0.f, 0.f, 1.f);
+	vec_init(&scene.cam.upvec, 0.f, 1.f, 0.f);
+	scene.cam.rightvec = vec_mul(&scene.cam.dirvec, &scene.cam.upvec);
+	scene.cam.viewplane_upleft = getupleft(&scene.cam);
+	scene.cam.wfov = 0.5;
+	scene.cam.hfov = 0.375;
+	scene.cam.distance = 1.f;
 	vec_init(&s.pos, 233.f, 290.f, 400.f);
 	s.radius = 100;
 	vec_init(&s2.pos, 424.f, 290.f, 400.f);
@@ -121,10 +169,8 @@ int main(void)
 	vec_init(&ray.dir, 0.f, 0.f, 1.f);
 	scene.width = 640;
 	scene.height = 480;
-	xyratio(&xindent, &yindent, &cam, &scene);
-	ambiant.r = 1.0;ambiant.g = 1.0;ambiant.b = 1.0;
-	init_dotlight(&light, (t_vec3d){0.f, 0.f, -100.f}, (t_vec3d){0.5f, 0.5f, 0.72});
-	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_vec3d){1.0f, 1.0f, 1.0f});
+	init_dotlight(&light, (t_vec3d){0.f, 0.f, -100.f}, (t_color){0.5f, 0.5f, 0.72});
+	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_color){1.0f, 1.0f, 1.0f});
 	mtl.color.r = 7.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 0.32f; mtl.specular.b = 0.0f; mtl.reflect = 0.4;
 	s.mtl = mtl;
@@ -141,83 +187,24 @@ int main(void)
 	vec_init(&p1.normal, 1.f, 0.f, -1.f);
 	vec_normalize(&p1.normal);
 	vec_init(&p1.pos, 300.f, 200.f, 800.f);
-	objlst = NULL;
-	lightlst = NULL;
-	addobject(&objlst, &s, 's');
-	addobject(&objlst, &s2, 's');
-	addobject(&objlst, &p1, 'p');
-	setobjfun(objlst);
-	list_pushfront(&lightlst, (void*)&light);
-	list_pushfront(&lightlst, (void*)&light2);
+	scene.obj = NULL;
+	scene.light = NULL;
+	addobject(&scene.obj, &s, 's');
+	addobject(&scene.obj, &s2, 's');
+	addobject(&scene.obj, &p1, 'p');
+	setobjfun(scene.obj);
+	list_pushfront(&scene.light, (void*)&light);
+	list_pushfront(&scene.light, (void*)&light2);
 	sdl_init(&e);
 	SDL_SetRenderDrawColor(e.img, 0, 0, 0, 255);
 	SDL_RenderClear(e.img);
 	t_color	 **a = create_buffer(scene.width, scene.height);
-	t_color	 **b = create_buffer(scene.width, scene.height);
+	rt(&scene, a);
 	for (int x = 0 ; x < scene.width;++x) {
 		for (int y = 0 ; y < scene.height;++y) {
-			t_vec3d color = {0.f, 0.f, 0.f};
-			t_vec3d color2 = {0.f, 0.f, 0.f};
-			t_vec3d planepix = getplanepix(&cam, x, y, xindent, yindent);
-			hit.t = 20000;
-			hit.didit = 0;
-			double	rc = 1.f;
-			vec_normalize(&planepix);
-			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
-			vec_init(&ray.pos, cam.pos.x, cam.pos.y, cam.pos.z);
-			/*vec_init(&ray.dir, 0, 0, 1.f);*/
-			/*vec_init(&ray.pos, x, y, -1000.0f);*/
-			ray_trace(&ray, objlst, &hit);
-			if (hit.didit)
-			{
-				t_list *ptr = lightlst;
-				while (ptr)
-				{
-					dotlight(&color, (t_dotlight*)ptr->data, &hit, objlst);
-					ptr = ptr->next;
-				}
-				color.x *= rc * (1 - hit.reflect);
-				color.y *= rc * (1 - hit.reflect);
-				color.z *= rc * (1 - hit.reflect);
-				rc *= hit.reflect;
-				ray.dir = vec_reflect(&ray.dir, &hit.normal);
-				ray.pos = hit.hitpoint;
-				hit.didit = 0;
-				ray_trace(&ray, objlst, &hit);
-				if (hit.didit)
-				{
-					t_list *ptr2 = lightlst;
-					while (ptr2)
-					{
-						dotlight(&color2, (t_dotlight*)ptr2->data, &hit, objlst);
-						ptr2 = ptr2->next;
-					}
-					color2.x *= rc * (1 - hit.reflect);
-					color2.y *= rc * (1 - hit.reflect);
-					color2.z *= rc * (1 - hit.reflect);
-					rc *= hit.reflect;
-				}
-				color.x += color2.x;
-				color.y += color2.y;
-				color.z += color2.z;
-				color.x = min(1.0f, color.x* ambiant.r);//remplacer color par la couleur du matriel pour l'illumination meme sans lumier et go relect dans une fonction/loop
-				color.y = min(1.0f, color.y* ambiant.g);
-				color.z = min(1.0f, color.z* ambiant.b);
-				a[x][y].r = color.x;
-				a[x][y].g = color.y;
-				a[x][y].b = color.z;
-				/*sdl_putpxl(&e, x, y, (unsigned char)(color.x*255.0f), (unsigned char)(color.y*255.0f), (unsigned char)(color.z*255.0f));*/
-			}
+				sdl_putpxl(&e, x, scene.height - y, (unsigned char)(a[x][y].r*255.0f), (unsigned char)(a[x][y].g*255.0f), (unsigned char)(a[x][y].b*255.0f));
 		}
 	}
-	AA(a, b, scene.width, scene.height);
-	for (int x = 0 ; x < scene.width;++x) {
-		for (int y = 0 ; y < scene.height;++y) {
-				sdl_putpxl(&e, x, scene.height - y, (unsigned char)(b[x][y].r*255.0f), (unsigned char)(b[x][y].g*255.0f), (unsigned char)(b[x][y].b*255.0f));
-		}
-	}
-	/*int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);*/
-	/*write_tga_header(fd, &scene, b);*/
 	sdl_main_loop(&e);
 	sdl_quit(&e);
 	return 0;
