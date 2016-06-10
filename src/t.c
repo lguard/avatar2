@@ -204,20 +204,20 @@ int main(void)
 	sdl_init(&e);
 	SDL_SetRenderDrawColor(e.img, 0, 0, 0, 255);
 	SDL_RenderClear(e.img);
-	int aa = 1;
+	int aa = 2;
 	scene.render_width = 640;
 	scene.render_height = 480;
 	scene.width = scene.render_width*aa;
-	scene.height = scene.render_width *aa;
-	/*t_buffer buff;*/
-	/*buffer_init(&buff);*/
-	/*buffer_reload(&buff, scene.width, scene.height, aa);*/
-	/*rt(&scene, buff.b);*/
-	/*buffer_ss(&buff);*/
-	/*render(&e, &scene, buff.a);*/
-	t_color	 **a = create_buffer(scene.width, scene.height);
-	rt(&scene, a);
-	render(&e, &scene, a);
+	scene.height = scene.render_height *aa;
+	t_buffer buff;
+	buffer_init(&buff);
+	buffer_reload(&buff, scene.render_width, scene.render_height, aa);
+	rt(&scene, buff.b);
+	buffer_ss(&buff);
+	render(&e, &scene, buff.a);
+	/*t_color	 **a = create_buffer(scene.width, scene.height);*/
+	/*rt(&scene, a);*/
+	/*render(&e, &scene, a);*/
 	sdl_main_loop(&e);
 	sdl_quit(&e);
 	return 0;
