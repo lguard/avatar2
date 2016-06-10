@@ -151,8 +151,6 @@ int main(void)
 	t_dotlight	light;
 	t_dotlight	light2;
 	t_mtl		mtl;
-	double	xindent;
-	double	yindent;
 
 	vec_init(&scene.cam.pos, 200.f, 200.f, -1000.f);
 	vec_init(&scene.cam.dirvec, 0.f, 0.f, 1.f);

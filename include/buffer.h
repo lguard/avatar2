@@ -17,6 +17,8 @@ void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa);
 void	buffer_free(t_buffer *buff);
 void	buffer_new(t_color **a, size_t width, size_t height);
 void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa);
+void	buffer_ss(t_buffer *buff);
+void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, double ratio);
 int		buffer_check_aa(int aa);
 
 #endif /* BUFFER_H */

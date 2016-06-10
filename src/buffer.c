@@ -64,6 +64,44 @@ void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 	buff->aa = aa;
 }
 
+void	buffer_ss(t_buffer *buff)
+{
+	size_t	x;
+	size_t	y;
+	double	ratio;
+
+	ratio = 1.f / (double)(buff->aa * buff->aa);
+	x = 0;
+	while (x < buff->width)
+	{
+		y = 0;
+		while (y < buff->height) {
+			buffer_somme_color(buff, x, y, ratio);
+		}
+	}
+}
+
+void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, double ratio)
+{
+	size_t	x;
+	size_t	y;
+
+	x = i * buff->aa;
+	color_init(&buff->a[i][j], 0, 0 ,0);
+	while (x < (i * buff->aa + buff->aa))//todo a opti d'urgence
+	{
+		y = j * buff->aa;
+		while (y < (j * buff->aa + buff->aa)) {
+			buff->a[i][j].r+= buff->b[x][y].r * ratio;
+			buff->a[i][j].g+= buff->b[x][y].g * ratio;
+			buff->a[i][j].b+= buff->b[x][y].b * ratio;
+			++y;
+		}
+		++x;
+	}
+	return ;
+}
+
 int		buffer_check_aa(int aa)
 {
 	if ((aa == 1) || (aa == 2) || (aa == 4) || (aa == 8) || (aa == 16))
