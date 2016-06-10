@@ -10,6 +10,8 @@ typedef struct	s_scene
 {
 	int		width;
 	int		height;
+	int		render_width;
+	int		render_height;
 	t_list *obj;
 	t_list *light;
 	t_color ambiant;

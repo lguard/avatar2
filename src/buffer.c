@@ -1,4 +1,5 @@
 #include "buffer.h"
+#include "stdio.h"
 
 void	buffer_init(t_buffer *buff)
 {
@@ -18,31 +19,18 @@ void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa)
 
 void	buffer_free(t_buffer *buff)
 {
-	size_t		i;
-
-	i = 0;
-	while (i < buff->width)
-	{
-		free(buff->a[i]);
-		++i;
-	}
+	free(buff->a[0]);
 	free(buff->a);
-	buff->a = NULL;
-	i = 0;
-	while (i < buff->width * buff->aa)
-	{
-		free(buff->b[i]);
-		++i;
-	}
+	free(buff->b[0]);
 	free(buff->b);
-	buff->b = NULL;
 }
 
-void	buffer_new(t_color **a, size_t width, size_t height)
+t_color	**buffer_new(size_t width, size_t height)
 {
 	t_color		*b;
+	t_color		**a;
 	size_t	i;
-
+	printf("new buffer x%u, y%u\n", width, height);
 	i = 0;
 	b = (t_color*)malloc(sizeof(t_color) * width * height);
 	a = (t_color**)malloc(sizeof(t_color*) * width);
@@ -52,13 +40,14 @@ void	buffer_new(t_color **a, size_t width, size_t height)
 		a[i] = b + (i*height);
 		++i;
 	}
+	return a;
 }
 
 void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 {
 	aa = buffer_check_aa(aa);
-	buffer_new(buff->a, width, height);
-	buffer_new(buff->b, width*aa, height*aa);
+	buff->a = buffer_new(width, height);
+	buff->b = buffer_new(width*aa, height*aa);
 	buff->width = width;
 	buff->height = height;
 	buff->aa = aa;
@@ -77,7 +66,9 @@ void	buffer_ss(t_buffer *buff)
 		y = 0;
 		while (y < buff->height) {
 			buffer_somme_color(buff, x, y, ratio);
+			++y;
 		}
+		++x;
 	}
 }
 
@@ -107,4 +98,27 @@ int		buffer_check_aa(int aa)
 	if ((aa == 1) || (aa == 2) || (aa == 4) || (aa == 8) || (aa == 16))
 		return aa;
 	return 1;
+}
+
+void	buffer_test(void)
+{
+	t_buffer buff;
+	buffer_init(&buff);
+	buffer_reload(&buff, 2, 2, 2);
+	printf("[%lf][%lf]\n", buff.a[0][0].r, buff.a[0][1].r);
+	printf("[%lf][%lf]\n\n", buff.a[1][0].r, buff.a[1][1].r);
+
+	buff.b[0][0].r = 1, buff.b[0][1].r = 2; buff.b[0][2].r = 3; buff.b[0][3].r = 4;
+	buff.b[1][0].r = 1, buff.b[1][1].r = 2; buff.b[1][2].r = 3; buff.b[1][3].r = 4;
+	buff.b[2][0].r = 1, buff.b[2][1].r = 2; buff.b[2][2].r = 3; buff.b[2][3].r = 4;
+	buff.b[3][0].r = 1, buff.b[3][1].r = 2; buff.b[3][2].r = 3; buff.b[3][3].r = 4;
+	printf("[%lf][%lf][%lf][%lf]\n", buff.b[0][0].r, buff.b[0][1].r, buff.b[0][2].r, buff.b[0][3].r);
+	printf("[%lf][%lf][%lf][%lf]\n", buff.b[1][0].r, buff.b[1][1].r, buff.b[1][2].r, buff.b[1][3].r);
+	printf("[%lf][%lf][%lf][%lf]\n", buff.b[2][0].r, buff.b[2][1].r, buff.b[2][2].r, buff.b[2][3].r);
+	printf("[%lf][%lf][%lf][%lf]\n\n", buff.b[3][0].r, buff.b[3][1].r, buff.b[3][2].r, buff.b[3][3].r);
+	buffer_ss(&buff);
+	printf("[%lf][%lf]\n", buff.a[0][0].r, buff.a[0][1].r);
+	printf("[%lf][%lf]\n\n", buff.a[1][0].r, buff.a[1][1].r);
+	
+	buffer_free(&buff);
 }

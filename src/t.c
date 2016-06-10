@@ -11,6 +11,7 @@
 #include "light.h"
 #include "mysdl.h"
 #include "mtl.h"
+#include "buffer.h"
 
 void		AA(t_color **src, t_color **rcv, size_t x, size_t y)
 {
@@ -140,6 +141,15 @@ void	rt(t_scene *scene, t_color **a)
 	}
 }
 
+void	render(t_env *e, t_scene *scene, t_color **a)
+{
+	for (int x = 0 ; x < scene->render_width;++x) {
+		for (int y = 0 ; y < scene->render_height;++y) {
+				sdl_putpxl(e, x, (scene->render_height) - y, (unsigned char)( a[x][y].r*255.0f), (unsigned char)( a[x][y].g*255.0f), (unsigned char)( a[x][y].b*255.0f));
+		}
+	}
+}
+
 int main(void)
 {
 	t_env		e;
@@ -165,8 +175,6 @@ int main(void)
 	vec_init(&s2.pos, 424.f, 290.f, 400.f);
 	s2.radius = 100;
 	vec_init(&ray.dir, 0.f, 0.f, 1.f);
-	scene.width = 640;
-	scene.height = 480;
 	init_dotlight(&light, (t_vec3d){0.f, 0.f, -100.f}, (t_color){0.5f, 0.5f, 0.72});
 	init_dotlight(&light2, (t_vec3d){100.f, 140.f, -1000.f}, (t_color){1.0f, 1.0f, 1.0f});
 	mtl.color.r = 7.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
@@ -196,13 +204,20 @@ int main(void)
 	sdl_init(&e);
 	SDL_SetRenderDrawColor(e.img, 0, 0, 0, 255);
 	SDL_RenderClear(e.img);
+	int aa = 1;
+	scene.render_width = 640;
+	scene.render_height = 480;
+	scene.width = scene.render_width*aa;
+	scene.height = scene.render_width *aa;
+	/*t_buffer buff;*/
+	/*buffer_init(&buff);*/
+	/*buffer_reload(&buff, scene.width, scene.height, aa);*/
+	/*rt(&scene, buff.b);*/
+	/*buffer_ss(&buff);*/
+	/*render(&e, &scene, buff.a);*/
 	t_color	 **a = create_buffer(scene.width, scene.height);
 	rt(&scene, a);
-	for (int x = 0 ; x < scene.width;++x) {
-		for (int y = 0 ; y < scene.height;++y) {
-				sdl_putpxl(&e, x, scene.height - y, (unsigned char)(a[x][y].r*255.0f), (unsigned char)(a[x][y].g*255.0f), (unsigned char)(a[x][y].b*255.0f));
-		}
-	}
+	render(&e, &scene, a);
 	sdl_main_loop(&e);
 	sdl_quit(&e);
 	return 0;
