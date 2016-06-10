@@ -30,7 +30,6 @@ t_color	**buffer_new(size_t width, size_t height)
 	t_color		*b;
 	t_color		**a;
 	size_t	i;
-	printf("new buffer x%u, y%u\n", width, height);
 	i = 0;
 	b = (t_color*)malloc(sizeof(t_color) * width * height);
 	a = (t_color**)malloc(sizeof(t_color*) * width);

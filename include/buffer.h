@@ -3,6 +3,7 @@
 
 # include "color.h"
 # include "stdlib.h"
+
 typedef struct	s_buffer
 {
 	t_color **a;

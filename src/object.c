@@ -38,3 +38,9 @@ void	addobject(t_list **objlist, void *object, char type)
 	new->object = object;
 	list_pushfront(objlist, (void*)new);
 }
+
+void	delete_object(void *obj)
+{
+	(void)obj;
+	/*free(obj);*/
+}

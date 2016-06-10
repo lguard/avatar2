@@ -12,6 +12,9 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
+opti: OPTI += -O2
+opti: re
+
 debug: DEBUG += debug
 debug: CFLAGS += -g
 debug: re

@@ -18,5 +18,6 @@ typedef struct	s_obj
 void	setobjfun(t_list *obj);
 void	hit_error(t_ray *ray, void *non, t_hit *hit);
 void	addobject(t_list **objlist, void *object, char type);
+void	delete_object(void *obj);
 
 #endif

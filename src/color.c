@@ -1,6 +1,5 @@
 #include "color.h"
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
 
 void	color_scale(t_color *color, double x)
 {

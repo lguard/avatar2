@@ -1,6 +1,6 @@
 #include "vec.h"
 
-t_vec3d		vec_add(const t_vec3d* a, const t_vec3d* b)
+inline t_vec3d		vec_add(const t_vec3d* a, const t_vec3d* b)
 {
 	t_vec3d	c;
 
@@ -9,7 +9,7 @@ t_vec3d		vec_add(const t_vec3d* a, const t_vec3d* b)
 	c.z = a->z + b->z;
 	return (c);
 }
-t_vec3d		vec_sub(const t_vec3d* a, const t_vec3d* b)
+inline t_vec3d		vec_sub(const t_vec3d* a, const t_vec3d* b)
 {
 	t_vec3d	c;
 
@@ -19,7 +19,7 @@ t_vec3d		vec_sub(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
-t_vec3d		vec_mul(const t_vec3d* a, const t_vec3d* b)
+inline t_vec3d		vec_mul(const t_vec3d* a, const t_vec3d* b)
 {
 	t_vec3d	c;
 
@@ -29,7 +29,7 @@ t_vec3d		vec_mul(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
-t_vec3d		vec_scale(const t_vec3d* a, const double f)
+inline t_vec3d		vec_scale(const t_vec3d* a, const double f)
 {
 	t_vec3d	c;
 
@@ -39,7 +39,7 @@ t_vec3d		vec_scale(const t_vec3d* a, const double f)
 	return (c);
 }
 
-t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
+inline t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
 {
 	t_vec3d	c;
 
@@ -50,17 +50,17 @@ t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
-double		vec_getsquare_length(const t_vec3d *a)
+inline double		vec_getsquare_length(const t_vec3d *a)
 {
 	return (a->x*a->x + a->y*a->y + a->z*a->z);
 }
 
-double		vec_dotproduct(const t_vec3d* a, const t_vec3d* b)
+inline double		vec_dotproduct(const t_vec3d* a, const t_vec3d* b)
 {
 	return (a->x*b->x + a->y*b->y + a->z*b->z);
 }
 
-void		vec_init(t_vec3d* a, double x, double y, double z)
+inline void		vec_init(t_vec3d* a, double x, double y, double z)
 {
 	a->x = x;
 	a->y = y;
@@ -73,7 +73,7 @@ void		vec_display(t_vec3d* a)
 	printf("\033[32mx%lf | \033[31my%lf | \033[33mz%lf\033[0m\n", a->x, a->y, a->z);
 }
 
-void		vec_normalize(t_vec3d* a)
+inline void		vec_normalize(t_vec3d* a)
 {
 	double	mag;
 

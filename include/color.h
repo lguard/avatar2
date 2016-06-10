@@ -1,6 +1,10 @@
 #ifndef COLOR_H
 # define COLOR_H
 
+# ifndef MIN
+#  define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+
 typedef struct	s_color
 {
 	double	r;

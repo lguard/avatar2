@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/time.h>
 #include "vec.h"
 #include "cam.h"
 #include "scene.h"
@@ -152,7 +153,7 @@ void	render(t_env *e, t_scene *scene, t_color **a)
 
 int main(void)
 {
-	t_env		e;
+	/*t_env		e;*/
 	t_scene	scene;
 	t_ray	ray;
 	t_sphere	s;
@@ -201,10 +202,10 @@ int main(void)
 	setobjfun(scene.obj);
 	list_pushfront(&scene.light, (void*)&light);
 	list_pushfront(&scene.light, (void*)&light2);
-	sdl_init(&e);
-	SDL_SetRenderDrawColor(e.img, 0, 0, 0, 255);
-	SDL_RenderClear(e.img);
-	int aa = 2;
+	/*sdl_init(&e);*/
+	/*SDL_SetRenderDrawColor(e.img, 0, 0, 0, 255);*/
+	/*SDL_RenderClear(e.img);*/
+	int aa = 1;
 	scene.render_width = 640;
 	scene.render_height = 480;
 	scene.width = scene.render_width*aa;
@@ -212,13 +213,27 @@ int main(void)
 	t_buffer buff;
 	buffer_init(&buff);
 	buffer_reload(&buff, scene.render_width, scene.render_height, aa);
+	struct timeval time;
+	if(gettimeofday( &time, 0 ))
+		return -1;
+	long cur_time = 1000000 * time.tv_sec + time.tv_usec;
+	double sec1 = cur_time / 1000000.0;
 	rt(&scene, buff.b);
-	buffer_ss(&buff);
-	render(&e, &scene, buff.a);
-	/*t_color	 **a = create_buffer(scene.width, scene.height);*/
-	/*rt(&scene, a);*/
-	/*render(&e, &scene, a);*/
-	sdl_main_loop(&e);
-	sdl_quit(&e);
+	if (aa == 1) {
+		/*render(&e, &scene, buff.b);*/
+	}
+	else {
+		buffer_ss(&buff);
+		/*render(&e, &scene, buff.a);*/
+	}
+	if(gettimeofday( &time, 0 ))
+		return -1;
+	cur_time = 1000000 * time.tv_sec + time.tv_usec;
+	double sec2 = cur_time / 1000000.0;
+	printf("%f\n", sec2-sec1);
+	/*sdl_main_loop(&e);*/
+	/*sdl_quit(&e);*/
+	list_delall(&scene.obj, delete_object);
+	list_delall(&scene.light, delete_light);
 	return 0;
 }

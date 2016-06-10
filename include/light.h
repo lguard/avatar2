@@ -6,7 +6,13 @@
 # include "raytrace.h"
 # include "mtl.h"
 
-#define invsqrtf(x) (1.0f / sqrtf(x))
+# ifndef MIN
+#  define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+
+# ifndef MAX
+#  define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
 
 typedef struct	s_dotlight
 {
@@ -16,6 +22,6 @@ typedef struct	s_dotlight
 
 void	init_dotlight(t_dotlight *light, t_vec3d pos, t_color color);
 void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst);
-double	min(double a, double b);
+void	delete_light(void *obj);
 
 #endif /* LIGHT_H */
