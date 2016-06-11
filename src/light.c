@@ -41,10 +41,19 @@ void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst)
 
 		float phongTerm = MAX(vec_dotproduct(&phongDir, &hit->dir), 0.0f) ;
 		phongTerm = 1.f * powf(phongTerm, 60.f);
-		color->r= MIN(1.f, color->r + phongTerm * light->color.r);
-		color->g= MIN(1.f, color->g + phongTerm * light->color.g);
-		color->b= MIN(1.f, color->b + phongTerm * light->color.b);
+		color->r= MIN(1.f, color->r + phongTerm * light->color.r * hit->mtl->specular.r);
+		color->g= MIN(1.f, color->g + phongTerm * light->color.g * hit->mtl->specular.g);
+		color->b= MIN(1.f, color->b + phongTerm * light->color.b * hit->mtl->specular.b);
 	}
+}
+
+void	addolight(t_list **lightlist, t_dotlight *light)
+{
+	t_dotlight	*new;
+
+	new = (t_dotlight*)malloc(sizeof(t_dotlight));
+	memcpy(new, light, sizeof(t_dotlight));
+	list_pushfront(lightlist, (void*)new);
 }
 
 void	delete_light(void *obj)

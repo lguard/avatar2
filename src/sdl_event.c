@@ -1,5 +1,7 @@
 #include "mysdl.h"
 
+void	single_rt(int x, int y);
+
 int		sdl_events(t_env *env)
 {
 	while (SDL_PollEvent(&env->event))
@@ -32,7 +34,7 @@ int		sdl_key_up(t_env *env)
 
 int		sdl_mouse_down(t_env *env)
 {
-	/*single_trace(e, env->event.button.x, , env->event.button.y);*/
+	/*single_rt(env->event.button.x , env->event.button.y);*/
 	(void)env;
 	return (0);
 }

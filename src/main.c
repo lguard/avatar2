@@ -1,7 +1,15 @@
 #include "mysdl.h"
 #include <unistd.h>
+
+int mainrt(t_env *e);
+
 int		sdl_main_loop(t_env *e)
 {
+	sdl_init(e);
+	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
+	SDL_RenderClear(e->img);
+
+	mainrt(e);
 	while (1)
 	{
 		usleep(100);
@@ -9,6 +17,7 @@ int		sdl_main_loop(t_env *e)
 			return (0);
 		SDL_RenderPresent(e->img);
 	}
+	sdl_quit(e);
 }
 
 int		sdl_init(t_env *e)
@@ -25,4 +34,12 @@ void	sdl_quit(t_env *e)
 {
 	SDL_DestroyWindow(e->sc);
 	SDL_Quit();
+}
+
+int main(void)
+{
+	t_env	e;
+
+	sdl_main_loop(&e);
+	return 0;
 }

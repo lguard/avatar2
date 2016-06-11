@@ -14,7 +14,7 @@ void		hit_plane(t_ray *ray, void *plane, t_hit *hit)
 	a = vec_sub(&p->pos, &ray->pos);
 	t = vec_dotproduct(&p->normal, &a);
 	t /= j;
-	if (t < 0.1f && t < hit->t)
+	if (t < 0.1f || t > hit->t)
 		return ;
 	hit->t = t;
 	hit->didit = 1;
