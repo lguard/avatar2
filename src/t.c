@@ -251,7 +251,7 @@ int mainrt(t_env *e)
 	addolight(&scene.light,&light2);
 	/*list_pushfront(&scene.light, (void*)&light);*/
 	/*list_pushfront(&scene.light, (void*)&light2);*/
-	int aa = 8;
+	int aa = 2;
 	scene.render_width = 640;
 	scene.render_height = 480;
 	scene.width = scene.render_width*aa;
