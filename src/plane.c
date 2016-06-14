@@ -3,8 +3,8 @@
 void		hit_plane(t_ray *ray, void *plane, t_hit *hit)
 {
 	t_plane	*p;
-	double	t;
-	double	j;
+	FLOAT	t;
+	FLOAT	j;
 	p = (t_plane*)plane;
 	t_vec3d	a;
 

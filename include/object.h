@@ -7,6 +7,7 @@
 # include "plane.h"
 # include "ray.h"
 # include "list.h"
+# include "rt.h"
 
 typedef struct	s_obj
 {

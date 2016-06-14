@@ -96,7 +96,7 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora)
 {
 	t_color colorb;
 	t_list	*ptr;
-	double	rc;
+	FLOAT	rc;
 
 	color_init(colora, 0, 0, 0);
 	rc = 1.f;
@@ -130,8 +130,8 @@ void	rt(t_scene *scene, t_color **a)
 {
 	t_hit hit;
 	t_ray ray;
-	double xindent;
-	double yindent;
+	FLOAT xindent;
+	FLOAT yindent;
 
 	xyratio(&xindent, &yindent, &scene->cam, scene->width, scene->height);
 	for (int x = 0 ; x < scene->width;++x) {
@@ -151,8 +151,8 @@ void	single_rt(t_scene *scene, int x, int y)
 {
 	t_hit hit;
 	t_ray ray;
-	double xindent;
-	double yindent;
+	FLOAT xindent;
+	FLOAT yindent;
 	t_color color;
 
 	xyratio(&xindent, &yindent, &scene->cam, scene->width, scene->height);
@@ -171,15 +171,29 @@ void	render(t_env *e, t_scene *scene, t_color **a)
 {
 	for (int x = 0 ; x < scene->render_width;++x) {
 		for (int y = 0 ; y < scene->render_height;++y) {
-				sdl_putpxl(e, scene->render_width - x, (scene->render_height) - y, (unsigned char)( a[x][y].r*255.0f), (unsigned char)( a[x][y].g*255.0f), (unsigned char)( a[x][y].b*255.0f));
+				sdl_putpxl(e, x, y, (unsigned char)( a[x][y].r*255.0f), (unsigned char)( a[x][y].g*255.0f), (unsigned char)( a[x][y].b*255.0f));
 		}
 	}
+}
+
+void	init_sphere(t_scene *sc, FLOAT radius, t_vec3d pos, t_mtl mtl)
+{
+	static int i = 0;
+	t_sphere	*s;
+
+	s = malloc(sizeof(t_sphere));
+	s->pos = pos;
+	s->radius = radius;
+	s->mtl = mtl;
+	s->id = i;
+	addobject(&sc->obj, s, 's');
+	printf("add - %p\n", s);
+	++i;
 }
 
 int mainrt(t_env *e)
 {
 	t_scene	scene;
-	t_ray	ray;
 	t_sphere	s;
 	t_sphere	s2;
 	t_plane		p1;
@@ -190,19 +204,20 @@ int mainrt(t_env *e)
 	t_dotlight	light2;
 	t_mtl		mtl;
 
-	vec_init(&scene.cam.pos, 250.f, 10.f, -1000.f);
+	scene.obj = NULL;
+	scene.light = NULL;
+	vec_init(&scene.cam.pos, 250.f, 10.f, -2000.f);
 	vec_init(&scene.cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene.cam.upvec, 0.f, 1.f, 0.f);
+	scene.cam.wfov = 1.0;
+	scene.cam.hfov = 1.0;
 	scene.cam.rightvec = vec_mul(&scene.cam.dirvec, &scene.cam.upvec);
-	scene.cam.viewplane_upleft = getupleft(&scene.cam);
-	scene.cam.wfov = 0.5;
-	scene.cam.hfov = 0.375;
+	scene.cam.viewplane_upleft = getupleft(&scene.cam, scene.cam.wfov, scene.cam.hfov);
 	scene.cam.distance = 1.f;
 	vec_init(&s.pos, 0.f, 170.f, 700.f);
 	s.radius = 100;
-	vec_init(&s2.pos, 300.f, 190.f, 500.f);
+	vec_init(&s2.pos, 400.f, 190.f, 500.f);
 	s2.radius = 100;
-	vec_init(&ray.dir, 0.f, 0.f, 1.f);
 	init_dotlight(&light, (t_vec3d){100.f, 50.f, 600.f}, (t_color){1.0f, 1.0f, 1.f});
 	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
@@ -214,6 +229,7 @@ int mainrt(t_env *e)
 	s.id = 0;
 	s2.id = 1;
 	s2.mtl = mtl;
+	init_sphere(&scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);
 	mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0;
 	p1.mtl = mtl;
@@ -238,10 +254,8 @@ int mainrt(t_env *e)
 	vec_init(&p4.normal, 0.f, 1.f, 0.f);
 	vec_normalize(&p4.normal);
 	vec_init(&p4.pos, 300.f, -600.f, 800.f);
-	scene.obj = NULL;
-	scene.light = NULL;
 	addobject(&scene.obj, &s, 's');
-	addobject(&scene.obj, &s2, 's');
+	/*addobject(&scene.obj, &s2, 's');*/
 	addobject(&scene.obj, &p1, 'p');
 	addobject(&scene.obj, &p2, 'p');
 	addobject(&scene.obj, &p3, 'p');
@@ -249,11 +263,9 @@ int mainrt(t_env *e)
 	setobjfun(scene.obj);
 	addolight(&scene.light,&light);
 	addolight(&scene.light,&light2);
-	/*list_pushfront(&scene.light, (void*)&light);*/
-	/*list_pushfront(&scene.light, (void*)&light2);*/
-	int aa = 2;
-	scene.render_width = 640;
-	scene.render_height = 480;
+	int aa = 128;
+	scene.render_width = 1000;
+	scene.render_height = 1000;
 	scene.width = scene.render_width*aa;
 	scene.height = scene.render_height *aa;
 	t_buffer buff;
@@ -279,8 +291,8 @@ int mainrt(t_env *e)
 	printf("%f\n", sec2-sec1);
 	list_delall(&scene.obj, delete_object);
 	list_delall(&scene.light, delete_light);
-	int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);
-	write_tga_header(fd, &scene, buff.a);
-	close(fd);
+	/*int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);*/
+	/*write_tga_header(fd, &scene, buff.a);*/
+	/*close(fd);*/
 	return 0;
 }

@@ -1,9 +1,10 @@
 #ifndef RAY_H
 # define RAY_H
 
-#include "vec.h"
-#include "list.h"
-#include "mtl.h"
+# include "vec.h"
+# include "list.h"
+# include "mtl.h"
+# include "rt.h"
 
 typedef struct	s_ray
 {
@@ -14,8 +15,8 @@ typedef struct	s_ray
 typedef struct	s_hit
 {
 	char	didit;
-	double	t;
-	double	reflect;
+	FLOAT	t;
+	FLOAT	reflect;
 	t_vec3d	dir;
 	t_vec3d	normal;
 	t_vec3d	hitpoint;

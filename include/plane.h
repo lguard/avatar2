@@ -4,6 +4,7 @@
 # include "vec.h"
 # include "ray.h"
 # include "mtl.h"
+# include "rt.h"
 
 typedef struct	s_plane
 {

@@ -25,7 +25,7 @@ int		sdl_init(t_env *e)
 	SDL_Init(SDL_INIT_VIDEO);
 	e->sc = SDL_CreateWindow("wold3d",
 	SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-	640, 480, SDL_WINDOW_RESIZABLE);
+	1000, 1000, SDL_WINDOW_RESIZABLE);
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
 	return (0);
 }

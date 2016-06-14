@@ -1,8 +1,9 @@
 #ifndef RAYTRACE_H
 # define RAYTRACE_H
 
-#include "object.h"
-#include "ray.h"
+# include "object.h"
+# include "ray.h"
+# include "rt.h"
 
 void		ray_trace(t_ray *ray, t_list *obj, t_hit *hit);
 

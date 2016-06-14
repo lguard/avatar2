@@ -2,10 +2,10 @@
 
 void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit)
 {
-	double		t0;
-	double		t1;
-	double		b;
-	double		d;
+	FLOAT		t0;
+	FLOAT		t1;
+	FLOAT		b;
+	FLOAT		d;
 	t_vec3d		r;
 	t_sphere	*s;
 

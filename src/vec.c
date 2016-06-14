@@ -29,7 +29,7 @@ inline t_vec3d		vec_mul(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
-inline t_vec3d		vec_scale(const t_vec3d* a, const double f)
+inline t_vec3d		vec_scale(const t_vec3d* a, const FLOAT f)
 {
 	t_vec3d	c;
 
@@ -50,17 +50,17 @@ inline t_vec3d		vec_reflect(const t_vec3d* a, const t_vec3d* b)
 	return (c);
 }
 
-inline double		vec_getsquare_length(const t_vec3d *a)
+inline FLOAT		vec_getsquare_length(const t_vec3d *a)
 {
 	return (a->x*a->x + a->y*a->y + a->z*a->z);
 }
 
-inline double		vec_dotproduct(const t_vec3d* a, const t_vec3d* b)
+inline FLOAT		vec_dotproduct(const t_vec3d* a, const t_vec3d* b)
 {
 	return (a->x*b->x + a->y*b->y + a->z*b->z);
 }
 
-inline void		vec_init(t_vec3d* a, double x, double y, double z)
+inline void		vec_init(t_vec3d* a, FLOAT x, FLOAT y, FLOAT z)
 {
 	a->x = x;
 	a->y = y;
@@ -75,7 +75,7 @@ void		vec_display(t_vec3d* a)
 
 inline void		vec_normalize(t_vec3d* a)
 {
-	double	mag;
+	FLOAT	mag;
 
 	mag = sqrt(a->x*a->x + a->y*a->y + a->z*a->z);
 	a->x /= mag;

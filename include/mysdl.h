@@ -4,6 +4,7 @@
 # include <SDL.h>
 # include <math.h>
 # include "vec.h"
+# include "rt.h"
 
 typedef struct		s_env
 {

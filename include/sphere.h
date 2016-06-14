@@ -5,11 +5,12 @@
 # include "ray.h"
 # include "math.h"
 # include "mtl.h"
+# include "rt.h"
 
 typedef struct	s_sphere
 {
 	t_vec3d	pos;
-	double	radius;
+	FLOAT	radius;
 	t_mtl	mtl;
 	int		id;
 }				t_sphere;

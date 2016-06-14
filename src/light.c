@@ -6,7 +6,7 @@ void	init_dotlight(t_dotlight *light, t_vec3d pos, t_color color)
 	light->color = color;
 }
 
-double	max(double a, double b)
+FLOAT	max(FLOAT a, FLOAT b)
 {
 	if (a > b)
 		return a;
@@ -34,12 +34,12 @@ void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst)
 	if (!hitshadow.didit)
 	{
 		t_vec3d phongDir = vec_reflect(&ray.dir, &hit->normal);
-		double lambert = vec_dotproduct(&lightdir, &hit->normal);
+		FLOAT lambert = vec_dotproduct(&lightdir, &hit->normal);
 		color->r = MIN(1.0f, color->r+ lambert * light->color.r * hit->mtl->color.r);
 		color->g = MIN(1.0f, color->g+ lambert * light->color.g * hit->mtl->color.g);
 		color->b = MIN(1.0f, color->b+ lambert * light->color.b * hit->mtl->color.b);
 
-		float phongTerm = MAX(vec_dotproduct(&phongDir, &hit->dir), 0.0f) ;
+		FLOAT phongTerm = MAX(vec_dotproduct(&phongDir, &hit->dir), 0.0f) ;
 		phongTerm = 1.f * powf(phongTerm, 60.f);
 		color->r= MIN(1.f, color->r + phongTerm * light->color.r * hit->mtl->specular.r);
 		color->g= MIN(1.f, color->g + phongTerm * light->color.g * hit->mtl->specular.g);

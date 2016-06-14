@@ -1,12 +1,12 @@
 #include "cam.h"
 
-void	xyratio(double *x, double *y, const t_cam *cam, const int width, const int height)
+void	xyratio(FLOAT *x, FLOAT *y, const t_cam *cam, const int width, const int height)
 {
-	*x = cam->wfov / (double)width;
-	*y = cam->hfov / (double)height;
+	*x = cam->wfov / (FLOAT)width;
+	*y = cam->hfov / (FLOAT)height;
 }
 
-t_vec3d	getupleft(t_cam *cam)
+t_vec3d	getupleft(t_cam *cam, FLOAT wfov, FLOAT hfov)
 {
 	t_vec3d	v1;
 	t_vec3d	v2;
@@ -16,16 +16,16 @@ t_vec3d	getupleft(t_cam *cam)
 	t_vec3d	v6;
 
 	v1 = vec_scale(&cam->dirvec, 1.0f);
-	v2 = vec_scale(&cam->upvec, 0.5f/2.0f);
+	v2 = vec_scale(&cam->upvec, wfov/2.0f);
 	v3 = vec_add(&v1, &v2);
-	v4 = vec_scale(&cam->rightvec, 0.35f/2.0f);
+	v4 = vec_scale(&cam->rightvec, hfov/2.0f);
 	v5 = vec_sub(&v3, &v4);
 	v6 = vec_add(&cam->pos, &v5);
 	return (v6);
 	/*lookat = vec_add(&camPos, (vec_sub(vec_add(vec_scale(&vecdir, 1.0f), (vec_scale(&upvec, 0.5f/2.0f))), vec_scale(&rightvec, 0.35f/2.0f))));*/
 }
 
-t_vec3d	getplanepix(t_cam *cam, double x, double y, double xindent, double yindent)
+t_vec3d	getplanepix(t_cam *cam, FLOAT x, FLOAT y, FLOAT xindent, FLOAT yindent)
 {
 	t_vec3d	v1;
 	t_vec3d	v2;

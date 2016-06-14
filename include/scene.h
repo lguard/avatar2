@@ -5,6 +5,7 @@
 # include "cam.h"
 # include "object.h"
 # include "list.h"
+# include "rt.h"
 
 typedef struct	s_scene
 {

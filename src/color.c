@@ -1,7 +1,7 @@
 #include "color.h"
 
 
-void	color_scale(t_color *color, double x)
+void	color_scale(t_color *color, FLOAT x)
 {
 	color->r *= x;
 	color->g *= x;
@@ -15,7 +15,7 @@ void	color_add(t_color *colora, t_color *colorb)
 	colora->b = MIN(1.0f, colora->b + colorb->b);
 }
 
-void	color_init(t_color *color, double r, double g, double b)
+void	color_init(t_color *color, FLOAT r, FLOAT g, FLOAT b)
 {
 	color->r = r;
 	color->g = g;

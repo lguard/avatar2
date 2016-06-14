@@ -56,9 +56,9 @@ void	buffer_ss(t_buffer *buff)
 {
 	size_t	x;
 	size_t	y;
-	double	ratio;
+	FLOAT	ratio;
 
-	ratio = 1.f / (double)(buff->aa * buff->aa);
+	ratio = 1.f / (FLOAT)(buff->aa * buff->aa);
 	x = 0;
 	while (x < buff->width)
 	{
@@ -71,7 +71,26 @@ void	buffer_ss(t_buffer *buff)
 	}
 }
 
-void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, double ratio)
+void	buffer_us(t_buffer *buff)
+{
+	size_t	x;
+	size_t	y;
+	FLOAT	ratio;
+
+	ratio = 1.f / (FLOAT)(buff->aa * buff->aa);
+	x = 0;
+	while (x < buff->width)
+	{
+		y = 0;
+		while (y < buff->height) {
+			buffer_somme_color(buff, x, y, ratio);
+			++y;
+		}
+		++x;
+	}
+}
+
+void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, FLOAT ratio)
 {
 	size_t	x;
 	size_t	y;
@@ -94,7 +113,7 @@ void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, double ratio)
 
 int		buffer_check_aa(int aa)
 {
-	if ((aa == 1) || (aa == 2) || (aa == 4) || (aa == 8) || (aa == 16))
+	if ((aa == 1) || (aa == 2) || (aa == 4) || (aa == 8) || (aa == 16) || (aa == 128))
 		return aa;
 	return 1;
 }
