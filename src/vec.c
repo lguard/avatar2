@@ -118,14 +118,14 @@ t_vec3d	vec_rotaion_y(t_vec3d *a, FLOAT angle)
 /* Zrot mat
  * [ cos  -sin 0  ]
  * [ sin  cos  0  ]
- * [  1   0    0  ]
+ * [  0   0    1  ]
 */
 t_vec3d	vec_rotaion_z(t_vec3d *a, FLOAT angle)
 {
 	t_vec3d	b;
 
 	b.x = cos(angle)*a->x - sin(angle)*a->y;
-	b.z = sin(angle)*a->x + cos(angle)*a->y;
+	b.y = sin(angle)*a->x + cos(angle)*a->y;
 	b.z = a->z;
 	return b;
 }

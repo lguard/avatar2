@@ -52,7 +52,6 @@ int		sdl_key_up(t_env *env)
 {
 	if (env->event.key.keysym.sym == SDLK_ESCAPE)
 		return (1);
-
 	if (env->event.key.keysym.sym == SDLK_1)
 		env->opti ^= SPECULAR;
 	if (env->event.key.keysym.sym == SDLK_2)
@@ -67,6 +66,8 @@ int		sdl_key_up(t_env *env)
 		env->opti ^= UNDERSAMPLE;
 		change_sample(env);
 	}
+	if (env->event.key.keysym.sym == SDLK_UP)
+		env->opti ^= REFRACTION;
 	return (0);
 }
 

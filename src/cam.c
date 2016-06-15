@@ -56,3 +56,27 @@ void	rot_cam(t_cam *cam, FLOAT xa, FLOAT ya, FLOAT za)
 	cam->upvec = vec_rotaion_z(&cam->upvec, za);
 	cam->rightvec = vec_rotaion_z(&cam->rightvec, za);
 }
+
+void	move_cam(t_cam *cam, t_vec3d *dir, FLOAT a)
+{
+	cam->pos.x += dir->x * a;
+	cam->pos.y += dir->y * a;
+	cam->pos.z += dir->z * a;
+}
+
+void	handle_move(t_cam *cam, int key, FLOAT frame)
+{
+	t_vec3d		dir;
+
+	vec_init(&dir, 0, 0,0);
+	if(key & UP)
+		dir = cam->dirvec;
+	if(key & DOWN)
+		dir = vec_sub(&dir, &cam->dirvec);
+	if(key & LEFT)
+		dir = vec_sub(&dir, &cam->rightvec);
+	if(key & RIGHT)
+		dir = vec_add(&dir, &cam->rightvec);
+	vec_normalize(&dir);
+	move_cam(cam, &dir, frame);
+}
