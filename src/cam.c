@@ -41,3 +41,18 @@ t_vec3d	getplanepix(t_cam *cam, FLOAT x, FLOAT y, FLOAT xindent, FLOAT yindent)
 	return v5;
  /*viewPlaneUpLeft + rightVec*xIndent*x - upVec*yIndent*y*/
 }
+
+void	rot_cam(t_cam *cam, FLOAT xa, FLOAT ya, FLOAT za)
+{
+	cam->dirvec = vec_rotaion_x(&cam->dirvec, xa);
+	cam->upvec = vec_rotaion_x(&cam->upvec, xa);
+	cam->rightvec = vec_rotaion_x(&cam->rightvec, xa);
+
+	cam->dirvec = vec_rotaion_y(&cam->dirvec, ya);
+	cam->upvec = vec_rotaion_y(&cam->upvec, ya);
+	cam->rightvec = vec_rotaion_y(&cam->rightvec, ya);
+
+	cam->dirvec = vec_rotaion_z(&cam->dirvec, za);
+	cam->upvec = vec_rotaion_z(&cam->upvec, za);
+	cam->rightvec = vec_rotaion_z(&cam->rightvec, za);
+}
