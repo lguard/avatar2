@@ -42,5 +42,5 @@ void	addobject(t_list **objlist, void *object, char type)
 void	delete_object(void *obj)
 {
 	(void)obj;
-	/*free(obj);*/
+	free(obj);
 }

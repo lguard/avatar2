@@ -23,7 +23,7 @@ typedef struct	s_dotlight
 }				t_dotlight;
 
 void	init_dotlight(t_dotlight *light, t_vec3d pos, t_color color);
-void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst);
+void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst, int opti);
 void	addolight(t_list **lightlist, t_dotlight *object);
 void	delete_light(void *obj);
 

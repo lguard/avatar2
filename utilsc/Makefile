@@ -2,7 +2,7 @@ NAME = libutilsc.a
 CC = gcc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
-OPTI = #-O2
+OPTI = -O2
 OBJ = $(SRC:.c=.o)
 SRC = $(addprefix src/, $(shell ls src | grep .c -F))
 TEST = $(addprefix test/, $(shell ls test | grep .c -F))

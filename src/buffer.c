@@ -5,6 +5,7 @@ void	buffer_init(t_buffer *buff)
 {
 	buff->a = NULL;
 	buff->b = NULL;
+	buff->c = NULL;
 	buff->width = 0;
 	buff->height = 0;
 	buff->aa = 1;
@@ -23,6 +24,8 @@ void	buffer_free(t_buffer *buff)
 	free(buff->a);
 	free(buff->b[0]);
 	free(buff->b);
+	free(buff->c[0]);
+	free(buff->c);
 }
 
 t_color	**buffer_new(size_t width, size_t height)
@@ -47,6 +50,7 @@ void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 	aa = buffer_check_aa(aa);
 	buff->a = buffer_new(width, height);
 	buff->b = buffer_new(width*aa, height*aa);
+	buff->c = buffer_new(width/2, height/2);
 	buff->width = width;
 	buff->height = height;
 	buff->aa = aa;
@@ -83,7 +87,7 @@ void	buffer_us(t_buffer *buff)
 	{
 		y = 0;
 		while (y < buff->height) {
-			buffer_somme_color(buff, x, y, ratio);
+			buff->a[x][y] = buff->c[x/2][y/2];
 			++y;
 		}
 		++x;
