@@ -35,16 +35,16 @@ void change_sample(t_env *e)
 	}
 }
 
-void	change_scenewh(t_env *e)
+void	change_scenewh(t_env *e, int width, int height)
 {
 	e->scene.render_width = width;
 	e->scene.render_height = height;
-	e->scene.width = scene->render_width * 1;
-	e->scene.height = scene->render_height * 1;
+	e->scene.width = e->scene.render_width * 1;
+	e->scene.height = e->scene.render_height * 1;
 	e->scene.cam.wfov = 1.0;
 	e->scene.cam.hfov = 1.0 / ((float)width / (float)height);
-	e->scene.cam.rightvec = vec_mul(&scene->cam.dirvec, &scene->cam.upvec);
-	e->scene.cam.viewplane_upleft = getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
+	e->scene.cam.rightvec = vec_mul(&e->scene.cam.dirvec, &e->scene.cam.upvec);
+	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
 	e->scene.cam.distance = 1.f;
 }
 
@@ -65,7 +65,7 @@ int		sdl_key_up(t_env *env)
 	{
 	// changer lesvariable en fin de calcule
 		env->opti ^= UNDERSAMPLE;
-		change_scenewh(env);
+		change_sample(env);
 	}
 	return (0);
 }
