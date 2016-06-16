@@ -13,6 +13,7 @@ typedef struct	s_buffer
 	size_t	width;
 	size_t	height;
 	int		aa;
+	int		pa;
 }				t_buffer;
 
 void	buffer_init(t_buffer *buff);
@@ -25,5 +26,7 @@ void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, FLOAT ratio);
 int		buffer_check_aa(int aa);
 t_color	**buffer_new(size_t width, size_t height);
 void	buffer_test(void);
+void	buffer_reload_ss(t_buffer *buff, int aa);
+void	buffer_reload_us(t_buffer *buff, int pa);
 
 #endif /* BUFFER_H */

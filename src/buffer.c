@@ -18,6 +18,24 @@ void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa)
 	buffer_create(buff, width, height, aa);
 }
 
+void	buffer_reload_ss(t_buffer *buff, int aa)
+{
+	free(buff->b[0]);
+	free(buff->b);
+	aa = buffer_check_aa(aa);
+	buff->b = buffer_new(buff->width*aa, buff->height*aa);
+	buff->aa = aa;
+}
+
+void	buffer_reload_us(t_buffer *buff, int pa)
+{
+	free(buff->c[0]);
+	free(buff->c);
+	pa = buffer_check_aa(pa);
+	buff->c = buffer_new(buff->width/pa, buff->height/pa);
+	buff->pa = pa;
+}
+
 void	buffer_free(t_buffer *buff)
 {
 	free(buff->a[0]);
@@ -50,7 +68,7 @@ void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 	aa = buffer_check_aa(aa);
 	buff->a = buffer_new(width, height);
 	buff->b = buffer_new(width*aa, height*aa);
-	buff->c = buffer_new(width/2, height/2);
+	buff->c = buffer_new(width/4, height/4);
 	buff->width = width;
 	buff->height = height;
 	buff->aa = aa;
@@ -79,15 +97,13 @@ void	buffer_us(t_buffer *buff)
 {
 	size_t	x;
 	size_t	y;
-	FLOAT	ratio;
 
-	ratio = 1.f / (FLOAT)(buff->aa * buff->aa);
 	x = 0;
 	while (x < buff->width)
 	{
 		y = 0;
 		while (y < buff->height) {
-			buff->a[x][y] = buff->c[x/2][y/2];
+			buff->a[x][y] = buff->c[x/4][y/4];
 			++y;
 		}
 		++x;

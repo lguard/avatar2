@@ -7,6 +7,7 @@
 # define REFRACTION 8
 # define SUPERSAMPLE 16
 # define UNDERSAMPLE 32
+# define SHADOW 64
 
 # define UP 1
 # define DOWN 2

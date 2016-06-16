@@ -10,8 +10,6 @@ int		sdl_main_loop(t_env *e)
 
 	e->opti = 0;
 	e->opti |= DIFFUSE;
-	e->opti |= SPECULAR;
-	e->opti |= REFLECTION;
 	e->opti |= UNDERSAMPLE;
 
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
@@ -23,7 +21,7 @@ int		sdl_main_loop(t_env *e)
 		if (sdl_events(e))
 			return (0);
 		opti = e->opti;
-		mainrt(e, &e->scene, &e->buff, e->opti);
+		mainrt(e, &e->scene, &e->buff, opti);
 		SDL_RenderPresent(e->img);
 	}
 	sdl_quit(e);

@@ -264,8 +264,8 @@ int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)
 	scene->height = scene->render_height * buff->aa;
 	if (opti & UNDERSAMPLE)
 	{
-		scene->width = scene->render_width / 2;
-		scene->height = scene->render_height / 2;
+		scene->width = scene->render_width / 4;
+		scene->height = scene->render_height / 4;
 	}
 	//===================
 

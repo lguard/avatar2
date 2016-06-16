@@ -52,10 +52,12 @@ int		sdl_key_up(t_env *env)
 {
 	if (env->event.key.keysym.sym == SDLK_ESCAPE)
 		return (1);
-	if (env->event.key.keysym.sym == SDLK_1)
-		env->opti ^= SPECULAR;
-	if (env->event.key.keysym.sym == SDLK_2)
+	if (env->event.key.keysym.sym == SDLK_0)
 		env->opti ^= DIFFUSE;
+	if (env->event.key.keysym.sym == SDLK_1)
+		env->opti ^= SHADOW;
+	if (env->event.key.keysym.sym == SDLK_2)
+		env->opti ^= SPECULAR;
 	if (env->event.key.keysym.sym == SDLK_3)
 		env->opti ^= REFLECTION;
 	if (env->event.key.keysym.sym == SDLK_4)

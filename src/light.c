@@ -20,7 +20,9 @@ void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst, int
 	if (hitshadow.t <= 0.f)
 		return ;
 	ray.dir = vec_scale(&dist, (1.0f/hitshadow.t));
-	ray_trace(&ray, objlst, &hitshadow);
+	if (opti & SHADOW) {
+		ray_trace(&ray, objlst, &hitshadow);
+	}
 	if (!hitshadow.didit)
 	{
 		if (opti & DIFFUSE)
