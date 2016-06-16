@@ -7,22 +7,33 @@ void	init_scene(t_scene *scene, int width, int height);
 int		sdl_main_loop(t_env *e)
 {
 	int		opti;
+	int		w;
+	int		h;
 
 	e->opti = 0;
 	e->opti |= DIFFUSE;
 	e->opti |= UNDERSAMPLE;
+	e->opti |= SCREENSIZE;
 
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
 	SDL_RenderClear(e->img);
 
 	while (1)
 	{
-		usleep(100);
 		if (sdl_events(e))
 			return (0);
+		if (e->opti & SCREENSIZE)
+		{
+			SDL_GetWindowSize(e->sc, &w, &h);
+			buffer_reload(&e->buff, w, h, e->buff.aa);
+			change_scenewh(e, w, h);
+			e->opti ^= SCREENSIZE;
+			printf("lol\n");
+		}
 		opti = e->opti;
 		mainrt(e, &e->scene, &e->buff, opti);
 		SDL_RenderPresent(e->img);
+		usleep(100);
 	}
 	sdl_quit(e);
 }
@@ -42,7 +53,6 @@ void	init(t_env *e, t_scene *sc, t_buffer *buff, int width, int height)
 	sdl_init(e, width, height);
 	init_scene(sc, width, height);
 	buffer_init(buff);
-	buffer_reload(buff, width, height, 1);
 }
 
 void	sdl_quit(t_env *e)

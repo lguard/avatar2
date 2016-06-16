@@ -29,5 +29,7 @@ int		sdl_win_ev(t_env *env);
 int		sdl_main_loop(t_env *e);
 int		sdl_init(t_env *e, int width, int height);
 void	sdl_quit(t_env *e);
+void	change_scenewh(t_env *e, int width, int height);
+void	change_sample(t_env *e);
 
 #endif /* MYSDL_H */

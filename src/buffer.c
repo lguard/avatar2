@@ -68,7 +68,7 @@ void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 	aa = buffer_check_aa(aa);
 	buff->a = buffer_new(width, height);
 	buff->b = buffer_new(width*aa, height*aa);
-	buff->c = buffer_new(width/4, height/4);
+	buff->c = buffer_new(width/2+1, height/2+1);
 	buff->width = width;
 	buff->height = height;
 	buff->aa = aa;
@@ -103,7 +103,7 @@ void	buffer_us(t_buffer *buff)
 	{
 		y = 0;
 		while (y < buff->height) {
-			buff->a[x][y] = buff->c[x/4][y/4];
+			buff->a[x][y] = buff->c[x/2][y/2];
 			++y;
 		}
 		++x;

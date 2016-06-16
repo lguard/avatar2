@@ -259,16 +259,6 @@ void	init_scene(t_scene *scene, int width, int height)
 
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)
 {
-	//todo delete
-	scene->width = scene->render_width * buff->aa;
-	scene->height = scene->render_height * buff->aa;
-	if (opti & UNDERSAMPLE)
-	{
-		scene->width = scene->render_width / 4;
-		scene->height = scene->render_height / 4;
-	}
-	//===================
-
 	struct timeval time;
 	if(gettimeofday( &time, 0 ))
 		return -1;

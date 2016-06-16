@@ -39,13 +39,10 @@ void	change_scenewh(t_env *e, int width, int height)
 {
 	e->scene.render_width = width;
 	e->scene.render_height = height;
-	e->scene.width = e->scene.render_width * 1;
-	e->scene.height = e->scene.render_height * 1;
+	change_sample(e);
 	e->scene.cam.wfov = 1.0;
 	e->scene.cam.hfov = 1.0 / ((float)width / (float)height);
-	e->scene.cam.rightvec = vec_mul(&e->scene.cam.dirvec, &e->scene.cam.upvec);
 	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
-	e->scene.cam.distance = 1.f;
 }
 
 int		sdl_key_up(t_env *env)
@@ -83,13 +80,6 @@ int		sdl_mouse_down(t_env *env)
 
 int		sdl_win_ev(t_env *e)
 {
-	(void)e;
-	// changer lesvariable en fin de calcule
-	/*int		w;*/
-	/*int 	h;*/
-
-	/*SDL_GetWindowSize(e->sc, &w, &h);*/
-	/*change_scenewh(e);*/
-	/*buffer_reload(&e->buff, w, h, e->buff.aa);*/
+	e->opti |= SCREENSIZE;
 	return (0);
 }

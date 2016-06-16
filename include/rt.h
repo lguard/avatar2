@@ -8,6 +8,7 @@
 # define SUPERSAMPLE 16
 # define UNDERSAMPLE 32
 # define SHADOW 64
+# define SCREENSIZE 128
 
 # define UP 1
 # define DOWN 2
