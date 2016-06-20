@@ -1,6 +1,8 @@
 #ifndef MYSDL_H
 # define MYSDL_H
 
+#define _BSD_SOURCE
+
 # include <SDL.h>
 # include <math.h>
 # include "vec.h"

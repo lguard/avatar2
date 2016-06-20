@@ -129,3 +129,24 @@ t_vec3d	vec_rotaion_z(t_vec3d *a, FLOAT angle)
 	b.z = a->z;
 	return b;
 }
+
+void	vec_translate(t_vec3d*vec, FLOAT tx, FLOAT ty, FLOAT tz)
+{
+	vec->x += tx;
+	vec->y += ty;
+	vec->z += tz;
+}
+
+void	vec_rotate(t_vec3d*vec, FLOAT rx, FLOAT ry, FLOAT rz)
+{
+	*vec = vec_rotaion_x(vec, rx);
+	*vec = vec_rotaion_y(vec, ry);
+	*vec = vec_rotaion_z(vec, rz);
+}
+
+void	vec_matscale(t_vec3d*vec, FLOAT tx, FLOAT ty, FLOAT tz)
+{
+	vec->x *= tx;
+	vec->y *= ty;
+	vec->z *= tz;
+}

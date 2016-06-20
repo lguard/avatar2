@@ -25,5 +25,8 @@ FLOAT		vec_dotproduct(const t_vec3d*, const t_vec3d*);
 void		vec_init(t_vec3d*, FLOAT, FLOAT, FLOAT);
 void		vec_display(t_vec3d*);
 void		vec_normalize(t_vec3d*);
+void		vec_translate(t_vec3d*vec, FLOAT tx, FLOAT ty, FLOAT tz);
+void		vec_rotate(t_vec3d*vec, FLOAT rx, FLOAT ry, FLOAT rz);
+void		vec_matscale(t_vec3d*vec, FLOAT tx, FLOAT ty, FLOAT tz);
 
 #endif

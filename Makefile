@@ -1,5 +1,5 @@
 NAME = avatar2
-CC = gcc
+CC = gcc -std=c11
 RM = rm -f
 LIB =  -L utilsc/ -lutilsc -lm $(shell sdl2-config --libs)
 INCLUDE = -I utilsc/include -I include $(shell sdl2-config --cflags)
