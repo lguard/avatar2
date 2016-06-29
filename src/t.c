@@ -2,7 +2,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <sys/time.h>
 #include "vec.h"
 #include "cam.h"
 #include "scene.h"
@@ -248,7 +247,7 @@ void	init_scene(t_scene *scene, int width, int height)
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
 	s2->mtl = mtl;
-	/*init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);*/
+	init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);
 	mtl.color.r = 0.1f; mtl.color.g = 0.2f; mtl.color.b = 0.7f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.f; mtl.reflect = 0.3;
 	init_sphere(scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);
@@ -268,11 +267,6 @@ void	init_scene(t_scene *scene, int width, int height)
 
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)
 {
-	struct timeval time;
-	if(gettimeofday( &time, 0 ))
-		return -1;
-	long cur_time = 1000000 * time.tv_sec + time.tv_usec;
-	double sec1 = cur_time / 1000000.0;
 	if (opti & UNDERSAMPLE)
 	{
 		rt(scene, buff->c, opti);
@@ -288,11 +282,6 @@ int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)
 		buffer_ss(buff);
 		render(e, scene, buff->a);
 	}
-	if(gettimeofday( &time, 0 ))
-		return -1;
-	cur_time = 1000000 * time.tv_sec + time.tv_usec;
-	double sec2 = cur_time / 1000000.0;
-	printf("%f\n", sec2-sec1);
 	/*list_delall(&scene.obj, delete_object);*/
 	/*list_delall(&scene.light, delete_light);*/
 	return 0;

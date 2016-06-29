@@ -70,13 +70,22 @@ void	handle_move(t_cam *cam, int key, FLOAT frame)
 
 	vec_init(&dir, 0, 0,0);
 	if(key & UP)
-		dir = cam->dirvec;
-	if(key & DOWN)
 		dir = vec_sub(&dir, &cam->dirvec);
+	if(key & DOWN)
+		dir = cam->dirvec;
 	if(key & LEFT)
 		dir = vec_sub(&dir, &cam->rightvec);
 	if(key & RIGHT)
 		dir = vec_add(&dir, &cam->rightvec);
-	vec_normalize(&dir);
-	move_cam(cam, &dir, frame);
+	(void)frame;
+	/*vec_normalize(&dir);*/
+	/*move_cam(cam, &dir, frame);*/
+	if(key & ROTPX)
+	{
+		vec_display(&cam->dirvec);
+		rot_cam(cam, 0, 0.1, 0);
+		vec_display(&cam->dirvec);
+		key -=ROTPX;
+	}
+
 }

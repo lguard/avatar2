@@ -20,7 +20,16 @@ int		sdl_events(t_env *env)
 
 int		sdl_key_down(t_env *env)
 {
-	(void)env;
+	if (env->event.key.keysym.sym == SDLK_UP)
+		env->key |= UP;
+	if (env->event.key.keysym.sym == SDLK_DOWN)
+		env->key |= DOWN;
+	if (env->event.key.keysym.sym == SDLK_LEFT)
+		env->key |= LEFT;
+	if (env->event.key.keysym.sym == SDLK_RIGHT)
+		env->key |= RIGHT;
+	if (env->event.key.keysym.sym == SDLK_a)
+		env->key |= ROTPX;
 	return (0);
 }
 
@@ -66,14 +75,19 @@ int		sdl_key_up(t_env *env)
 		change_sample(env);
 	}
 	if (env->event.key.keysym.sym == SDLK_UP)
-		env->opti ^= REFRACTION;
+		env->key -= UP;
+	if (env->event.key.keysym.sym == SDLK_DOWN)
+		env->key -= DOWN;
+	if (env->event.key.keysym.sym == SDLK_LEFT)
+		env->key -= LEFT;
+	if (env->event.key.keysym.sym == SDLK_RIGHT)
+		env->key -= RIGHT;
 	return (0);
 }
 
 
 int		sdl_mouse_down(t_env *env)
 {
-	/*single_rt(env->event.button.x , env->event.button.y);*/
 	(void)env;
 	return (0);
 }

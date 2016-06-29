@@ -14,6 +14,7 @@
 # define DOWN 2
 # define LEFT 4
 # define RIGHT 8
+# define ROTPX 16
 
 typedef float	FLOAT;
 
