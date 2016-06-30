@@ -230,7 +230,8 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->obj = NULL;
 	scene->light = NULL;
 	vec_init(&scene->cam.pos, 250.f, 10.f, -2000.f);
-	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
+	vec_init(&scene->cam.dirvec, 0.f, 1.f, 1.f);
+	vec_normalize(&scene->cam.pos);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
 	scene->cam.rightvec = vec_mul(&scene->cam.dirvec, &scene->cam.upvec);
 	rot_cam(&scene->cam, 3.14*2, 3.14*2, 3.14*2);

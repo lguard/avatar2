@@ -44,17 +44,19 @@ t_vec3d	getplanepix(t_cam *cam, FLOAT x, FLOAT y, FLOAT xindent, FLOAT yindent)
 
 void	rot_cam(t_cam *cam, FLOAT xa, FLOAT ya, FLOAT za)
 {
-	cam->dirvec = vec_rotaion_x(&cam->dirvec, xa);
-	cam->upvec = vec_rotaion_x(&cam->upvec, xa);
-	cam->rightvec = vec_rotaion_x(&cam->rightvec, xa);
+	/*cam->dirvec = vec_rotaion_x(&cam->dirvec, xa);*/
+	/*cam->upvec = vec_rotaion_x(&cam->upvec, xa);*/
+	/*cam->rightvec = vec_rotaion_x(&cam->rightvec, xa);*/
 
+	(void)xa;
+	(void)za;
 	cam->dirvec = vec_rotaion_y(&cam->dirvec, ya);
 	cam->upvec = vec_rotaion_y(&cam->upvec, ya);
 	cam->rightvec = vec_rotaion_y(&cam->rightvec, ya);
 
-	cam->dirvec = vec_rotaion_z(&cam->dirvec, za);
-	cam->upvec = vec_rotaion_z(&cam->upvec, za);
-	cam->rightvec = vec_rotaion_z(&cam->rightvec, za);
+	/*cam->dirvec = vec_rotaion_z(&cam->dirvec, za);*/
+	/*cam->upvec = vec_rotaion_z(&cam->upvec, za);*/
+	/*cam->rightvec = vec_rotaion_z(&cam->rightvec, za);*/
 }
 
 void	move_cam(t_cam *cam, t_vec3d *dir, FLOAT a)
@@ -74,18 +76,17 @@ void	handle_move(t_cam *cam, int key, FLOAT frame)
 	if(key & DOWN)
 		dir = cam->dirvec;
 	if(key & LEFT)
-		dir = vec_sub(&dir, &cam->rightvec);
-	if(key & RIGHT)
 		dir = vec_add(&dir, &cam->rightvec);
+	if(key & RIGHT)
+		dir = vec_sub(&dir, &cam->rightvec);
 	(void)frame;
-	/*vec_normalize(&dir);*/
-	/*move_cam(cam, &dir, frame);*/
+	vec_normalize(&dir);
+	move_cam(cam, &dir, frame);
 	if(key & ROTPX)
 	{
 		vec_display(&cam->dirvec);
 		rot_cam(cam, 0, 0.1, 0);
 		vec_display(&cam->dirvec);
-		key -=ROTPX;
 	}
 
 }

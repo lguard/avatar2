@@ -30,7 +30,6 @@ int		sdl_main_loop(t_env *e)
 			buffer_reload(&e->buff, w, h, e->buff.aa);
 			change_scenewh(e, w, h);
 			e->opti ^= SCREENSIZE;
-			printf("lol\n");
 		}
 		opti = e->opti;
 		struct timeval time;
@@ -44,7 +43,7 @@ int		sdl_main_loop(t_env *e)
 			return -1;
 		cur_time = 1000000 * time.tv_sec + time.tv_usec;
 		double sec2 = cur_time / 1000000.0;
-		printf("%f\n", sec2-sec1);
+		/*printf("%f\n", sec2-sec1);*/
 		if (e->key != 0)
 			handle_move(&e->scene.cam, e->key, sec2-sec1);
 	}

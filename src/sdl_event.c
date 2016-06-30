@@ -25,7 +25,10 @@ int		sdl_key_down(t_env *env)
 	if (env->event.key.keysym.sym == SDLK_DOWN)
 		env->key |= DOWN;
 	if (env->event.key.keysym.sym == SDLK_LEFT)
+	{
+		printf("%d\n", env->key);
 		env->key |= LEFT;
+	}
 	if (env->event.key.keysym.sym == SDLK_RIGHT)
 		env->key |= RIGHT;
 	if (env->event.key.keysym.sym == SDLK_a)
@@ -70,7 +73,6 @@ int		sdl_key_up(t_env *env)
 		env->opti ^= REFRACTION;
 	if (env->event.key.keysym.sym == SDLK_5)
 	{
-	// changer lesvariable en fin de calcule
 		env->opti ^= UNDERSAMPLE;
 		change_sample(env);
 	}
@@ -82,6 +84,8 @@ int		sdl_key_up(t_env *env)
 		env->key -= LEFT;
 	if (env->event.key.keysym.sym == SDLK_RIGHT)
 		env->key -= RIGHT;
+	if (env->event.key.keysym.sym == SDLK_a)
+		env->key -= ROTPX;
 	return (0);
 }
 

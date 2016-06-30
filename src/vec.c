@@ -78,6 +78,8 @@ inline void		vec_normalize(t_vec3d* a)
 	FLOAT	mag;
 
 	mag = sqrtf(a->x*a->x + a->y*a->y + a->z*a->z);
+	if (mag == 0)
+		return ;
 	a->x /= mag;
 	a->y /= mag;
 	a->z /= mag;
