@@ -2,26 +2,37 @@
 
 
 /*
-		ray		:	ray = c.pos + c.dir * t
-		sphere	:	x² + y² + z² = r²
-				:	(c.pos.x + c.dir.x *t)² + (c.pos.y + c.dir.y *t)² + (c.pos.z + c.dir.z *t)² = r²
-					(   a    +     b     )² = a² + 2ab + b²
-					c.dir²*t² + 2*c.dir*c.pos*t + c.pos² for x y z
+	ray		:	ray = c.pos + c.dir * t
+	sphere	:	x² + y² + z² = r²
+			:	(c.pos.x + c.dir.x *t)² + (c.pos.y + c.dir.y *t)² + (c.pos.z + c.dir.z *t)² = r²
+				(   a    +     b     )² = a² + 2ab + b²
+				c.dir²*t² + 2*c.dir*c.pos*t + c.pos² for x y z
 
-					(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-					2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
-					(c.pos.x² + c.pos.y² + c.pos.z²) = r²
+				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
+				2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
+				(c.pos.x² + c.pos.y² + c.pos.z²) = r²
 
-					(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-					2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
-					(c.pos.x² + c.pos.y² + c.pos.z² + r²) = 0
+				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
+				2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
+				(c.pos.x² + c.pos.y² + c.pos.z² + r²) = 0
 
-					o.pos = s.pos - c.pos
-					position de la camera - centre de la sphere pour deplacer l'origin
+				o.pos = s.pos - c.pos
+				position de la camera - centre de la sphere pour deplacer l'origin
 
-					(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-					2*(o.pos.x*c.dir.x+o.pos.y*c.dir.y+o.pos.z*c.dir.z)*t +
-					(o.pos.x² + o.pos.y² + o.pos.z² + r²) = 0
+				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
+				2*(o.pos.x*c.dir.x+o.pos.y*c.dir.y+o.pos.z*c.dir.z)*t +
+				(o.pos.x² + o.pos.y² + o.pos.z² + r²) = 0
+	elipsoid:
+				x²/a² + y²/b² + z²/c² = 1
+				A = 1 / a²; B = 1 / b² ;C = 1 / c²
+				X = dx; Y = dy; Z = dz; 
+				(X*t)²*A + (Y*t)²*B + (Z*t)²*C = 1
+				X²*t²*A + 2*X*t*A+
+				Y²*t²*B + 2*Y*t*B+
+				Z²*t²*C + 2*Z*t*C
+				t²*(X²*A+Y²*B+Z²*C)+t*2*(X*A+Y*B+Z*C) = 1
+	hyperboloide:
+				x²/a² + y²/b² - z²/c² = 1
 */
 
 void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit)

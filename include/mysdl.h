@@ -20,6 +20,7 @@ typedef struct		s_env
 	t_buffer		buff;
 	int				opti;
 	int				key;
+	int				rotkey;
 }					t_env;
 
 void	sdl_putpxl(t_env *e, int x, int y, unsigned char r, unsigned char g, unsigned char b);

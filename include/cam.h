@@ -21,5 +21,8 @@ void	xyratio(FLOAT *, FLOAT *, const t_cam *, const int width, const int height)
 t_vec3d	getupleft(t_cam *, FLOAT , FLOAT);
 t_vec3d	getplanepix(t_cam *, FLOAT, FLOAT, FLOAT, FLOAT);
 void	rot_cam(t_cam *cam, FLOAT xa, FLOAT ya, FLOAT za);
+void	move_cam(t_cam *cam, t_vec3d *dir, FLOAT a);
+void	handle_move(t_cam *cam, int key, FLOAT frame);
+void	handle_rot(t_cam *cam, int key, FLOAT frame);
 
 #endif

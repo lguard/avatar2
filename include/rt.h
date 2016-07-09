@@ -10,11 +10,17 @@
 # define SHADOW 64
 # define SCREENSIZE 128
 
-# define UP 1
-# define DOWN 2
-# define LEFT 4
-# define RIGHT 8
-# define ROTPX 16
+# define UP 1 << 1
+# define DOWN 1 << 2
+# define LEFT 1 << 3
+# define RIGHT 1 << 4
+
+# define ROTPY 1 << 1
+# define ROTPYB 1 << 2
+# define ROTPX 1 << 3
+# define ROTPXB 1 << 4
+# define ROTPZ 1 << 5
+# define ROTPZB 1 << 6
 
 typedef float	FLOAT;
 

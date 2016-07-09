@@ -166,7 +166,8 @@ void	single_rt(t_scene *scene, int x, int y)
 	vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
 	vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
 
-	light_and_reflect(&ray, &hit, scene, &color, 1);
+	light_and_reflect(&ray, &hit, scene, &color, 1 | 64);
+	printf("x:%d, y:%d\n", x, y);
 	printf("\033[38;2mr %d, g %d, b %d\n", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
 }
 
@@ -223,18 +224,16 @@ void	init_scene(t_scene *scene, int width, int height)
 
 	s2 = (t_sphere2*)malloc(sizeof(t_sphere2));
 	s2->pos = (t_vec3d){0, 0, 0};
-	s2->matt = (t_vec3d){0, 170, 700};
+	s2->matt = (t_vec3d){20, 210, 400};
 	s2->matr = (t_vec3d){0, 0, 0};
-	s2->mats = (t_vec3d){1, 1.6, 1};
+	s2->mats = (t_vec3d){1, 2, 1};
 	s2->radius = 110;
 	scene->obj = NULL;
 	scene->light = NULL;
 	vec_init(&scene->cam.pos, 250.f, 10.f, -2000.f);
-	vec_init(&scene->cam.dirvec, 0.f, 1.f, 1.f);
-	vec_normalize(&scene->cam.pos);
+	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
 	scene->cam.rightvec = vec_mul(&scene->cam.dirvec, &scene->cam.upvec);
-	rot_cam(&scene->cam, 3.14*2, 3.14*2, 3.14*2);
 	scene->render_width = width;
 	scene->render_height = height;
 	scene->width = scene->render_width * 1;
@@ -243,12 +242,12 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->cam.hfov = 1.0 / ((float)width / (float)height);
 	scene->cam.viewplane_upleft = getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
 	scene->cam.distance = 1.f;
-	init_dotlight(&light, (t_vec3d){100.f, 50.f, 600.f}, (t_color){1.0f, 1.0f, 1.f});
+	init_dotlight(&light, (t_vec3d){300.f, 50.f, 600.f}, (t_color){1.0f, 1.0f, 1.f});
 	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
 	s2->mtl = mtl;
-	init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);
+	/*init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);*/
 	mtl.color.r = 0.1f; mtl.color.g = 0.2f; mtl.color.b = 0.7f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.f; mtl.reflect = 0.3;
 	init_sphere(scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);
@@ -260,7 +259,7 @@ void	init_scene(t_scene *scene, int width, int height)
 	mtl.color.r = 0.2f; mtl.color.g = 8.f; mtl.color.b = 0.4f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.0f; mtl.reflect = 0.7;
 	init_plane(scene, (t_vec3d){0.f, -1.f, -0.6f}, (t_vec3d){ 300, 100, 800}, mtl);
-	/*addobject(&scene->obj, s2, 'S');*/
+	addobject(&scene->obj, s2, 'S');
 	setobjfun(scene->obj);
 	addolight(&scene->light,&light);
 	addolight(&scene->light,&light2);

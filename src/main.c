@@ -5,6 +5,7 @@
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti);
 void	init_scene(t_scene *scene, int width, int height);
 void	handle_move(t_cam *cam, int key, FLOAT frame);
+void	handle_rot(t_cam *cam, int key, FLOAT frame);
 
 int		sdl_main_loop(t_env *e)
 {
@@ -31,21 +32,29 @@ int		sdl_main_loop(t_env *e)
 			change_scenewh(e, w, h);
 			e->opti ^= SCREENSIZE;
 		}
-		opti = e->opti;
-		struct timeval time;
-		if(gettimeofday( &time, 0 ))
-			return -1;
-		long cur_time = 1000000 * time.tv_sec + time.tv_usec;
-		double sec1 = cur_time / 1000000.0;
-		mainrt(e, &e->scene, &e->buff, opti);
-		SDL_RenderPresent(e->img);
-		if(gettimeofday( &time, 0 ))
-			return -1;
-		cur_time = 1000000 * time.tv_sec + time.tv_usec;
-		double sec2 = cur_time / 1000000.0;
-		/*printf("%f\n", sec2-sec1);*/
-		if (e->key != 0)
-			handle_move(&e->scene.cam, e->key, sec2-sec1);
+		if (e->key != 0 || e->rotkey !=0)
+		{
+			opti = e->opti;
+			struct timeval time;
+			if(gettimeofday( &time, 0 ))
+				return -1;
+			long cur_time = 1000000 * time.tv_sec + time.tv_usec;
+			double sec1 = cur_time / 1000000.0;
+			mainrt(e, &e->scene, &e->buff, opti);
+			SDL_RenderPresent(e->img);
+			if(gettimeofday( &time, 0 ))
+				return -1;
+			cur_time = 1000000 * time.tv_sec + time.tv_usec;
+			double sec2 = cur_time / 1000000.0;
+			/*printf("%f\n", sec2-sec1);*/
+			if (e->key != 0) {
+				handle_move(&e->scene.cam, e->key, sec2-sec1);
+			}
+			if (e->rotkey != 0) {
+				handle_rot(&e->scene.cam, e->rotkey, sec2-sec1);
+			}
+			e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
+		}
 	}
 	sdl_quit(e);
 }
@@ -58,6 +67,7 @@ int		sdl_init(t_env *e, int width, int height)
 	width, height, SDL_WINDOW_RESIZABLE);
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
 	e->key = 0;
+	e->rotkey = 0;
 	return (0);
 }
 
@@ -78,7 +88,7 @@ int main(void)
 {
 	t_env		e;
 
-	init(&e, &e.scene, &e.buff, 400, 300);
+	init(&e, &e.scene, &e.buff, 400, 500);
 	sdl_main_loop(&e);
 	return 0;
 }

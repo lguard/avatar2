@@ -1,6 +1,6 @@
 #include "mysdl.h"
 
-void	single_rt(int x, int y);
+void	single_rt(t_scene *scene, int x, int y);
 
 int		sdl_events(t_env *env)
 {
@@ -24,15 +24,19 @@ int		sdl_key_down(t_env *env)
 		env->key |= UP;
 	if (env->event.key.keysym.sym == SDLK_DOWN)
 		env->key |= DOWN;
-	if (env->event.key.keysym.sym == SDLK_LEFT)
-	{
-		printf("%d\n", env->key);
+	if (env->event.key.keysym.sym == SDLK_LEFT) {
 		env->key |= LEFT;
 	}
 	if (env->event.key.keysym.sym == SDLK_RIGHT)
 		env->key |= RIGHT;
 	if (env->event.key.keysym.sym == SDLK_a)
-		env->key |= ROTPX;
+		env->rotkey |= ROTPY;
+	if (env->event.key.keysym.sym == SDLK_w)
+		env->rotkey |= ROTPX;
+	if (env->event.key.keysym.sym == SDLK_s)
+		env->rotkey |= ROTPXB;
+	if (env->event.key.keysym.sym == SDLK_d)
+		env->rotkey |= ROTPYB;
 	return (0);
 }
 
@@ -85,14 +89,20 @@ int		sdl_key_up(t_env *env)
 	if (env->event.key.keysym.sym == SDLK_RIGHT)
 		env->key -= RIGHT;
 	if (env->event.key.keysym.sym == SDLK_a)
-		env->key -= ROTPX;
+		env->rotkey -= ROTPY;
+	if (env->event.key.keysym.sym == SDLK_w)
+		env->rotkey -= ROTPX;
+	if (env->event.key.keysym.sym == SDLK_s)
+		env->rotkey -= ROTPXB;
+	if (env->event.key.keysym.sym == SDLK_d)
+		env->rotkey -= ROTPYB;
 	return (0);
 }
 
 
 int		sdl_mouse_down(t_env *env)
 {
-	(void)env;
+	single_rt(&env->scene, env->event.button.x, env->event.button.y);
 	return (0);
 }
 
