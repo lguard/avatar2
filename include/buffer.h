@@ -1,9 +1,9 @@
 #ifndef BUFFER_H
 # define BUFFER_H
 
+# include <stdlib.h>
 # include "color.h"
-# include "stdlib.h"
-#include "rt.h"
+# include "rt.h"
 
 typedef struct	s_buffer
 {

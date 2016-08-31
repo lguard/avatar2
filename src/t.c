@@ -224,10 +224,10 @@ void	init_scene(t_scene *scene, int width, int height)
 
 	s2 = (t_sphere2*)malloc(sizeof(t_sphere2));
 	s2->pos = (t_vec3d){0, 0, 0};
-	s2->matt = (t_vec3d){20, 210, 400};
-	s2->matr = (t_vec3d){0, 0, 0};
-	s2->mats = (t_vec3d){1, 2, 1};
-	s2->radius = 110;
+	s2->matt = (t_vec3d){1000, -190, 700};
+	s2->matr = (t_vec3d){0, 0, 0.2};
+	s2->mats = (t_vec3d){1, 1, 1};
+	s2->radius = 1000;
 	scene->obj = NULL;
 	scene->light = NULL;
 	vec_init(&scene->cam.pos, 250.f, 10.f, -2000.f);
@@ -242,7 +242,7 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->cam.hfov = 1.0 / ((float)width / (float)height);
 	scene->cam.viewplane_upleft = getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
 	scene->cam.distance = 1.f;
-	init_dotlight(&light, (t_vec3d){300.f, 50.f, 600.f}, (t_color){1.0f, 1.0f, 1.f});
+	init_dotlight(&light, (t_vec3d){200.f, 50.f, 500.f}, (t_color){1.0f, 1.0f, 1.f});
 	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
@@ -250,15 +250,15 @@ void	init_scene(t_scene *scene, int width, int height)
 	/*init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);*/
 	mtl.color.r = 0.1f; mtl.color.g = 0.2f; mtl.color.b = 0.7f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.f; mtl.reflect = 0.3;
-	init_sphere(scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);
+	/*init_sphere(scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);*/
 	mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0;
 	init_plane(scene, (t_vec3d){0.f, 0.f, -1.f}, (t_vec3d){ 300, 200, 800}, mtl);
 	init_plane(scene, (t_vec3d){1.f, 0.f, 0.f}, (t_vec3d){ -50.f, 200, 800}, mtl);
-	init_plane(scene, (t_vec3d){0.f, 1.f, 0.f}, (t_vec3d){ 300, -600, 800}, mtl);
+	init_plane(scene, (t_vec3d){0.f, 1.f, 0.f}, (t_vec3d){ 300, -700, 800}, mtl);
 	mtl.color.r = 0.2f; mtl.color.g = 8.f; mtl.color.b = 0.4f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.0f; mtl.reflect = 0.7;
-	init_plane(scene, (t_vec3d){0.f, -1.f, -0.6f}, (t_vec3d){ 300, 100, 800}, mtl);
+	init_plane(scene, (t_vec3d){0.f, -1.f, 0.f}, (t_vec3d){ 300, 400, 800}, mtl);
 	addobject(&scene->obj, s2, 'S');
 	setobjfun(scene->obj);
 	addolight(&scene->light,&light);

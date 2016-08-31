@@ -5,6 +5,8 @@
 # include <stdio.h>
 # include "rt.h"
 
+# define CUBE(x) x*x
+
 typedef struct	s_vec3d
 {
 	FLOAT	x;
