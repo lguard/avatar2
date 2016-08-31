@@ -71,6 +71,17 @@ FLOAT	solve_quadratic(FLOAT a, FLOAT b, FLOAT c)
 	}
 }
 
+/*void	solve_quadratic(FLOAT *t0, FLOAT *t1, FLOAT a, FLOAT b, FLOAT c)*/
+/*{*/
+	/*FLOAT	d;*/
+
+	/*d = b*b - 4*a * c;*/
+	/*if (d < 0.0f)*/
+		/*return ;*/
+	/**t0 = (-b + sqrtf(d)) / (2*a);*/
+	/**t1 = (-b - sqrtf(d)) / (2*a);*/
+/*}*/
+
 void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit)
 {
 	FLOAT		t0;
