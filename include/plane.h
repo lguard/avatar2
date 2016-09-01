@@ -8,10 +8,10 @@
 
 typedef struct	s_plane
 {
+	int		id;
+	t_mtl	mtl;
 	t_vec3d		normal;
 	t_vec3d		pos;
-	t_mtl	mtl;
-	int		id;
 }				t_plane;
 
 void	hit_plane(t_ray *ray, void *plane, t_hit *hit);

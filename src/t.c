@@ -87,10 +87,16 @@ void	write_tga_header(int fd, t_scene *scene, t_color **src)
 		}
 	}
 }
-
 	/*int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);*/
 	/*write_tga_header(fd, &scene, buff.a);*/
 	/*close(fd);*/
+
+/*{*/
+	/*t_obj *obj;*/
+	
+	/*obj = getobject_by_id(id, objlist);*/
+	/*hit->mtl = obj->mtl*/
+/*}*/
 
 void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora, int opti)
 {

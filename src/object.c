@@ -42,15 +42,20 @@ void	addobject(t_list **objlist, void *object, char type)
 	list_pushfront(objlist, (void*)new);
 }
 
-void	addobject2(t_list **objlist, void *object, char type, int id)
+t_obj	*getobject_by_id(int id, t_list **objlist)
 {
-	t_obj	*new;
+	t_list		*new;
+	t_id_obj	*idobj;
 
-	new = (t_obj*)malloc(sizeof(t_obj));
-	new->type = type;
-	new->id = id;
-	new->object = object;
-	list_pushfront(objlist, (void*)new);
+	new = *objlist;
+	while (new)
+	{
+		idobj = (t_id_obj*)(((t_obj*)new->data)->object);
+		if (idobj->id == id)
+			return (new->data);
+		new = new->next;
+	}
+	return NULL;
 }
 
 void	delete_object(void *obj)
