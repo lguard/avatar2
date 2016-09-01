@@ -6,7 +6,7 @@ INCLUDE = -I utilsc/include -I include $(shell sdl2-config --cflags)
 CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
 SRC = $(addprefix src/, $(shell ls src | grep .c -F))
 DEBUG =
-OPTI = #-O2
+OPTI = -O2
 
 OBJ = $(SRC:.c=.o)
 

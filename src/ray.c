@@ -48,3 +48,17 @@ t_ray	ray_invertmat(t_ray *srcray, t_vec3d *matt, t_vec3d *matr, t_vec3d *mats)
 	ray_scale(&ray, 1.f / mats->x, 1.f / mats->y, 1.f / mats->z);
 	return ray;
 }
+
+void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit)
+{
+	if (t0 > 0.1f && t0 < t1 && t0 < hit->t)
+	{
+		hit->t = t0;
+		hit->id = id;
+	}
+	else if (t1 > 0.1f && t1 < hit->t)
+	{
+		hit->t = t1;
+		hit->id = id;
+	}
+}

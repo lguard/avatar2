@@ -42,6 +42,17 @@ void	addobject(t_list **objlist, void *object, char type)
 	list_pushfront(objlist, (void*)new);
 }
 
+void	addobject2(t_list **objlist, void *object, char type, int id)
+{
+	t_obj	*new;
+
+	new = (t_obj*)malloc(sizeof(t_obj));
+	new->type = type;
+	new->id = id;
+	new->object = object;
+	list_pushfront(objlist, (void*)new);
+}
+
 void	delete_object(void *obj)
 {
 	(void)obj;

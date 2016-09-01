@@ -105,6 +105,9 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 	{
 		color_init(&colorb, 0, 0, 0);
 		ray_trace(ray, scene->obj, hit);
+		//-> compute hitpoint
+		//-> get normal
+		//-> apply mat
 		if (!hit->didit)
 			return ;
 		ptr = scene->light;
