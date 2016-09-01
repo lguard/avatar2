@@ -130,11 +130,11 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 			ptr = ptr->next;
 		}
 		//test mtl->reflect
-		color_scale(&colorb, (rc * (1- hit->mtl.reflect)));
+		color_scale(&colorb, (rc * (1- hit->mtl->reflect)));
 		color_add(colora, &colorb);
 		if (!(opti & REFLECTION))
 			return ;
-		rc *= hit->mtl.reflect;
+		rc *= hit->mtl->reflect;
 		ray->dir = vec_reflect(&ray->dir, &hit->normal);
 		ray->pos = hit->hitpoint;
 		hit->didit = 0;
