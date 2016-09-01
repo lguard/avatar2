@@ -19,11 +19,11 @@ typedef struct	s_sphere2
 {
 	int		id;
 	t_mtl	mtl;
-	t_vec3d	pos;
-	FLOAT	radius;
 	t_vec3d	matt;
 	t_vec3d	matr;
 	t_vec3d	mats;
+	t_vec3d	pos;
+	FLOAT	radius;
 }				t_sphere2;
 
 void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit);

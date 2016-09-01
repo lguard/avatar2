@@ -12,6 +12,10 @@
 typedef struct	s_id_obj
 {
 	int		id;
+	t_mtl	mtl;
+	t_vec3d	matt;
+	t_vec3d	matr;
+	t_vec3d	mats;
 }				t_id_obj;
 
 typedef struct	s_obj
@@ -19,6 +23,7 @@ typedef struct	s_obj
 	char	type;
 	void	*object;
 	void	(*hit)(t_ray *, void *, t_hit *);
+	void	(*normal)(void *, t_hit *);
 }				t_obj;
 
 void	setobjfun(t_list *obj);

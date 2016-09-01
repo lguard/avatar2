@@ -92,10 +92,18 @@ void	write_tga_header(int fd, t_scene *scene, t_color **src)
 	/*close(fd);*/
 
 /*{*/
-	/*t_obj *obj;*/
+	/*t_obj		*obj;*/
+	/*t_id_obj	*idobj;*/
 	
-	/*obj = getobject_by_id(id, objlist);*/
-	/*hit->mtl = obj->mtl*/
+	/*obj = getobject_by_id(hit->id, objlist);*/
+	/*idobj = (t_id_obj*)obj;*/
+
+	/*hit->mtl = idobj->mtl;*/
+	/*hit->dir = ray->dir;*/
+	/*obj->normal(obj->object, hit);*/
+	/*vec_rotate(&hit->hitpoint, idobj->matr.x, idobj->matr.y, idobj->matr.z);*/
+	/*vec_rotate(&hit->normal, idobj->matr.x, idobj->matr.y, idobj->matr.z);*/
+	/*vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);*/
 /*}*/
 
 void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora, int opti)
@@ -111,9 +119,9 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 	{
 		color_init(&colorb, 0, 0, 0);
 		ray_trace(ray, scene->obj, hit);
-		//-> compute hitpoint
-		//-> get normal
-		//-> apply mat
+		//-> compute hitpoint c fai dans la function du hau
+		//-> get normal c fai dans la function du hau aussi
+		//-> apply mat aussi
 		if (!hit->didit)
 			return ;
 		ptr = scene->light;
@@ -121,11 +129,12 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 			dotlight(&colorb, (t_dotlight*)ptr->data, hit, scene->obj, opti);
 			ptr = ptr->next;
 		}
-		color_scale(&colorb, (rc * (1- hit->reflect)));
+		//test mtl->reflect
+		color_scale(&colorb, (rc * (1- hit->mtl.reflect)));
 		color_add(colora, &colorb);
 		if (!(opti & REFLECTION))
 			return ;
-		rc *= hit->reflect;
+		rc *= hit->mtl.reflect;
 		ray->dir = vec_reflect(&ray->dir, &hit->normal);
 		ray->pos = hit->hitpoint;
 		hit->didit = 0;
