@@ -1,6 +1,12 @@
 #include "object.h"
 #include "stdio.h"
 
+uint16_t	get_id(void)
+{
+	static uint16_t i = 0;
+	return (i++);
+}
+
 void	hit_error(t_ray *ray, void *non, t_hit *hit)
 {
 	(void)ray;
@@ -24,6 +30,14 @@ void	setobjfun(t_list *obj)
 			case 'p':
 				((t_obj*)(obj->data))->hit = &hit_plane;
 				break ;
+			case 'P':
+				((t_obj*)(obj->data))->hit = &surface_plane;
+				((t_obj*)(obj->data))->normal = &surface_plane_normal;
+				break ;
+			case 'h':
+				((t_obj*)(obj->data))->hit = &surface_hyperboloid;
+				((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
+				break ;
 			default :
 				((t_obj*)(obj->data))->hit = &hit_error;
 				break ;
@@ -34,26 +48,28 @@ void	setobjfun(t_list *obj)
 
 void	addobject(t_list **objlist, void *object, char type)
 {
-	t_obj	*new;
+	t_obj			*new;
+	t_obj_header	*h;
 
 	new = (t_obj*)malloc(sizeof(t_obj));
 	new->type = type;
 	new->object = object;
+	new->id = get_id();
+	h = (t_obj_header*)object;
+	h->id = new->id;
 	list_pushfront(objlist, (void*)new);
 }
 
-t_obj	*getobject_by_id(int id, t_list **objlist)
+t_obj	*getobject_by_id(int id, t_list *objlist)
 {
-	t_list		*new;
-	t_id_obj	*idobj;
+	t_obj_header	*idobj;
 
-	new = *objlist;
-	while (new)
+	while (objlist)
 	{
-		idobj = (t_id_obj*)(((t_obj*)new->data)->object);
+		idobj = (t_obj_header*)(((t_obj*)objlist->data)->object);
 		if (idobj->id == id)
-			return (new->data);
-		new = new->next;
+			return (objlist->data);
+		objlist = objlist->next;
 	}
 	return NULL;
 }

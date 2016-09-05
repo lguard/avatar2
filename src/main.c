@@ -12,14 +12,17 @@ int		sdl_main_loop(t_env *e)
 	int		opti;
 	int		w;
 	int		h;
+	int		lol;
 
 	e->opti = 0;
 	e->opti |= DIFFUSE;
 	e->opti |= UNDERSAMPLE;
 	e->opti |= SCREENSIZE;
+	e->opti |= SHADOW;
 
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
 	SDL_RenderClear(e->img);
+	lol = 1;
 
 	while (1)
 	{
@@ -32,8 +35,9 @@ int		sdl_main_loop(t_env *e)
 			change_scenewh(e, w, h);
 			e->opti ^= SCREENSIZE;
 		}
-		if (e->key != 0 || e->rotkey !=0)
+		if (e->key != 0 || e->rotkey !=0 || lol)
 		{
+			lol =0;
 			opti = e->opti;
 			struct timeval time;
 			if(gettimeofday( &time, 0 ))

@@ -12,6 +12,7 @@
 #include "mysdl.h"
 #include "mtl.h"
 #include "buffer.h"
+#include "quad.h"
 
 void		AA(t_color **src, t_color **rcv, size_t x, size_t y)
 {
@@ -87,24 +88,27 @@ void	write_tga_header(int fd, t_scene *scene, t_color **src)
 		}
 	}
 }
+
 	/*int fd = open("output.tga", O_WRONLY | O_CREAT | S_IRWXU);*/
 	/*write_tga_header(fd, &scene, buff.a);*/
 	/*close(fd);*/
 
-/*{*/
-	/*t_obj		*obj;*/
-	/*t_id_obj	*idobj;*/
+void	process_hit(t_hit *hit, t_list *objlist)
+{
+	t_obj		*obj;
+	t_obj_header	*idobj;
 	
-	/*obj = getobject_by_id(hit->id, objlist);*/
-	/*idobj = (t_id_obj*)obj;*/
+	obj = getobject_by_id(hit->id, objlist);
+	idobj = (t_obj_header*)obj->object;
 
-	/*hit->mtl = idobj->mtl;*/
-	/*hit->dir = ray->dir;*/
-	/*obj->normal(obj->object, hit);*/
-	/*vec_rotate(&hit->hitpoint, idobj->matr.x, idobj->matr.y, idobj->matr.z);*/
-	/*vec_rotate(&hit->normal, idobj->matr.x, idobj->matr.y, idobj->matr.z);*/
-	/*vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);*/
-/*}*/
+	hit->mtl = &(idobj->mtl);
+	hit->hitpoint = vec_scale(&hit->dir, hit->t);
+	hit->hitpoint = vec_add(&hit->hitpoint, &hit->raypos);
+	obj->normal(obj->object, hit);
+	vec_rotate(&hit->hitpoint, idobj->matr.x, idobj->matr.y, idobj->matr.z);
+	vec_rotate(&hit->normal, idobj->matr.x, idobj->matr.y, idobj->matr.z);
+	vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);
+}
 
 void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora, int opti)
 {
@@ -118,18 +122,17 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 	while(i != 0)
 	{
 		color_init(&colorb, 0, 0, 0);
+		hit->dir = ray->dir;
+		hit->raypos = ray->pos;
 		ray_trace(ray, scene->obj, hit);
-		//-> compute hitpoint c fai dans la function du hau
-		//-> get normal c fai dans la function du hau aussi
-		//-> apply mat aussi
 		if (!hit->didit)
 			return ;
+		process_hit(hit, scene->obj);
 		ptr = scene->light;
 		while (ptr) {
 			dotlight(&colorb, (t_dotlight*)ptr->data, hit, scene->obj, opti);
 			ptr = ptr->next;
 		}
-		//test mtl->reflect
 		color_scale(&colorb, (rc * (1- hit->mtl->reflect)));
 		color_add(colora, &colorb);
 		if (!(opti & REFLECTION))
@@ -166,6 +169,7 @@ void	rt(t_scene *scene, t_color **a, int opti)
 		}
 		++x;
 	}
+	vec_display(&scene->cam.pos);
 }
 
 void	single_rt(t_scene *scene, int x, int y)
@@ -238,17 +242,31 @@ void	init_scene(t_scene *scene, int width, int height)
 	t_dotlight	light;
 	t_dotlight	light2;
 	t_mtl		mtl;
-	t_sphere2	*s2;
+	/*t_sphere2	*s2;*/
+	t_quad		*hyper;
+	t_plane		*plane;
 
-	s2 = (t_sphere2*)malloc(sizeof(t_sphere2));
-	s2->pos = (t_vec3d){0, 0, 0};
-	s2->matt = (t_vec3d){1000, -190, 700};
-	s2->matr = (t_vec3d){0, 0, 0.2};
-	s2->mats = (t_vec3d){1, 1, 1};
-	s2->radius = 1000;
+	/*s2 = (t_sphere2*)malloc(sizeof(t_sphere2));*/
+	hyper = (t_quad*)malloc(sizeof(t_quad));
+	hyper->matt = (t_vec3d){1000, -190, 700};
+	hyper->matr = (t_vec3d){0, 0, 0};
+	hyper->mats = (t_vec3d){1, 1, 1};
+	hyper->a = 0.0002;
+	hyper->b = -0.0002;
+	hyper->c = 0.0002;
+	hyper->r = 1;
+	plane = (t_plane*)malloc(sizeof(t_plane));
+	plane->matt = (t_vec3d){0, -700, 800};
+	plane->matr = (t_vec3d){0, 0, 0};
+	plane->mats = (t_vec3d){1, 1, 1};
+	/*s2->pos = (t_vec3d){0, 0, 0};*/
+	/*s2->matt = (t_vec3d){1000, -190, 700};*/
+	/*s2->matr = (t_vec3d){0, 0, 0.2};*/
+	/*s2->mats = (t_vec3d){1, 1, 1};*/
+	/*s2->radius = 1000;*/
 	scene->obj = NULL;
 	scene->light = NULL;
-	vec_init(&scene->cam.pos, 250.f, 10.f, -2000.f);
+	vec_init(&scene->cam.pos, 350.f, 10.f, -2000.f);
 	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
 	scene->cam.rightvec = vec_mul(&scene->cam.dirvec, &scene->cam.upvec);
@@ -264,20 +282,26 @@ void	init_scene(t_scene *scene, int width, int height)
 	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
-	s2->mtl = mtl;
+	/*s2->mtl = mtl;*/
+	hyper->mtl = mtl;
+	mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;
+	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0.3;
+	plane->mtl = mtl;
 	/*init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);*/
 	mtl.color.r = 0.1f; mtl.color.g = 0.2f; mtl.color.b = 0.7f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.f; mtl.reflect = 0.3;
 	/*init_sphere(scene, 100, (t_vec3d){400.f, 190.f, 500.f}, mtl);*/
 	mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0;
-	init_plane(scene, (t_vec3d){0.f, 0.f, -1.f}, (t_vec3d){ 300, 200, 800}, mtl);
-	init_plane(scene, (t_vec3d){1.f, 0.f, 0.f}, (t_vec3d){ -50.f, 200, 800}, mtl);
-	init_plane(scene, (t_vec3d){0.f, 1.f, 0.f}, (t_vec3d){ 300, -700, 800}, mtl);
+	/*init_plane(scene, (t_vec3d){0.f, 0.f, -1.f}, (t_vec3d){ 300, 200, 800}, mtl);*/
+	/*init_plane(scene, (t_vec3d){1.f, 0.f, 0.f}, (t_vec3d){ -50.f, 200, 800}, mtl);*/
+	/*init_plane(scene, (t_vec3d){0.f, 1.f, 0.f}, (t_vec3d){ 300, -700, 800}, mtl);*/
 	mtl.color.r = 0.2f; mtl.color.g = 8.f; mtl.color.b = 0.4f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.0f; mtl.reflect = 0.7;
-	init_plane(scene, (t_vec3d){0.f, -1.f, 0.f}, (t_vec3d){ 300, 400, 800}, mtl);
-	addobject(&scene->obj, s2, 'S');
+	/*init_plane(scene, (t_vec3d){0.f, -1.f, 0.f}, (t_vec3d){ 300, 400, 800}, mtl);*/
+	/*addobject(&scene->obj, s2, 'S');*/
+	addobject(&scene->obj, hyper, 'h');
+	addobject(&scene->obj, plane, 'P');
 	setobjfun(scene->obj);
 	addolight(&scene->light,&light);
 	addolight(&scene->light,&light2);

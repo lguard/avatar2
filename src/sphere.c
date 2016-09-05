@@ -46,6 +46,10 @@
 				2*z*C = 0
 */
 
+FLOAT	dot_produce_elips2(t_vec3d a, t_vec3d b, t_vec3d c)
+{
+	return a.x*b.x*c.x+a.y*b.y*c.y+a.z*b.z*c.z;
+}
 
 FLOAT	solve_quadratic(FLOAT a, FLOAT b, FLOAT c)
 {
@@ -66,6 +70,17 @@ FLOAT	solve_quadratic(FLOAT a, FLOAT b, FLOAT c)
 		return t1;
 	}
 }
+
+/*void	solve_quadratic(FLOAT *t0, FLOAT *t1, FLOAT a, FLOAT b, FLOAT c)*/
+/*{*/
+	/*FLOAT	d;*/
+
+	/*d = b*b - 4*a * c;*/
+	/*if (d < 0.0f)*/
+		/*return ;*/
+	/**t0 = (-b + sqrtf(d)) / (2*a);*/
+	/**t1 = (-b - sqrtf(d)) / (2*a);*/
+/*}*/
 
 void		hit_sphere(t_ray *ray, void *sphere, t_hit *hit)
 {
@@ -133,9 +148,9 @@ void		hit_sphere2(t_ray *srcray, void *sphere, t_hit *hit)
 	(void)d;
 	(void)t1;
 	/*t²*(X²*A+Y²*B+Z²*C)+t*2*(X*A*px+Y*B*py+Z*C*pz)+ A*px² + B*py² + C*pz² - 1 = 0*/
-	t0 = solve_quadratic(vec_dotproduct(&ray.dir, &ray.dir), 2 * vec_dotproduct(&ray.dir, &ray.pos),vec_dotproduct(&ray.pos, &ray.pos)- s->radius * s->radius);
-	/*t0 = solve_quadratic(dot_produce_elips(ray.dir, ray.dir, test), 2*dot_produce_elips(ray.dir, ray.pos, test)*/
-	/*,dot_produce_elips(ray.pos, ray.pos, test)- 1);*/
+	/*t0 = solve_quadratic(vec_dotproduct(&ray.dir, &ray.dir), 2 * vec_dotproduct(&ray.dir, &ray.pos),vec_dotproduct(&ray.pos, &ray.pos)- s->radius * s->radius);*/
+	t0 = solve_quadratic(dot_produce_elips2(ray.dir, ray.dir, test), 2*dot_produce_elips2(ray.dir, ray.pos, test)
+	,dot_produce_elips2(ray.pos, ray.pos, test)- 1);
 	if (t0 > 0.1f && t0 < hit->t) {
 		/*t_vec3d tt = vec_scale(&ray.dir, t0);*/
 		/*tt = vec_add(&tt, &ray.pos);*/

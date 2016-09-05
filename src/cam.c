@@ -16,9 +16,9 @@ t_vec3d	getupleft(t_cam *cam, FLOAT wfov, FLOAT hfov)
 	t_vec3d	v6;
 
 	v1 = vec_scale(&cam->dirvec, 1.0f);
-	v2 = vec_scale(&cam->upvec, wfov/2.0f);
+	v2 = vec_scale(&cam->upvec, hfov/2.0f);
 	v3 = vec_add(&v1, &v2);
-	v4 = vec_scale(&cam->rightvec, hfov/2.0f);
+	v4 = vec_scale(&cam->rightvec, wfov/2.0f);
 	v5 = vec_sub(&v3, &v4);
 	v6 = vec_add(&cam->pos, &v5);
 	return (v6);

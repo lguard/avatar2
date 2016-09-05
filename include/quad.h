@@ -1,6 +1,7 @@
 #ifndef QUAD_H
 # define QUAD_H
 
+# include <stdint.h>
 # include "vec.h"
 # include "ray.h"
 # include "math.h"
@@ -9,12 +10,16 @@
 
 typedef struct	s_quad
 {
-	int		id;
-	t_mtl	mtl;
-	t_vec3d	matt;
-	t_vec3d	matr;
-	t_vec3d	mats;
-	t_vec3d	param;
+	uint16_t		id;
+	t_mtl			mtl;
+	t_vec3d			matt;
+	t_vec3d			matr;
+	t_vec3d			mats;
+	FLOAT			a;
+	FLOAT			b;
+	FLOAT			c;
+	FLOAT			r;
+
 }				t_quad;
 
 
