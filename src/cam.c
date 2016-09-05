@@ -59,9 +59,9 @@ void	rot_cam(t_cam *cam, FLOAT xa, FLOAT ya, FLOAT za)
 
 void	move_cam(t_cam *cam, t_vec3d *dir, FLOAT a)
 {
-	cam->pos.x += dir->x * a*50;
-	cam->pos.y += dir->y * a*50;
-	cam->pos.z += dir->z * a*50;
+	cam->pos.x += dir->x * a;
+	cam->pos.y += dir->y * a;
+	cam->pos.z += dir->z * a;
 }
 
 void	handle_move(t_cam *cam, int key, FLOAT frame)
@@ -70,13 +70,13 @@ void	handle_move(t_cam *cam, int key, FLOAT frame)
 
 	vec_init(&dir, 0, 0,0);
 	if(key & UP)
-		dir = vec_sub(&dir, &cam->dirvec);
-	if(key & DOWN)
 		dir = cam->dirvec;
+	if(key & DOWN)
+		dir = vec_sub(&dir, &cam->dirvec);
 	if(key & LEFT)
-		dir = vec_add(&dir, &cam->rightvec);
-	if(key & RIGHT)
 		dir = vec_sub(&dir, &cam->rightvec);
+	if(key & RIGHT)
+		dir = vec_add(&dir, &cam->rightvec);
 	vec_normalize(&dir);
 	move_cam(cam, &dir, frame);
 }
@@ -85,10 +85,10 @@ void	handle_rot(t_cam *cam, int key, FLOAT frame)
 {
 	frame *=0.2;
 	if(key & ROTPX)	{
-		rot_cam(cam, frame, 0, 0);
+		rot_cam(cam, -frame, 0, 0);
 	}
 	if(key & ROTPXB)	{
-		rot_cam(cam, -frame, 0, 0);
+		rot_cam(cam, frame, 0, 0);
 	}
 	if(key & ROTPY)	{
 		rot_cam(cam, 0, frame, 0);

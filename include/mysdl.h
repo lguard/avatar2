@@ -18,6 +18,8 @@ typedef struct		s_env
 	SDL_Surface		*surface;
 	t_scene			scene;
 	t_buffer		buff;
+	char			cmd[255];
+	int				cmd_cursor;
 	int				opti;
 	int				key;
 	int				rotkey;

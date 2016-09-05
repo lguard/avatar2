@@ -5,8 +5,8 @@ void		surface_hyperboloid(t_ray *srcray, void *quad, t_hit *hit)
 	t_quad		*hb;
 	t_ray		ray;
 	t_vec3d		param;
-	FLOAT		t0;
-	FLOAT		t1;
+	FLOAT		t0 = 2000000;
+	FLOAT		t1 = 2000000;
 
 	hb = (t_quad*)quad;
 	vec_init(&param, hb->a, hb->b, hb->c);

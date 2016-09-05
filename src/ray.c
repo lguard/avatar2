@@ -45,6 +45,7 @@ t_ray	ray_invertmat(t_ray *srcray, t_vec3d *matt, t_vec3d *matr, t_vec3d *mats)
 	ray = *srcray;
 	ray_translate(&ray, -matt->x, -matt->y, -matt->z);
 	ray_rotate(&ray, -matr->x, -matr->y, -matr->z);
+	(void)mats;
 	/*ray_scale(&ray, 1.f / mats->x, 1.f / mats->y, 1.f / mats->z);*/
 	return ray;
 }

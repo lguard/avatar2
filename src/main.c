@@ -20,6 +20,8 @@ int		sdl_main_loop(t_env *e)
 	e->opti |= SCREENSIZE;
 	e->opti |= SHADOW;
 
+	/*SDL_StartTextInput();*/
+	SDL_StopTextInput();
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
 	SDL_RenderClear(e->img);
 	lol = 1;
@@ -50,9 +52,9 @@ int		sdl_main_loop(t_env *e)
 				return -1;
 			cur_time = 1000000 * time.tv_sec + time.tv_usec;
 			double sec2 = cur_time / 1000000.0;
-			/*printf("%f\n", sec2-sec1);*/
+			printf("%f\n", sec2-sec1);
 			if (e->key != 0) {
-				handle_move(&e->scene.cam, e->key, sec2-sec1);
+				handle_move(&e->scene.cam, e->key, (sec2-sec1)*50);
 			}
 			if (e->rotkey != 0) {
 				handle_rot(&e->scene.cam, e->rotkey, sec2-sec1);
@@ -72,6 +74,9 @@ int		sdl_init(t_env *e, int width, int height)
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
 	e->key = 0;
 	e->rotkey = 0;
+	for (int i = 0;i < 255;++i)
+		e->cmd[i] = 0;
+	e->cmd_cursor = 0;
 	return (0);
 }
 

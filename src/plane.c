@@ -32,27 +32,15 @@ void		surface_plane(t_ray *srcray, void *plane, t_hit *hit)
 	t_plane	*p;
 	FLOAT	t;
 	FLOAT	j;
-	t_vec3d	a;
-	t_vec3d	b;
 	t_ray	ray;
 
 	p = (t_plane*)plane;
 	ray = ray_invertmat(srcray, &p->matt, &p->matr, &p->mats);
 
-	a.x = 0;
-	a.y = 1;
-	a.z = 0;
-	j = vec_dotproduct(&a, &ray.dir);
+	j = ray.dir.y;
 	if (j == 0.f)
 		return ;
-	a.x = 0;
-	a.y = 0;
-	a.z = 0;
-	a = vec_sub(&a, &ray.pos);
-	b.x = 0;
-	b.y = 1;
-	b.z = 0;
-	t = vec_dotproduct(&b, &a);
+	t = 0 - ray.pos.y;
 	t /= j;
 	hit_switch(t, 20000000, p->id, hit, &ray);
 }

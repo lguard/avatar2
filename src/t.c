@@ -14,6 +14,9 @@
 #include "buffer.h"
 #include "quad.h"
 
+#define DEGREESTORADIANS(x) (x * M_PI / 180.0)
+#define RADIANSTODEGREES(x) (x * 180.0 / M_PI)
+
 void		AA(t_color **src, t_color **rcv, size_t x, size_t y)
 {
 	for (size_t i = 1;i<(x-1);++i) {
@@ -181,7 +184,7 @@ void	single_rt(t_scene *scene, int x, int y)
 	t_color color;
 
 	xyratio(&xindent, &yindent, &scene->cam, scene->width, scene->height);
-	t_vec3d planepix = getplanepix(&scene->cam, x, y, xindent, yindent);
+	t_vec3d planepix = getplanepix(&scene->cam, x/2, y/2, xindent, yindent);
 	hit.t = 20000;
 	hit.didit = 0;
 	vec_normalize(&planepix);
@@ -244,24 +247,38 @@ void	init_scene(t_scene *scene, int width, int height)
 	t_mtl		mtl;
 	/*t_sphere2	*s2;*/
 	t_quad		*hyper;
+	t_quad		*hyper2;
 	t_plane		*plane;
+	t_plane		*plane2;
 
 	/*s2 = (t_sphere2*)malloc(sizeof(t_sphere2));*/
 	hyper = (t_quad*)malloc(sizeof(t_quad));
 	hyper->matt = (t_vec3d){1000, -190, 700};
-	hyper->matr = (t_vec3d){0, 0, 0};
+	hyper->matr = (t_vec3d){0, 0, 0.2};
 	hyper->mats = (t_vec3d){1, 1, 1};
 	hyper->a = 0.0002;
 	hyper->b = -0.0002;
 	hyper->c = 0.0002;
-	hyper->r = 1;
+	hyper->r = -1;
+	hyper2 = (t_quad*)malloc(sizeof(t_quad));
+	hyper2->matt = (t_vec3d){-100, -190, 700};
+	hyper2->matr = (t_vec3d){0, 0, 0};
+	hyper2->mats = (t_vec3d){1, 1, 1};
+	hyper2->a = 0.00008;
+	hyper2->b = 0.00002;
+	hyper2->c = 0.00008;
+	hyper2->r = -1;
 	plane = (t_plane*)malloc(sizeof(t_plane));
 	plane->matt = (t_vec3d){0, -700, 800};
 	plane->matr = (t_vec3d){0, 0, 0};
 	plane->mats = (t_vec3d){1, 1, 1};
+	plane2 = (t_plane*)malloc(sizeof(t_plane));
+	plane2->matt = (t_vec3d){-300, -700, 800};
+	plane2->matr = (t_vec3d){0, 0, -1.5708};
+	plane2->mats = (t_vec3d){1, 1, 1};
 	/*s2->pos = (t_vec3d){0, 0, 0};*/
 	/*s2->matt = (t_vec3d){1000, -190, 700};*/
-	/*s2->matr = (t_vec3d){0, 0, 0.2};*/
+	/*s2->matr = (t_vec3d){0, 0, 0};*/
 	/*s2->mats = (t_vec3d){1, 1, 1};*/
 	/*s2->radius = 1000;*/
 	scene->obj = NULL;
@@ -284,9 +301,11 @@ void	init_scene(t_scene *scene, int width, int height)
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
 	/*s2->mtl = mtl;*/
 	hyper->mtl = mtl;
+	hyper2->mtl = mtl;
 	mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;
 	mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0.3;
 	plane->mtl = mtl;
+	plane2->mtl = mtl;
 	/*init_sphere(scene, 100, (t_vec3d){0.f, 170.f, 700.f}, mtl);*/
 	mtl.color.r = 0.1f; mtl.color.g = 0.2f; mtl.color.b = 0.7f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.f; mtl.reflect = 0.3;
@@ -302,6 +321,8 @@ void	init_scene(t_scene *scene, int width, int height)
 	/*addobject(&scene->obj, s2, 'S');*/
 	addobject(&scene->obj, hyper, 'h');
 	addobject(&scene->obj, plane, 'P');
+	addobject(&scene->obj, plane2, 'P');
+	addobject(&scene->obj, hyper2, 'h');
 	setobjfun(scene->obj);
 	addolight(&scene->light,&light);
 	addolight(&scene->light,&light2);
