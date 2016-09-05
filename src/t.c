@@ -192,8 +192,8 @@ void	single_rt(t_scene *scene, int x, int y)
 	vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
 
 	light_and_reflect(&ray, &hit, scene, &color, 1 | 64);
-	printf("x:%d, y:%d\n", x, y);
-	printf("\033[38;2mr %d, g %d, b %d\n", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
+	printf("\033[48;2;%d;%d;%dm", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
+	printf("x:%d, y:%d | r:%d g:%d b:%d\033[0m\n", x, y, (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
 }
 
 void	render(t_env *e, t_scene *scene, t_color **a)
