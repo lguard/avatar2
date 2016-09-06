@@ -1,7 +1,7 @@
 NAME = avatar2
 CC = gcc -std=c11
 RM = rm -f
-LIB =  -L utilsc/ -lutilsc -lm $(shell sdl2-config --libs)
+LIB =  -L utilsc/ -lutilsc -lm -lpthread -D_REENTRANT -lreadline $(shell sdl2-config --libs)
 INCLUDE = -I utilsc/include -I include $(shell sdl2-config --cflags)
 CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
 SRC = $(addprefix src/, $(shell ls src | grep .c -F))

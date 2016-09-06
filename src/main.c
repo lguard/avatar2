@@ -1,6 +1,10 @@
 #include "mysdl.h"
 #include <unistd.h>
 #include <sys/time.h>
+#include <pthread.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
 
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti);
 void	init_scene(t_scene *scene, int width, int height);
@@ -93,11 +97,29 @@ void	sdl_quit(t_env *e)
 	SDL_Quit();
 }
 
+void	*parse_cmd(void	*env)
+{
+	(void)env;
+	char *inpt;
+
+	while (42)
+	{
+		inpt = readline("Enter text: ");
+		add_history(inpt);
+		printf("%s", inpt);
+		printf("\n");
+	}
+	clear_history();
+	return NULL;
+}
+
 int main(void)
 {
 	t_env		e;
+	pthread_t	p;
 
 	init(&e, &e.scene, &e.buff, 400, 500);
+	pthread_create (&p, NULL, parse_cmd, &e);
 	sdl_main_loop(&e);
 	return 0;
 }
