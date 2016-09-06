@@ -37,13 +37,14 @@
 				Y²*t²*B + 2*Y*t*py*B+py²
 				Z²*t²*C + 2*Z*t*pz*C+pz²
 				t²*(X²*A+Y²*B+Z²*C)+t*2*(X*A*px+Y*B*py+Z*C*pz)+ A*px² + B*py² + C*pz² - 1 = 0
-				(t^2)*((x^2)*a+(y^2)*b+(z^2)*c)+t*2*(x*px*a+y*py*b+z*pz*c)+(px^2)*a+(py^2)*b+(pz^2)*c
+				(t^2)*((dx^2)*a+(dy^2)*b+(dz^2)*c)+t*2*(dx*px*a+dy*py*b+dz*pz*c)+(px^2)*a+(py^2)*b+(pz^2)*c
 
 	hyperboloide:
 				x²/a² - y²/b² + z²/c² = 1
-				2*x*A = 0
-				-2*y*B = 0
-				2*z*C = 0
+				(t^2)*((x^2)*a-(y^2)*b+(z^2)*c)+t*2*(x*px*a-y*py*b+z*pz*c)+(px^2)*a-(py^2)*b+(pz^2)*c
+	cylindre:
+				x^2/a^2+z^2/b^2 = 1
+				(t^2)*((x^2)*a+(z^2)*c)+t*2*(x*px*a++z*pz*c)+(px^2)*a+(pz^2)*c = 1
 */
 
 FLOAT	dot_produce_elips2(t_vec3d a, t_vec3d b, t_vec3d c)

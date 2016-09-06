@@ -14,6 +14,8 @@ typedef struct	s_cam
 	FLOAT		wfov;
 	FLOAT		hfov;
 	FLOAT		distance;
+	FLOAT		roty;
+	FLOAT		rotx;
 }				t_cam;
 
 

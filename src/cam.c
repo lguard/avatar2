@@ -81,19 +81,54 @@ void	handle_move(t_cam *cam, int key, FLOAT frame)
 	move_cam(cam, &dir, frame);
 }
 
+/*void	handle_rot(t_cam *cam, int key, FLOAT frame)*/
+/*{*/
+	/*frame *=0.2;*/
+	/*if(key & ROTPX)	{*/
+		/*rot_cam(cam, -frame, 0, 0);*/
+	/*}*/
+	/*if(key & ROTPXB)	{*/
+		/*rot_cam(cam, frame, 0, 0);*/
+	/*}*/
+	/*if(key & ROTPY)	{*/
+		/*rot_cam(cam, 0, frame, 0);*/
+	/*}*/
+	/*if(key & ROTPYB)	{*/
+		/*rot_cam(cam, 0, -frame, 0);*/
+	/*}*/
+/*}*/
+
+void	rot_cam2(t_cam *cam)
+{
+	vec_init(&cam->dirvec, 0.f, 0.f, 1.f);
+	vec_init(&cam->upvec, 0.f, 1.f, 0.f);
+	cam->rightvec = vec_mul(&cam->dirvec, &cam->upvec);
+	cam->dirvec = vec_rotaion_x(&cam->dirvec, cam->rotx);
+	cam->upvec = vec_rotaion_x(&cam->upvec, cam->rotx);
+	cam->rightvec = vec_rotaion_x(&cam->rightvec, cam->rotx);
+
+	cam->dirvec = vec_rotaion_y(&cam->dirvec, cam->roty);
+	cam->upvec = vec_rotaion_y(&cam->upvec, cam->roty);
+	cam->rightvec = vec_rotaion_y(&cam->rightvec, cam->roty);
+
+	/*cam->dirvec = vec_rotaion_z(&cam->dirvec, za);*/
+	/*cam->upvec = vec_rotaion_z(&cam->upvec, za);*/
+	/*cam->rightvec = vec_rotaion_z(&cam->rightvec, za);*/
+}
 void	handle_rot(t_cam *cam, int key, FLOAT frame)
 {
-	frame *=0.2;
+	frame *=0.4;
 	if(key & ROTPX)	{
-		rot_cam(cam, -frame, 0, 0);
+		cam->rotx -=frame;
 	}
 	if(key & ROTPXB)	{
-		rot_cam(cam, frame, 0, 0);
+		cam->rotx +=frame;
 	}
 	if(key & ROTPY)	{
-		rot_cam(cam, 0, frame, 0);
+		cam->roty +=frame;
 	}
 	if(key & ROTPYB)	{
-		rot_cam(cam, 0, -frame, 0);
+		cam->roty -=frame;
 	}
+	rot_cam2(cam);
 }

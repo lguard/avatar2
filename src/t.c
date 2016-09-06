@@ -254,18 +254,18 @@ void	init_scene(t_scene *scene, int width, int height)
 	/*s2 = (t_sphere2*)malloc(sizeof(t_sphere2));*/
 	hyper = (t_quad*)malloc(sizeof(t_quad));
 	hyper->matt = (t_vec3d){1000, -190, 700};
-	hyper->matr = (t_vec3d){0, 0, 0.2};
+	hyper->matr = (t_vec3d){0, 0, 0};
 	hyper->mats = (t_vec3d){1, 1, 1};
-	hyper->a = 0.0002;
-	hyper->b = -0.0002;
-	hyper->c = 0.0002;
-	hyper->r = -1;
+	hyper->a = 2;
+	hyper->b = 2;
+	hyper->c = 2;
+	hyper->r = 70;
 	hyper2 = (t_quad*)malloc(sizeof(t_quad));
 	hyper2->matt = (t_vec3d){-100, -190, 700};
 	hyper2->matr = (t_vec3d){0, 0, 0};
 	hyper2->mats = (t_vec3d){1, 1, 1};
 	hyper2->a = 0.00008;
-	hyper2->b = 0.00002;
+	hyper2->b = -0.00002;
 	hyper2->c = 0.00008;
 	hyper2->r = -1;
 	plane = (t_plane*)malloc(sizeof(t_plane));
@@ -283,7 +283,7 @@ void	init_scene(t_scene *scene, int width, int height)
 	/*s2->radius = 1000;*/
 	scene->obj = NULL;
 	scene->light = NULL;
-	vec_init(&scene->cam.pos, 350.f, 10.f, -2000.f);
+	vec_init(&scene->cam.pos, 350.f, 10.f, -3000.f);
 	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
 	scene->cam.rightvec = vec_mul(&scene->cam.dirvec, &scene->cam.upvec);
@@ -295,7 +295,9 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->cam.hfov = 1.0 / ((float)width / (float)height);
 	scene->cam.viewplane_upleft = getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
 	scene->cam.distance = 1.f;
-	init_dotlight(&light, (t_vec3d){200.f, 50.f, 500.f}, (t_color){1.0f, 1.0f, 1.f});
+	scene->cam.roty = 0;
+	scene->cam.rotx = 0;
+	init_dotlight(&light, (t_vec3d){200.f, 50.f, -1000.f}, (t_color){1.0f, 1.0f, 1.f});
 	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
 	mtl.color.r = 1.0f; mtl.color.g = 0.32f; mtl.color.b = 0.0f;
 	mtl.specular.r = 1.0f; mtl.specular.g = 1.f; mtl.specular.b = 1.0f; mtl.reflect = 0;
@@ -322,7 +324,7 @@ void	init_scene(t_scene *scene, int width, int height)
 	addobject(&scene->obj, hyper, 'h');
 	addobject(&scene->obj, plane, 'P');
 	addobject(&scene->obj, plane2, 'P');
-	addobject(&scene->obj, hyper2, 'h');
+	/*addobject(&scene->obj, hyper2, 'h');*/
 	setobjfun(scene->obj);
 	addolight(&scene->light,&light);
 	addolight(&scene->light,&light2);
