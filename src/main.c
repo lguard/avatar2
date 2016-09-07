@@ -108,7 +108,7 @@ void	save_to_file(char **cmd)
 	}
 }
 
-void	display_scene(t_scene *sc)
+void	display_light(t_scene *sc)
 {
 	t_list		*ptr;
 	t_dotlight	*dl;
@@ -117,10 +117,31 @@ void	display_scene(t_scene *sc)
 	while (ptr)
 	{
 		dl = (t_dotlight*)ptr->data;
-		printf("pos:x%f,y%fz,%f color:r%f,g%f,b%f\n",
+		print("pos:x%f,y%fz,%f color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
 		dl->pos.x,dl->pos.y,dl->pos.z,dl->color.g,dl->color.r,dl->color.b);
 		ptr = ptr->next;
 	}
+}
+
+void	display_object(t_scene *sc)
+{
+	t_list		*ptr;
+	t_obj		*obj;
+
+	ptr = sc->obj;
+	while (ptr)
+	{
+		obj = (t_obj*)ptr->data;
+		print("id:%u, type:%c\n", //,  color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
+		obj->id, obj->type);
+		ptr = ptr->next;
+	}
+}
+
+void	display_scene(t_scene *sc)
+{
+	display_light(sc);
+	display_object(sc);
 }
 
 void	exec_cmd(t_scene *sc, char **cmd)

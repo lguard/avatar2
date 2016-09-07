@@ -27,5 +27,9 @@ void		solve_quadraticv2(FLOAT *t0, FLOAT *t1, FLOAT a, FLOAT b, FLOAT c);
 FLOAT		dot_produce_elips(t_vec3d a, t_vec3d b, t_vec3d c);
 void		surface_hyperboloid(t_ray *srcray, void *quad, t_hit *hit);
 void		surface_hyperboloid_normal(void *hyperboloid, t_hit *hit);
+void		surface_cone(t_ray *srcray, void *quad, t_hit *hit);
+void		surface_cone_normal(void *hyperboloid, t_hit *hit);
+void		surface_cylindre(t_ray *srcray, void *quad, t_hit *hit);
+void		surface_cylindre_normal(void *hyperboloid, t_hit *hit);
 
 #endif /* QUAD_H */

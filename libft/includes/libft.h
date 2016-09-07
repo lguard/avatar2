@@ -16,8 +16,10 @@
 # include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
-# define BUFF_SIZE 65536
 # include <fcntl.h>
+
+# define BUFF_SIZE 65536
+# define BASE "0123456789abcdef"
 
 typedef struct		s_read
 {
@@ -25,7 +27,11 @@ typedef struct		s_read
 	int				fd;
 }					t_read;
 
-void				put(char *str, ...);
+void				print(char *str, ...);
+float				ft_ftoi(const char *str);
+void				ft_putnbr_base_fd_uint(int fd, unsigned int nbr, unsigned int base);
+void				ft_putnbr_base_fd_int(int fd, int nbr, int base);
+void				ft_putnbr_fd_float(int fd, float nbr);
 int					get_next_line(int const fd, char **line);
 int					ft_testnu(char *str);
 void				*ft_memset(void *b, int c, size_t len);

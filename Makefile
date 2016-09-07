@@ -21,6 +21,7 @@ debug: re
 
 $(NAME): $(OBJ)
 	make -j -C utilsc $(DEBUG)
+	make -j -C libft $(DEBUG)
 	$(CC) $(OPTI) -o $(NAME) $(OBJ) $(CFLAGS) $(LIB)
 
 %.o: %.c
@@ -28,10 +29,12 @@ $(NAME): $(OBJ)
 
 clean:
 	make -C utilsc clean
+	make -C libft clean
 	$(RM) $(OBJ)
 
 fclean: clean
 	make -C utilsc fclean
+	make -C libft fclean
 	$(RM) $(NAME)
 
 re: fclean all

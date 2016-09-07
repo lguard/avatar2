@@ -3,7 +3,10 @@ CC = gcc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 OBJ = $(SRC:.c=.o)
-SRC =	ft_atoi.c \
+SRC =	ft_print.c \
+		ft_print_utils.c \
+		ft_ftoi.c \
+		ft_atoi.c \
 		ft_testnu.c \
 		ft_bzero.c \
 		ft_isalnum.c \
@@ -61,17 +64,16 @@ SRC =	ft_atoi.c \
 		ft_trim.c \
 		ft_tolower.c \
 		ft_toupper.c \
-		get_next_line.c \
-		put.c
+		get_next_line.c
 
 all: $(NAME)
 
-$(NAME): $(OBJ) includes/libft.h
-	ar rc $(NAME) $(OBJ)
+$(NAME): $(OBJ)
+	ar rc $(NAME) $(OBJ) 
 	ranlib $(NAME)
 
 %.o: %.c
-	$(CC) -O2 -o $@ -c $< $(CFLAGS)
+	$(CC) -I includes -O2 -o $@ -c $< $(CFLAGS)
 
 clean:
 	$(RM) $(OBJ)

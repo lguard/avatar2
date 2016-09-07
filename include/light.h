@@ -2,6 +2,7 @@
 # define LIGHT_H
 
 # include <string.h>
+# include <stdint.h>
 # include "vec.h"
 # include "ray.h"
 # include "raytrace.h"
@@ -18,6 +19,7 @@
 
 typedef struct	s_dotlight
 {
+	uint16_t	id;
 	t_vec3d		pos;
 	t_color		color;
 }				t_dotlight;
