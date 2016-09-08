@@ -20,10 +20,15 @@ typedef struct	s_obj_header
 	t_vec3d		mats;
 }				t_obj_header;
 
+typedef struct	s_id
+{
+	uint16_t	id;
+}				t_id;
+
 typedef struct	s_obj
 {
-	char		type;
 	uint16_t	id;
+	char		type;
 	void		*object;
 	void		(*hit)(t_ray *, void *, t_hit *);
 	void		(*normal)(void *, t_hit *);
@@ -35,5 +40,6 @@ void		addobject(t_list **objlist, void *object, char type);
 void		delete_object(void *obj);
 t_obj		*getobject_by_id(int id, t_list *objlist);
 uint16_t	get_id(void);
+int			remove_obj(void *obj, void *id);
 
 #endif

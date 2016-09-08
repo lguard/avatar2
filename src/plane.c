@@ -50,3 +50,18 @@ void	surface_plane_normal(void *plane, t_hit *hit)
 	(void)plane;
 	vec_init(&hit->normal, 0, 1.f, 0);
 }
+
+t_plane		*surface_default_plane(t_vec3d *pos)
+{
+	t_plane *sphere;
+
+	sphere  = (t_plane*)malloc(sizeof(t_plane));
+	vec_init(&sphere->matt, pos->x, pos->y, pos->z);
+	vec_init(&sphere->matr, 0, 0, 0);
+	vec_init(&sphere->mats, 1, 1, 1);
+	vec_init(&sphere->normal, 0, 1, 0);
+	color_init(&sphere->mtl.color, 1.0f, 1.0f, 0.0f);
+	color_init(&sphere->mtl.specular, 1.0f, 1.0f, 1.0f);
+	sphere->mtl.reflect = 0.1;
+	return (sphere);
+}

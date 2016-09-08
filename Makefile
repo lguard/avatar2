@@ -16,7 +16,7 @@ opti: OPTI += -O2
 opti: re
 
 debug: DEBUG += debug
-debug: CFLAGS += -g
+debug: CFLAGS += -g3
 debug: re
 
 $(NAME): $(OBJ)

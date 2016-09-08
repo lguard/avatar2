@@ -68,6 +68,9 @@ SRC =	ft_print.c \
 
 all: $(NAME)
 
+debug: CFLAGS += -g
+debug: $(NAME)
+
 $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ) 
 	ranlib $(NAME)

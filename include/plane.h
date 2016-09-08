@@ -18,8 +18,9 @@ typedef struct	s_plane
 	t_vec3d		pos;
 }				t_plane;
 
-void	hit_plane(t_ray *ray, void *plane, t_hit *hit);
-void	surface_plane(t_ray *ray, void *plane, t_hit *hit);
-void	surface_plane_normal(void *plane, t_hit *hit);
+void		hit_plane(t_ray *ray, void *plane, t_hit *hit);
+void		surface_plane(t_ray *ray, void *plane, t_hit *hit);
+void		surface_plane_normal(void *plane, t_hit *hit);
+t_plane		*surface_default_plane(t_vec3d *pos);
 
 #endif /* PLANE_H */

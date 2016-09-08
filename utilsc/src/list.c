@@ -6,7 +6,7 @@ t_list	*list_new(void *data)
 	node = (t_list*)malloc(sizeof(t_list));
 	node->next = NULL;
 	node->data = data;
-	return node;
+	return (node);
 }
 
 void	list_pushback(t_list **root, void *data)
@@ -81,4 +81,23 @@ void	list_dellast(t_list **root, void(*del)(void *))
 	ptr->data = NULL;
 	free(ptr);
 	ptr2->next = NULL;
+}
+
+void	list_delelem(t_list **root, void *to_remove, int(*cmp)(void *, void *), void(*del)(void *))
+{
+	t_list **pp = root;
+	t_list *entry = *root;
+
+	while (entry)
+	{
+		if (!cmp(entry->data, to_remove))
+		{
+			*pp = entry->next;
+			del(entry->data);
+			free(entry);
+			return ;
+		}
+		pp = &entry->next;
+		entry = entry->next;
+	}
 }

@@ -26,7 +26,6 @@ int		sdl_main_loop(t_env *e)
 	e->opti |= SCREENSIZE;
 	e->opti |= SHADOW;
 
-	/*SDL_StartTextInput();*/
 	SDL_StopTextInput();
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
 	SDL_RenderClear(e->img);
@@ -43,9 +42,9 @@ int		sdl_main_loop(t_env *e)
 			change_scenewh(e, w, h);
 			e->opti ^= SCREENSIZE;
 		}
-		if (e->key != 0 || e->rotkey !=0 || lol)
+		if (e->toraytrace)
 		{
-			lol =0;
+			e->toraytrace = 0;
 			opti = e->opti;
 			struct timeval time;
 			if(gettimeofday( &time, 0 ))
@@ -53,12 +52,11 @@ int		sdl_main_loop(t_env *e)
 			long cur_time = 1000000 * time.tv_sec + time.tv_usec;
 			double sec1 = cur_time / 1000000.0;
 			mainrt(e, &e->scene, &e->buff, opti);
-			SDL_RenderPresent(e->img);
 			if(gettimeofday( &time, 0 ))
 				return -1;
 			cur_time = 1000000 * time.tv_sec + time.tv_usec;
 			double sec2 = cur_time / 1000000.0;
-			printf("%f\n", sec2-sec1);
+			/*printf("%f\n", sec2-sec1);*/
 			if (e->key != 0) {
 				handle_move(&e->scene.cam, e->key, (sec2-sec1)*240);
 			}
@@ -67,6 +65,7 @@ int		sdl_main_loop(t_env *e)
 			}
 			e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
 		}
+		SDL_RenderPresent(e->img);
 	}
 	sdl_quit(e);
 }
@@ -83,6 +82,7 @@ int		sdl_init(t_env *e, int width, int height)
 	for (int i = 0;i < 255;++i)
 		e->cmd[i] = 0;
 	e->cmd_cursor = 0;
+	e->toraytrace = 1;
 	return (0);
 }
 
@@ -138,24 +138,59 @@ void	display_object(t_scene *sc)
 	}
 }
 
-void	display_scene(t_scene *sc)
+void	display_scene(t_env *env)
 {
-	display_light(sc);
-	display_object(sc);
+	display_light(&env->scene);
+	display_object(&env->scene);
 }
 
-void	exec_cmd(t_scene *sc, char **cmd)
+void	delete_obj(t_env *env, char **cmd)
+{
+	uint16_t	id;
+
+	if(!cmd[1])
+		return ;
+	id = ft_atoi(cmd[1]);
+	list_delelem(&env->scene.obj, &id, &remove_obj, &delete_object);
+	env->toraytrace = 1;
+	display_object(&env->scene);
+}
+
+void	new_obj(t_env *env, char **cmd)
+{
+	t_vec3d		pos;
+
+	if(!cmd[1] || !cmd[2] || !cmd[3] || !cmd[4]) 
+		return ;
+	vec_init(&pos, ft_ftoi(cmd[2]), ft_ftoi(cmd[3]), ft_ftoi(cmd[4]));
+	if(*cmd[1] == 'S')
+		addobject(&env->scene.obj, surface_default_sphere(&pos), 'S');
+	if(*cmd[1] == 'h')
+		addobject(&env->scene.obj, surface_default_hyperboloid(&pos), 'h');
+	if(*cmd[1] == 'C')
+		addobject(&env->scene.obj, surface_default_cylindre(&pos), 'C');
+	if(*cmd[1] == 'c')
+		addobject(&env->scene.obj, surface_default_cone(&pos), 'c');
+	if(*cmd[1] == 'p')
+		addobject(&env->scene.obj, surface_default_plane(&pos), 'p');
+	env->toraytrace = 1;
+	display_object(&env->scene);
+}
+
+void	exec_cmd(t_env *env, char **cmd)
 {
 	int		i;
-	/*if (!strcmp(*cmd, "new"))*/
-	/*new [hyperbol, sphere, cone, cylindre, plan]*/
-	if (!strcmp(*cmd, "list"))
-		display_scene(sc);
+	if (!ft_strcmp(*cmd, "new"))
+		new_obj(env, cmd);
+	if (!ft_strcmp(*cmd, "list"))
+		display_scene(env);
 	/*list*/
 	/*if (!strcmp(*cmd, "mod"))*/
 	/*mod id [color vec, specular vec, mat[t,r,s] vec, reflect f, [abcr] f]*/
-	if (!strcmp(*cmd, "save"))
+	if (!ft_strcmp(*cmd, "save"))
 		save_to_file(cmd);
+	if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
+		delete_obj(env, cmd);
 	/*save filename*/
 	i = 0;
 	while (cmd[i])
@@ -172,9 +207,11 @@ void	*parse_cmd(void	*env)
 
 	while (42)
 	{
-		inpt = readline("Enter text: ");
+		inpt = readline("\x1b[32mavatar2->\x1b[0m");
 		add_history(inpt);
-		exec_cmd(&((t_env*)env)->scene, ft_strsplit(inpt, ' '));
+		if (!*inpt)
+			continue ;
+		exec_cmd(((t_env*)env), ft_strsplit(inpt, ' '));
 	}
 	clear_history();
 	return NULL;

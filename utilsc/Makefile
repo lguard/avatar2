@@ -9,7 +9,7 @@ TEST = $(addprefix test/, $(shell ls test | grep .c -F))
 
 all: $(NAME)
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g3
 debug: $(NAME)
 
 dtest: CFLAGS += -g

@@ -23,6 +23,7 @@ typedef struct		s_env
 	int				opti;
 	int				key;
 	int				rotkey;
+	int				toraytrace;
 }					t_env;
 
 void	sdl_putpxl(t_env *e, int x, int y, unsigned char r, unsigned char g, unsigned char b);

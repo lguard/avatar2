@@ -1,51 +1,5 @@
 #include "sphere.h"
-
-
-/*
-	ray		:	ray = c.pos + c.dir * t
-	sphere	:	x² + y² + z² = r²
-			:	(c.pos.x + c.dir.x *t)² + (c.pos.y + c.dir.y *t)² + (c.pos.z + c.dir.z *t)² = r²
-				(   a    +     b     )² = a² + 2ab + b²
-				c.dir²*t² + 2*c.dir*c.pos*t + c.pos² for x y z
-
-				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-				2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
-				(c.pos.x² + c.pos.y² + c.pos.z²) = r²
-
-				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-				2*(c.pos.x*c.dir.x+c.pos.y*c.dir.y+c.pos.z*c.dir.z)*t +
-				(c.pos.x² + c.pos.y² + c.pos.z² + r²) = 0
-
-				o.pos = s.pos - c.pos
-				position de la camera - centre de la sphere pour deplacer l'origin
-
-				(c.dir.x² + c.dir.y² + c.dir.z²)*t² +
-				2*(o.pos.x*c.dir.x+o.pos.y*c.dir.y+o.pos.z*c.dir.z)*t +
-				(o.pos.x² + o.pos.y² + o.pos.z² + r²) = 0
-
-				X = dx; Y = dy; Z = dz; 
-				(X*t)² + (Y*t)² + (z*t)² = r²
-				t²*(X²+Y²+Z²)+t*2*(X*px+Y*py+Z*pz)+ px² + py² +pz² - r² =0
-
-				2x + 2y + 2z - 2r = 0
-	elipsoid:
-				x²/a² + y²/b² + z²/c² = 1
-				A = 1 / a²; B = 1 / b² ;C = 1 / c²
-				X = dx; Y = dy; Z = dz; 
-				(X*t+px)²*A + (Y*t+py)²*B + (Z*t+pz)²*C = 1
-				X²*t²*A + 2*X*t*px*A+px²
-				Y²*t²*B + 2*Y*t*py*B+py²
-				Z²*t²*C + 2*Z*t*pz*C+pz²
-				t²*(X²*A+Y²*B+Z²*C)+t*2*(X*A*px+Y*B*py+Z*C*pz)+ A*px² + B*py² + C*pz² - 1 = 0
-				(t^2)*((dx^2)*a+(dy^2)*b+(dz^2)*c)+t*2*(dx*px*a+dy*py*b+dz*pz*c)+(px^2)*a+(py^2)*b+(pz^2)*c
-
-	hyperboloide:
-				x²/a² - y²/b² + z²/c² = 1
-				(t^2)*((x^2)*a-(y^2)*b+(z^2)*c)+t*2*(x*px*a-y*py*b+z*pz*c)+(px^2)*a-(py^2)*b+(pz^2)*c
-	cylindre:
-				x^2/a^2+z^2/b^2 = 1
-				(t^2)*((x^2)*a+(z^2)*c)+t*2*(x*px*a++z*pz*c)+(px^2)*a+(pz^2)*c = 1
-*/
+#include "quad.h"
 
 FLOAT	dot_produce_elips2(t_vec3d a, t_vec3d b, t_vec3d c)
 {
@@ -201,4 +155,55 @@ t_vec3d		hit_normal2(t_ray *ray, t_sphere2 *s, t_hit *hit)
 	t_vec3d		normal = vec_sub(&hit->hitpoint, &s->pos);
 	vec_normalize(&normal);
 	return normal;
+}
+
+/*t^2*(dx^2+dy^2+dz^2) +*/
+/*t*2*(px*dx+py*dy+pz*dz) +*/
+/*(px^2+py^2+pz^2-r^2)*/
+
+void		surface_sphere(t_ray *srcray, void *quad, t_hit *hit)
+{
+	t_quad		*hb;
+	t_ray		ray;
+	t_vec3d		abc;
+	FLOAT		t0 = 2000000;
+	FLOAT		t1 = 2000000;
+
+	hb = (t_quad*)quad;
+	ray = ray_invertmat(srcray, &hb->matt, &hb->matr, &hb->mats);
+	abc.x = ray.dir.x*ray.dir.x + ray.dir.y*ray.dir.y + ray.dir.z*ray.dir.z;
+	abc.y = 2 * (ray.pos.x*ray.dir.x + ray.pos.y*ray.dir.y + ray.pos.z*ray.dir.z);
+	abc.z = ray.pos.x*ray.pos.x + ray.pos.y*ray.pos.y + ray.pos.z*ray.pos.z - hb->r*hb->r;
+	solve_quadraticv2(&t0, &t1, abc.x, abc.y, abc.z);
+	hit_switch(t0, t1, hb->id, hit, &ray);
+	return ;
+}
+
+void		surface_sphere_normal(void *quad, t_hit *hit)
+{
+	t_quad	*hb;
+
+	hb = (t_quad*)quad;
+	hit->normal.x = 2*hit->hitpoint.x;
+	hit->normal.y = 2*hit->hitpoint.y;
+	hit->normal.z = 2*hit->hitpoint.z;
+	vec_normalize(&hit->normal);
+}
+
+t_quad	*surface_default_sphere(t_vec3d *pos)
+{
+	t_quad	*sphere;
+
+	sphere  = (t_quad*)malloc(sizeof(t_quad));
+	vec_init(&sphere->matt, pos->x, pos->y, pos->z);
+	vec_init(&sphere->matr, 0, 0, 0);
+	vec_init(&sphere->mats, 1, 1, 1);
+	sphere->a = 0;
+	sphere->b = 0;
+	sphere->c = 0;
+	sphere->r = 150;
+	color_init(&sphere->mtl.color, 0.3f, 1.f, 0.3f);
+	color_init(&sphere->mtl.specular, 1.0f, 1.0f, 1.0f);
+	sphere->mtl.reflect = 0.4;
+	return (sphere);
 }
