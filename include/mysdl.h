@@ -3,6 +3,7 @@
 
 #define _BSD_SOURCE
 
+# include <pthread.h>
 # include <SDL.h>
 # include <math.h>
 # include "vec.h"
@@ -24,6 +25,7 @@ typedef struct		s_env
 	int				key;
 	int				rotkey;
 	int				toraytrace;
+	pthread_mutex_t	mutex_lock;
 }					t_env;
 
 void	sdl_putpxl(t_env *e, int x, int y, unsigned char r, unsigned char g, unsigned char b);

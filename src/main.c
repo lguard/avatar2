@@ -33,6 +33,7 @@ int		sdl_main_loop(t_env *e)
 
 	while (1)
 	{
+		pthread_mutex_lock(&e->mutex_lock);
 		if (sdl_events(e))
 			return (0);
 		if (e->opti & SCREENSIZE)
@@ -66,6 +67,7 @@ int		sdl_main_loop(t_env *e)
 			e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
 		}
 		SDL_RenderPresent(e->img);
+		pthread_mutex_unlock(&e->mutex_lock);
 	}
 	sdl_quit(e);
 }
@@ -153,7 +155,6 @@ void	delete_obj(t_env *env, char **cmd)
 	id = ft_atoi(cmd[1]);
 	list_delelem(&env->scene.obj, &id, &remove_obj, &delete_object);
 	env->toraytrace = 1;
-	display_object(&env->scene);
 }
 
 void	new_obj(t_env *env, char **cmd)
@@ -174,8 +175,18 @@ void	new_obj(t_env *env, char **cmd)
 	if(*cmd[1] == 'p')
 		addobject(&env->scene.obj, surface_default_plane(&pos), 'p');
 	env->toraytrace = 1;
-	display_object(&env->scene);
 }
+
+/*void	mod_color(t_obj *obj)*/
+/*{*/
+	
+/*}*/
+
+/*void	mod_obj(t_env *env, char **cmd)*/
+/*{*/
+	/*if(!cmd[1] || !cmd[2] || !cmd[3]) */
+		/*return ;*/
+/*}*/
 
 void	exec_cmd(t_env *env, char **cmd)
 {
@@ -184,14 +195,12 @@ void	exec_cmd(t_env *env, char **cmd)
 		new_obj(env, cmd);
 	if (!ft_strcmp(*cmd, "list"))
 		display_scene(env);
-	/*list*/
 	/*if (!strcmp(*cmd, "mod"))*/
 	/*mod id [color vec, specular vec, mat[t,r,s] vec, reflect f, [abcr] f]*/
 	if (!ft_strcmp(*cmd, "save"))
 		save_to_file(cmd);
 	if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
 		delete_obj(env, cmd);
-	/*save filename*/
 	i = 0;
 	while (cmd[i])
 	{
@@ -211,7 +220,9 @@ void	*parse_cmd(void	*env)
 		add_history(inpt);
 		if (!*inpt)
 			continue ;
+		pthread_mutex_lock(&((t_env*)env)->mutex_lock);
 		exec_cmd(((t_env*)env), ft_strsplit(inpt, ' '));
+		pthread_mutex_unlock (&((t_env*)env)->mutex_lock);
 	}
 	clear_history();
 	return NULL;
