@@ -11,6 +11,12 @@
 # include "list.h"
 # include "rt.h"
 
+# define SPHERE 1
+# define CONE 2
+# define CYLINDRE 3
+# define HYBERBOLE 5
+# define PLANE 6
+
 typedef struct	s_obj_header
 {
 	uint16_t	id;
@@ -28,7 +34,7 @@ typedef struct	s_id
 typedef struct	s_obj
 {
 	uint16_t	id;
-	char		type;
+	uint16_t	type;
 	void		*object;
 	void		(*hit)(t_ray *, void *, t_hit *);
 	void		(*normal)(void *, t_hit *);
@@ -36,7 +42,7 @@ typedef struct	s_obj
 
 void		setobjfun(t_list *obj);
 void		hit_error(t_ray *ray, void *non, t_hit *hit);
-void		addobject(t_list **objlist, void *object, char type);
+void		addobject(t_list **objlist, void *object, uint16_t type);
 void		delete_object(void *obj);
 t_obj		*getobject_by_id(int id, t_list *objlist);
 uint16_t	get_id(void);

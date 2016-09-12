@@ -25,6 +25,7 @@ typedef struct		s_env
 	int				key;
 	int				rotkey;
 	int				toraytrace;
+	int				lol;
 	pthread_mutex_t	mutex_lock;
 }					t_env;
 

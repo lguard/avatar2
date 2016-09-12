@@ -27,9 +27,7 @@ void		surface_cylindre(t_ray *srcray, void *quad, t_hit *hit)
 
 void		surface_cylindre_normal(void *quad, t_hit *hit)
 {
-	t_quad	*hb;
-
-	hb = (t_quad*)quad;
+	(void)quad;
 	hit->normal.x = 2*hit->hitpoint.x;
 	hit->normal.y = 0;
 	hit->normal.z = 2*hit->hitpoint.z;

@@ -21,26 +21,23 @@ void	setobjfun(t_list *obj)
 	{
 		switch (((t_obj*)(obj->data))->type)
 		{
-			case 's':
-				((t_obj*)(obj->data))->hit = &hit_sphere;
-				break ;
-			case 'S':
+			case SPHERE:
 				((t_obj*)(obj->data))->hit = &surface_sphere;
 				((t_obj*)(obj->data))->normal = &surface_sphere_normal;
 				break ;
-			case 'c':
+			case CONE:
 				((t_obj*)(obj->data))->hit = &surface_cone;
 				((t_obj*)(obj->data))->normal = &surface_cone_normal;
 				break ;
-			case 'C':
+			case CYLINDRE:
 				((t_obj*)(obj->data))->hit = &surface_cylindre;
 				((t_obj*)(obj->data))->normal = &surface_cylindre_normal;
 				break ;
-			case 'p':
+			case PLANE:
 				((t_obj*)(obj->data))->hit = &surface_plane;
 				((t_obj*)(obj->data))->normal = &surface_plane_normal;
 				break ;
-			case 'h':
+			case HYBERBOLE:
 				((t_obj*)(obj->data))->hit = &surface_hyperboloid;
 				((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
 				break ;
@@ -56,26 +53,23 @@ void	setobjfun2(t_obj *obj)
 {
 	switch (obj->type)
 	{
-		case 's':
-			obj->hit = &hit_sphere;
-			break ;
-		case 'S':
+		case SPHERE:
 			obj->hit = &surface_sphere;
 			obj->normal = &surface_sphere_normal;
 			break ;
-		case 'c':
+		case CONE:
 			obj->hit = &surface_cone;
 			obj->normal = &surface_cone_normal;
 			break ;
-		case 'C':
+		case CYLINDRE:
 			obj->hit = &surface_cylindre;
 			obj->normal = &surface_cylindre_normal;
 			break ;
-		case 'p':
+		case PLANE:
 			obj->hit = &surface_plane;
 			obj->normal = &surface_plane_normal;
 			break ;
-		case 'h':
+		case HYBERBOLE:
 			obj->hit = &surface_hyperboloid;
 			obj->normal = &surface_hyperboloid_normal;
 			break ;
@@ -85,7 +79,7 @@ void	setobjfun2(t_obj *obj)
 	}
 }
 
-void	addobject(t_list **objlist, void *object, char type)
+void	addobject(t_list **objlist, void *object, uint16_t type)
 {
 	t_obj			*new;
 	t_obj_header	*h;

@@ -12,53 +12,52 @@
 
 #include "libft.h"
 
-static size_t	ft_get_splits_number(char const *s, char c)
+static size_t		ft_nbrstr(char *str, char c)
 {
-	size_t i;
-	size_t n;
+	size_t	n;
 
 	n = 0;
-	i = 0;
-	while (s[i])
+	while (*str)
 	{
-		if ((s[i] != c) && (i == 0 || s[i - 1] == c))
-			n++;
-		i++;
+		if (*str != c && (!n || (n && *(str - 1) == c)))
+			++n;
+		++str;
 	}
 	return (n);
 }
 
-static size_t	ft_get_len(char const *s, char c, size_t start)
+static size_t		ft_strlenc(const char *str, char c)
 {
-	size_t len;
+	char	*temp;
 
-	len = 0;
-	while (s[start + len] && s[start + len] != c)
-		len++;
-	return (len);
+	temp = (char *)str;
+	while (*str != c && *str)
+		++str;
+	return (str - temp);
 }
 
-char			**ft_strsplit(char const *s, char c)
+char				**ft_strsplit(char const *s, char c)
 {
-	size_t	start;
-	size_t	len;
-	size_t	splits;
-	size_t	i;
-	char	**out;
+	char	**str;
+	char	**temp;
+	size_t	n;
+	size_t	lenc;
 
-	splits = ft_get_splits_number(s, c);
-	out = (char**)malloc(sizeof(char*) * (splits + 1));
-	out[splits] = 0;
-	i = 0;
-	start = 0;
-	while (i < splits && s[start])
+	if (s == NULL)
+		return (NULL);
+	n = ft_nbrstr((char*)s, c);
+	if ((str = (char**)malloc(sizeof(char*) * n + 1)) == NULL)
+		return (NULL);
+	temp = str;
+	while (n-- > 0)
 	{
-		while (s[start] == c && s[start])
-			start++;
-		len = ft_get_len(s, c, start);
-		out[i] = ft_strsub(s, (unsigned int)start, len);
-		start += len;
-		i++;
+		while (*s == c)
+			++s;
+		lenc = ft_strlenc(s, c);
+		*str = ft_strsub(s, 0, lenc);
+		s += lenc;
+		++str;
 	}
-	return (out);
+	*str = '\0';
+	return (temp);
 }

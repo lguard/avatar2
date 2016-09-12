@@ -1,10 +1,9 @@
 #include "mysdl.h"
 #include "light.h"
+#include "cmd.h"
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "libft.h"
 
 
@@ -18,7 +17,6 @@ int		sdl_main_loop(t_env *e)
 	int		opti;
 	int		w;
 	int		h;
-	int		lol;
 
 	e->opti = 0;
 	e->opti |= DIFFUSE;
@@ -29,9 +27,8 @@ int		sdl_main_loop(t_env *e)
 	SDL_StopTextInput();
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
 	SDL_RenderClear(e->img);
-	lol = 1;
 
-	while (1)
+	while (!e->lol)
 	{
 		pthread_mutex_lock(&e->mutex_lock);
 		if (sdl_events(e))
@@ -70,6 +67,7 @@ int		sdl_main_loop(t_env *e)
 		pthread_mutex_unlock(&e->mutex_lock);
 	}
 	sdl_quit(e);
+	return (0);
 }
 
 int		sdl_init(t_env *e, int width, int height)
@@ -85,6 +83,9 @@ int		sdl_init(t_env *e, int width, int height)
 		e->cmd[i] = 0;
 	e->cmd_cursor = 0;
 	e->toraytrace = 1;
+	e->lol = 0;
+	e->scene.obj = NULL;
+	e->scene.light = NULL;
 	return (0);
 }
 
@@ -99,133 +100,6 @@ void	sdl_quit(t_env *e)
 {
 	SDL_DestroyWindow(e->sc);
 	SDL_Quit();
-}
-
-
-void	save_to_file(char **cmd)
-{
-	if (cmd[1])
-	{
-		printf("save to: %s\n", cmd[1]);
-	}
-}
-
-void	display_light(t_scene *sc)
-{
-	t_list		*ptr;
-	t_dotlight	*dl;
-
-	ptr = sc->light;
-	while (ptr)
-	{
-		dl = (t_dotlight*)ptr->data;
-		print("pos:x%f,y%fz,%f color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
-		dl->pos.x,dl->pos.y,dl->pos.z,dl->color.g,dl->color.r,dl->color.b);
-		ptr = ptr->next;
-	}
-}
-
-void	display_object(t_scene *sc)
-{
-	t_list		*ptr;
-	t_obj		*obj;
-
-	ptr = sc->obj;
-	while (ptr)
-	{
-		obj = (t_obj*)ptr->data;
-		print("id:%u, type:%c\n", //,  color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
-		obj->id, obj->type);
-		ptr = ptr->next;
-	}
-}
-
-void	display_scene(t_env *env)
-{
-	display_light(&env->scene);
-	display_object(&env->scene);
-}
-
-void	delete_obj(t_env *env, char **cmd)
-{
-	uint16_t	id;
-
-	if(!cmd[1])
-		return ;
-	id = ft_atoi(cmd[1]);
-	list_delelem(&env->scene.obj, &id, &remove_obj, &delete_object);
-	env->toraytrace = 1;
-}
-
-void	new_obj(t_env *env, char **cmd)
-{
-	t_vec3d		pos;
-
-	if(!cmd[1] || !cmd[2] || !cmd[3] || !cmd[4]) 
-		return ;
-	vec_init(&pos, ft_ftoi(cmd[2]), ft_ftoi(cmd[3]), ft_ftoi(cmd[4]));
-	if(*cmd[1] == 'S')
-		addobject(&env->scene.obj, surface_default_sphere(&pos), 'S');
-	if(*cmd[1] == 'h')
-		addobject(&env->scene.obj, surface_default_hyperboloid(&pos), 'h');
-	if(*cmd[1] == 'C')
-		addobject(&env->scene.obj, surface_default_cylindre(&pos), 'C');
-	if(*cmd[1] == 'c')
-		addobject(&env->scene.obj, surface_default_cone(&pos), 'c');
-	if(*cmd[1] == 'p')
-		addobject(&env->scene.obj, surface_default_plane(&pos), 'p');
-	env->toraytrace = 1;
-}
-
-/*void	mod_color(t_obj *obj)*/
-/*{*/
-	
-/*}*/
-
-/*void	mod_obj(t_env *env, char **cmd)*/
-/*{*/
-	/*if(!cmd[1] || !cmd[2] || !cmd[3]) */
-		/*return ;*/
-/*}*/
-
-void	exec_cmd(t_env *env, char **cmd)
-{
-	int		i;
-	if (!ft_strcmp(*cmd, "new"))
-		new_obj(env, cmd);
-	if (!ft_strcmp(*cmd, "list"))
-		display_scene(env);
-	/*if (!strcmp(*cmd, "mod"))*/
-	/*mod id [color vec, specular vec, mat[t,r,s] vec, reflect f, [abcr] f]*/
-	if (!ft_strcmp(*cmd, "save"))
-		save_to_file(cmd);
-	if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
-		delete_obj(env, cmd);
-	i = 0;
-	while (cmd[i])
-	{
-		free(cmd[i]);
-		++i;
-	}
-	free(cmd);
-}
-
-void	*parse_cmd(void	*env)
-{
-	char *inpt;
-
-	while (42)
-	{
-		inpt = readline("\x1b[32mavatar2->\x1b[0m");
-		add_history(inpt);
-		if (!*inpt)
-			continue ;
-		pthread_mutex_lock(&((t_env*)env)->mutex_lock);
-		exec_cmd(((t_env*)env), ft_strsplit(inpt, ' '));
-		pthread_mutex_unlock (&((t_env*)env)->mutex_lock);
-	}
-	clear_history();
-	return NULL;
 }
 
 int main(void)
