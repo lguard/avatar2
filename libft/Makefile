@@ -66,9 +66,10 @@ SRC =	ft_print.c \
 		ft_toupper.c \
 		get_next_line.c
 
+all: CFLAGS += -O2
 all: $(NAME)
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g3
 debug: $(NAME)
 
 $(NAME): $(OBJ)
@@ -76,7 +77,7 @@ $(NAME): $(OBJ)
 	ranlib $(NAME)
 
 %.o: %.c
-	$(CC) -I includes -O2 -o $@ -c $< $(CFLAGS)
+	$(CC) -I includes -o $@ -c $< $(CFLAGS)
 
 clean:
 	$(RM) $(OBJ)

@@ -6,29 +6,101 @@ void		value_to_file(int fd, void *v, int16_t size, int16_t type)
 	write(fd, v, size);
 }
 
-/*void		read_scene(t_scene *scene, const char *pathname)*/
-/*{*/
-	/*int	fd;*/
-	/*int16_t	type;*/
+void		load_light(int fd, t_scene *scene)
+{
+	t_dotlight	*light;
 
-	/*fd = open(pathname, O_RDONLY);*/
-	/*if (fd < 0)*/
-		/*return ;*/
-	/*while(42)*/
-	/*{*/
-		/*if (read(fd, &type, sizeof(int16_t)) <= 0)*/
-			/*break;*/
-		/*if (type == 0)*/
-		/*{*/
-			/*read(fd, &a, sizeof(t_lol));*/
-		/*}*/
-		/*else*/
-		/*{*/
-			/*read(fd, &b, sizeof(t_lol2));*/
-		/*}*/
-	/*}*/
-	/*close(fd);*/
-/*}*/
+	light = (t_dotlight*)malloc(sizeof(t_dotlight));
+	read(fd, light, sizeof(t_dotlight));
+	printf("id %d, ", light->id);
+	vec_display(&light->pos);
+	addolight(&scene->light, light);
+}
+
+void		load_sphere(int fd, t_scene *scene)
+{
+	t_quad	*quad;
+
+	quad = (t_quad*)malloc(sizeof(t_quad));
+	read(fd, quad, sizeof(t_quad));
+	addobject(&scene->obj, quad, 1);
+}
+
+void		load_cone(int fd, t_scene *scene)
+{
+	t_quad	*quad;
+
+	quad = (t_quad*)malloc(sizeof(t_quad));
+	read(fd, quad, sizeof(t_quad));
+	addobject(&scene->obj, quad, 2);
+}
+
+void		load_cylindre(int fd, t_scene *scene)
+{
+	t_quad	*quad;
+
+	quad = (t_quad*)malloc(sizeof(t_quad));
+	read(fd, quad, sizeof(t_quad));
+	addobject(&scene->obj, quad, 3);
+}
+
+void		load_hyperbol(int fd, t_scene *scene)
+{
+	t_quad	*quad;
+
+	quad = (t_quad*)malloc(sizeof(t_quad));
+	read(fd, quad, sizeof(t_quad));
+	addobject(&scene->obj, quad, 4);
+}
+
+void		load_plane(int fd, t_scene *scene)
+{
+	t_plane	*plane;
+
+	plane = (t_plane*)malloc(sizeof(t_plane));
+	read(fd, plane, sizeof(t_plane));
+	addobject(&scene->obj, plane, 5);
+}
+
+void		read_scene(const char *pathname, t_scene *scene)
+{
+	int	fd;
+	int16_t	type;
+
+	fd = open(pathname, O_RDONLY);
+	if (fd < 0)
+		return ;
+	while(42)
+	{
+		if (read(fd, &type, sizeof(int16_t)) <= 0)
+			break;
+		if (type == 0)
+		{
+			load_light(fd, scene);
+		}
+		else if (type == 1)
+		{
+			load_sphere(fd, scene);
+		}
+		else if (type == 2)
+		{
+			load_cone(fd, scene);
+		}
+		else if (type == 3)
+		{
+			load_cylindre(fd, scene);
+		}
+		else if (type == 4)
+		{
+			load_hyperbol(fd, scene);
+		}
+		else if (type == 5)
+		{
+			load_plane(fd, scene);
+		}
+	}
+	close(fd);
+}
 
 void		write_s(const char *pathname, t_scene *e)
 {
@@ -41,16 +113,18 @@ void		write_s(const char *pathname, t_scene *e)
 	ptr = e->light;
 	while (ptr)
 	{
+		printf("id %d, ", ((t_dotlight*)ptr->data)->id);
+		vec_display(&((t_dotlight*)ptr->data)->pos);
 		value_to_file(fd, (void*)(ptr->data), sizeof(t_dotlight), 0);
 		ptr = ptr->next;
 	}
 	ptr = e->obj;
 	while (ptr)
 	{
-		if (((t_obj*)(ptr->data))->type == 6)
-			value_to_file(fd, ptr->data, sizeof(t_plane), ((t_obj*)(ptr->data))->type);
+		if (((t_obj*)(ptr->data))->type == 5)
+			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_plane), ((t_obj*)(ptr->data))->type);
 		else
-			value_to_file(fd, ptr->data, sizeof(t_quad), ((t_obj*)(ptr->data))->type);
+			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_quad), ((t_obj*)(ptr->data))->type);
 		ptr = ptr->next;
 	}
 }

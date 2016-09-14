@@ -8,3 +8,13 @@ void	save_to_file(t_env *e, char **cmd)
 		printf("save to: %s\n", cmd[1]);
 	}
 }
+
+void	load_from_file(t_env *e, char **cmd)
+{
+	if (cmd[1])
+	{
+		read_scene(cmd[1], &e->scene);
+		printf("load : %s\n", cmd[1]);
+	}
+	e->toraytrace = 1;
+}

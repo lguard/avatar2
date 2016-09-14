@@ -1,12 +1,6 @@
 #include "object.h"
 #include "stdio.h"
 
-uint16_t	get_id(void)
-{
-	static uint16_t i = 0;
-	return (i++);
-}
-
 void	hit_error(t_ray *ray, void *non, t_hit *hit)
 {
 	(void)ray;
@@ -119,6 +113,5 @@ void	delete_object(void *obj)
 
 int		remove_obj(void *obj, void *id)
 {
-	printf("%u, %u\n", ((t_id*)obj)->id, *(uint16_t*)id);
 	return (((t_id*)obj)->id - *(uint16_t*)id);
 }

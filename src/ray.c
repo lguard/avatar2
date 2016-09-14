@@ -5,6 +5,8 @@ void	ray_trace(t_ray *ray, t_list *obj, t_hit *hit)
 {
 	while (obj)
 	{
+		(void)hit;
+		(void)ray;
 		((t_obj*)(obj->data))->hit(ray, ((t_obj*)(obj->data))->object, hit);
 		obj = obj->next;
 	}
@@ -68,4 +70,10 @@ void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray)
 	hit->didit = 1;
 	hit->dir = ray->dir;
 	hit->raypos = ray->pos;
+}
+
+uint16_t	get_id(void)
+{
+	static uint16_t i = 0;
+	return (i++);
 }

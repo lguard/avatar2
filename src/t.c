@@ -213,12 +213,14 @@ void	render(t_env *e, t_scene *scene, t_color **a)
 
 void	init_scene(t_scene *scene, int width, int height)
 {
-	t_dotlight	light;
-	t_dotlight	light2;
+	/*t_dotlight	*light;*/
+	/*t_dotlight	*light2;*/
 	/*t_mtl		mtl;*/
 
-	scene->obj = NULL;
-	scene->light = NULL;
+	/*light = (t_dotlight*)malloc(sizeof(t_dotlight));*/
+	/*light2 = (t_dotlight*)malloc(sizeof(t_dotlight));*/
+	/*scene->obj = NULL;*/
+	/*scene->light = NULL;*/
 	vec_init(&scene->cam.pos, 350.f, 10.f, -3000.f);
 	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
@@ -233,23 +235,23 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->cam.distance = 1.f;
 	scene->cam.roty = 0;
 	scene->cam.rotx = 0;
-	init_dotlight(&light, (t_vec3d){200.f, 50.f, -1000.f}, (t_color){1.0f, 1.0f, 1.f});
-	init_dotlight(&light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});
+	/*init_dotlight(light, (t_vec3d){200.f, 50.f, -1000.f}, (t_color){1.0f, 1.0f, 1.f});*/
+	/*init_dotlight(light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});*/
 	/*mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;*/
 	/*mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0.3;*/
-	t_vec3d		pp = (t_vec3d){1000, -190, 500};
-	addobject(&scene->obj, surface_default_hyperboloid(&pp), HYBERBOLE);
-	pp = (t_vec3d){500, -190, 500};
-	addobject(&scene->obj, surface_default_sphere(&pp), SPHERE);
-	pp = (t_vec3d){200, -190, 500};
-	addobject(&scene->obj, surface_default_cone(&pp), CONE);
-	pp = (t_vec3d){2000, -190, 500};
-	addobject(&scene->obj, surface_default_cylindre(&pp), CYLINDRE);
-	pp = (t_vec3d){0, -700, 800};
-	addobject(&scene->obj, surface_default_plane(&pp), PLANE);
-	setobjfun(scene->obj);
-	addolight(&scene->light,&light);
-	addolight(&scene->light,&light2);
+	/*t_vec3d		pp = (t_vec3d){1000, -190, 500};*/
+	/*addobject(&scene->obj, surface_default_hyperboloid(&pp), HYBERBOLE);*/
+	/*pp = (t_vec3d){500, -190, 500};*/
+	/*addobject(&scene->obj, surface_default_sphere(&pp), SPHERE);*/
+	/*pp = (t_vec3d){200, -190, 500};*/
+	/*addobject(&scene->obj, surface_default_cone(&pp), CONE);*/
+	/*pp = (t_vec3d){2000, -190, 500};*/
+	/*addobject(&scene->obj, surface_default_cylindre(&pp), CYLINDRE);*/
+	/*pp = (t_vec3d){0, -700, 800};*/
+	/*addobject(&scene->obj, surface_default_plane(&pp), PLANE);*/
+	/*setobjfun(scene->obj);*/
+	/*addolight(&scene->light,light);*/
+	/*addolight(&scene->light,light2);*/
 }
 
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)

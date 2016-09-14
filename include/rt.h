@@ -22,6 +22,10 @@
 # define ROTPZ 1 << 5
 # define ROTPZB 1 << 6
 
+#include <stdint.h>
+
 typedef float	FLOAT;
+
+uint16_t	get_id(void);
 
 #endif /* RT_H */

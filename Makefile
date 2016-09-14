@@ -6,10 +6,11 @@ INCLUDE = -I utilsc/include -I include -I libft/includes $(shell sdl2-config --c
 CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
 SRC = $(addprefix src/, $(shell ls src | grep .c -F))
 DEBUG =
-OPTI = -O2
+OPTI =# -O2
 
 OBJ = $(SRC:.c=.o)
 
+all: OPTI += -O2
 all: $(NAME)
 
 opti: OPTI += -O2

@@ -14,8 +14,8 @@
 # define SPHERE 1
 # define CONE 2
 # define CYLINDRE 3
-# define HYBERBOLE 5
-# define PLANE 6
+# define HYBERBOLE 4
+# define PLANE 5
 
 typedef struct	s_obj_header
 {
@@ -45,7 +45,6 @@ void		hit_error(t_ray *ray, void *non, t_hit *hit);
 void		addobject(t_list **objlist, void *object, uint16_t type);
 void		delete_object(void *obj);
 t_obj		*getobject_by_id(int id, t_list *objlist);
-uint16_t	get_id(void);
 int			remove_obj(void *obj, void *id);
 
 #endif

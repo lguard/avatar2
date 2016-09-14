@@ -104,11 +104,12 @@ void	sdl_quit(t_env *e)
 
 int main(void)
 {
-	t_env		e;
-	pthread_t	p;
+	/*t_env		e;*/
+	/*pthread_t	p;*/
 
-	init(&e, &e.scene, &e.buff, 400, 500);
-	pthread_create (&p, NULL, parse_cmd, &e);
-	sdl_main_loop(&e);
+	/*init(&e, &e.scene, &e.buff, 400, 500);*/
+	/*pthread_create (&p, NULL, parse_cmd, &e);*/
+	/*sdl_main_loop(&e);*/
+	print("%f\n", 78843405204083065405601670979104276480.000000);
 	return 0;
 }

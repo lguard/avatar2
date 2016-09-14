@@ -11,6 +11,8 @@ void	exec_cmd(t_env *env, char **cmd)
 		mod_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "save"))
 		save_to_file(env, cmd);
+	else if (!ft_strcmp(*cmd, "load"))
+		load_from_file(env, cmd);
 	else if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
 		delete_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "quit"))
