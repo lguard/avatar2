@@ -4,6 +4,7 @@
 # include <math.h>
 # include <stdio.h>
 # include "rt.h"
+# include "libft.h"
 
 # define CUBE(x) x*x
 
