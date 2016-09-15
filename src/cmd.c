@@ -3,6 +3,7 @@
 void	exec_cmd(t_env *env, char **cmd)
 {
 	int		i;
+
 	if (!ft_strcmp(*cmd, "new"))
 		new_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "list"))
@@ -26,7 +27,7 @@ void	exec_cmd(t_env *env, char **cmd)
 	free(cmd);
 }
 
-void	*parse_cmd(void	*env)
+void	*parse_cmd(void *env)
 {
 	char *inpt;
 
@@ -38,8 +39,8 @@ void	*parse_cmd(void	*env)
 			continue ;
 		pthread_mutex_lock(&((t_env*)env)->mutex_lock);
 		exec_cmd(((t_env*)env), ft_strsplit(inpt, ' '));
-		pthread_mutex_unlock (&((t_env*)env)->mutex_lock);
+		pthread_mutex_unlock(&((t_env*)env)->mutex_lock);
 	}
 	clear_history();
-	return NULL;
+	return (NULL);
 }

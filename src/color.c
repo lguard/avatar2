@@ -1,6 +1,5 @@
 #include "color.h"
 
-
 inline void	color_scale(t_color *color, FLOAT x)
 {
 	color->r *= x;

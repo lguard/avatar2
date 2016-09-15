@@ -1,9 +1,9 @@
-#include "mysdl.h"
-#include "light.h"
-#include "cmd.h"
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include "mysdl.h"
+#include "light.h"
+#include "cmd.h"
 #include "libft.h"
 
 
@@ -79,8 +79,7 @@ int		sdl_init(t_env *e, int width, int height)
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
 	e->key = 0;
 	e->rotkey = 0;
-	for (int i = 0;i < 255;++i)
-		e->cmd[i] = 0;
+	ft_bzero(e->cmd, 255);
 	e->cmd_cursor = 0;
 	e->toraytrace = 1;
 	e->lol = 0;
@@ -102,14 +101,13 @@ void	sdl_quit(t_env *e)
 	SDL_Quit();
 }
 
-int main(void)
+int	main(void)
 {
-	/*t_env		e;*/
-	/*pthread_t	p;*/
+	t_env		e;
+	pthread_t	p;
 
-	/*init(&e, &e.scene, &e.buff, 400, 500);*/
-	/*pthread_create (&p, NULL, parse_cmd, &e);*/
-	/*sdl_main_loop(&e);*/
-	print("%f\n", 78843405204083065405601670979104276480.000000);
-	return 0;
+	init(&e, &e.scene, &e.buff, 400, 500);
+	pthread_create(&p, NULL, parse_cmd, &e);
+	sdl_main_loop(&e);
+	return (0);
 }

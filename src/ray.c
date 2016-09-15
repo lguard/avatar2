@@ -49,7 +49,7 @@ t_ray	ray_invertmat(t_ray *srcray, t_vec3d *matt, t_vec3d *matr, t_vec3d *mats)
 	ray_rotate(&ray, -matr->x, -matr->y, -matr->z);
 	(void)mats;
 	/*ray_scale(&ray, 1.f / mats->x, 1.f / mats->y, 1.f / mats->z);*/
-	return ray;
+	return (ray);
 }
 
 void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray)
@@ -75,5 +75,6 @@ void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray)
 uint16_t	get_id(void)
 {
 	static uint16_t i = 0;
+
 	return (i++);
 }

@@ -62,31 +62,38 @@ void		load_plane(int fd, t_scene *scene)
 	addobject(&scene->obj, plane, 5);
 }
 
+int		select_surface(int fd, t_scene *scene, uint16_t type)
+{
+	if (type == 0)
+		load_light(fd, scene);
+	else if (type == 1)
+		load_sphere(fd, scene);
+	else if (type == 2)
+		load_cone(fd, scene);
+	else if (type == 3)
+		load_cylindre(fd, scene);
+	else if (type == 4)
+		load_hyperbol(fd, scene);
+	else if (type == 5)
+		load_plane(fd, scene);
+	else
+		return (1);
+	return (0);
+}
+
 void		read_scene(const char *pathname, t_scene *scene)
 {
-	int	fd;
+	int		fd;
 	int16_t	type;
 
 	fd = open(pathname, O_RDONLY);
 	if (fd < 0)
 		return ;
-	while(42)
+	while (42)
 	{
 		if (read(fd, &type, sizeof(int16_t)) <= 0)
-			break;
-		if (type == 0)
-			load_light(fd, scene);
-		else if (type == 1)
-			load_sphere(fd, scene);
-		else if (type == 2)
-			load_cone(fd, scene);
-		else if (type == 3)
-			load_cylindre(fd, scene);
-		else if (type == 4)
-			load_hyperbol(fd, scene);
-		else if (type == 5)
-			load_plane(fd, scene);
-		else
+			break ;
+		if (select_surface(fd, scene, type))
 			break ;
 	}
 	close(fd);
@@ -94,7 +101,7 @@ void		read_scene(const char *pathname, t_scene *scene)
 
 void		write_s(const char *pathname, t_scene *e)
 {
-	int	fd;
+	int		fd;
 	t_list	*ptr;
 
 	fd = open(pathname, O_CREAT | O_WRONLY, S_IROTH | S_IRWXU);
@@ -103,7 +110,6 @@ void		write_s(const char *pathname, t_scene *e)
 	ptr = e->light;
 	while (ptr)
 	{
-		printf("id %d, ", ((t_dotlight*)ptr->data)->id);
 		vec_display(&((t_dotlight*)ptr->data)->pos);
 		value_to_file(fd, (void*)(ptr->data), sizeof(t_dotlight), 0);
 		ptr = ptr->next;
@@ -112,9 +118,11 @@ void		write_s(const char *pathname, t_scene *e)
 	while (ptr)
 	{
 		if (((t_obj*)(ptr->data))->type == 5)
-			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_plane), ((t_obj*)(ptr->data))->type);
+			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_plane),
+			((t_obj*)(ptr->data))->type);
 		else
-			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_quad), ((t_obj*)(ptr->data))->type);
+			value_to_file(fd, ((t_obj*)ptr->data)->object, sizeof(t_quad),
+			((t_obj*)(ptr->data))->type);
 		ptr = ptr->next;
 	}
 }

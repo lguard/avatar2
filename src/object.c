@@ -13,64 +13,66 @@ void	setobjfun(t_list *obj)
 {
 	while (obj)
 	{
-		switch (((t_obj*)(obj->data))->type)
+		if (((t_obj*)(obj->data))->type == SPHERE)
 		{
-			case SPHERE:
-				((t_obj*)(obj->data))->hit = &surface_sphere;
-				((t_obj*)(obj->data))->normal = &surface_sphere_normal;
-				break ;
-			case CONE:
-				((t_obj*)(obj->data))->hit = &surface_cone;
-				((t_obj*)(obj->data))->normal = &surface_cone_normal;
-				break ;
-			case CYLINDRE:
-				((t_obj*)(obj->data))->hit = &surface_cylindre;
-				((t_obj*)(obj->data))->normal = &surface_cylindre_normal;
-				break ;
-			case PLANE:
-				((t_obj*)(obj->data))->hit = &surface_plane;
-				((t_obj*)(obj->data))->normal = &surface_plane_normal;
-				break ;
-			case HYBERBOLE:
-				((t_obj*)(obj->data))->hit = &surface_hyperboloid;
-				((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
-				break ;
-			default :
-				((t_obj*)(obj->data))->hit = &hit_error;
-				break ;
+			((t_obj*)(obj->data))->hit = &surface_sphere;
+			((t_obj*)(obj->data))->normal = &surface_sphere_normal;
 		}
+		if (((t_obj*)(obj->data))->type == CONE)
+		{
+			((t_obj*)(obj->data))->hit = &surface_cone;
+			((t_obj*)(obj->data))->normal = &surface_cone_normal;
+		}
+		if (((t_obj*)(obj->data))->type == CYLINDRE)
+		{
+			((t_obj*)(obj->data))->hit = &surface_cylindre;
+			((t_obj*)(obj->data))->normal = &surface_cylindre_normal;
+		}
+		if (((t_obj*)(obj->data))->type == PLANE)
+		{
+			((t_obj*)(obj->data))->hit = &surface_plane;
+			((t_obj*)(obj->data))->normal = &surface_plane_normal;
+		}
+		if (((t_obj*)(obj->data))->type == HYBERBOLE)
+		{
+			((t_obj*)(obj->data))->hit = &surface_hyperboloid;
+			((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
+		}
+		else
+			((t_obj*)(obj->data))->hit = &hit_error;
 		obj = obj->next;
 	}
 }
 
 void	setobjfun2(t_obj *obj)
 {
-	switch (obj->type)
+	if (obj->type == SPHERE)
 	{
-		case SPHERE:
-			obj->hit = &surface_sphere;
-			obj->normal = &surface_sphere_normal;
-			break ;
-		case CONE:
-			obj->hit = &surface_cone;
-			obj->normal = &surface_cone_normal;
-			break ;
-		case CYLINDRE:
-			obj->hit = &surface_cylindre;
-			obj->normal = &surface_cylindre_normal;
-			break ;
-		case PLANE:
-			obj->hit = &surface_plane;
-			obj->normal = &surface_plane_normal;
-			break ;
-		case HYBERBOLE:
-			obj->hit = &surface_hyperboloid;
-			obj->normal = &surface_hyperboloid_normal;
-			break ;
-		default :
-			obj->hit = &hit_error;
-			break ;
+		obj->hit = &surface_sphere;
+		obj->normal = &surface_sphere_normal;
 	}
+	if (obj->type == CONE)
+	{
+		obj->hit = &surface_cone;
+		obj->normal = &surface_cone_normal;
+	}
+	if (obj->type == CYLINDRE)
+	{
+		obj->hit = &surface_cylindre;
+		obj->normal = &surface_cylindre_normal;
+	}
+	if (obj->type == PLANE)
+	{
+		obj->hit = &surface_plane;
+		obj->normal = &surface_plane_normal;
+	}
+	if (obj->type == HYBERBOLE)
+	{
+		obj->hit = &surface_hyperboloid;
+		obj->normal = &surface_hyperboloid_normal;
+	}
+	else
+		obj->hit = &hit_error;
 }
 
 void	addobject(t_list **objlist, void *object, uint16_t type)
@@ -99,7 +101,7 @@ t_obj	*getobject_by_id(int id, t_list *objlist)
 			return (objlist->data);
 		objlist = objlist->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
 void	delete_object(void *obj)

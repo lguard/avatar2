@@ -25,8 +25,10 @@ void	display_light(t_scene *sc)
 	while (ptr)
 	{
 		dl = (t_dotlight*)ptr->data;
-		print("id:%u, pos:x%f,y%fz,%f color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
-		dl->id, dl->pos.x,dl->pos.y,dl->pos.z,dl->color.g,dl->color.r,dl->color.b);
+		print("id:%u, pos:x%f,y%fz,%f color:\x1b[31mr%f,\
+\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
+		dl->id, dl->pos.x, dl->pos.y, dl->pos.z, dl->color.g, dl->color.r,
+		dl->color.b);
 		ptr = ptr->next;
 	}
 }
@@ -42,8 +44,9 @@ void	display_object(t_scene *sc)
 	{
 		obj = (t_obj*)ptr->data;
 		head = obj->object;
-		print("id:%u, type:%s, pos x:%f y:%f z:%f\n", //,  color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
-		obj->id, type_to_char(obj->type), head->matt.x, head->matt.y, head->matt.z);
+		print("id:%u, type:%s, pos x:%f y:%f z:%f\n",
+		obj->id, type_to_char(obj->type),
+		head->matt.x, head->matt.y, head->matt.z);
 		ptr = ptr->next;
 	}
 }

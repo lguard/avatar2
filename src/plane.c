@@ -36,7 +36,6 @@ void		surface_plane(t_ray *srcray, void *plane, t_hit *hit)
 
 	p = (t_plane*)plane;
 	ray = ray_invertmat(srcray, &p->matt, &p->matr, &p->mats);
-
 	j = ray.dir.y;
 	if (j == 0.f)
 		return ;
@@ -55,7 +54,7 @@ t_plane		*surface_default_plane(t_vec3d *pos)
 {
 	t_plane *sphere;
 
-	sphere  = (t_plane*)malloc(sizeof(t_plane));
+	sphere = (t_plane*)malloc(sizeof(t_plane));
 	vec_init(&sphere->matt, pos->x, pos->y, pos->z);
 	vec_init(&sphere->matr, 0, 0, 0);
 	vec_init(&sphere->mats, 1, 1, 1);

@@ -41,7 +41,7 @@ int		sdl_key_down(t_env *env)
 	return (0);
 }
 
-void change_sample(t_env *e)
+void	change_sample(t_env *e)
 {
 	e->scene.width = e->scene.render_width * e->buff.aa;
 	e->scene.height = e->scene.render_height * e->buff.aa;
@@ -59,7 +59,8 @@ void	change_scenewh(t_env *e, int width, int height)
 	change_sample(e);
 	e->scene.cam.wfov = 1.0;
 	e->scene.cam.hfov = 1.0 / ((float)width / (float)height);
-	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
+	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov,
+	e->scene.cam.hfov);
 }
 
 int		sdl_key_up(t_env *env)
@@ -100,7 +101,6 @@ int		sdl_key_up(t_env *env)
 	env->toraytrace = 0;
 	return (0);
 }
-
 
 int		sdl_mouse_down(t_env *env)
 {
