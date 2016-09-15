@@ -25,8 +25,8 @@ void	display_light(t_scene *sc)
 	while (ptr)
 	{
 		dl = (t_dotlight*)ptr->data;
-		print("pos:x%f,y%fz,%f color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
-		dl->pos.x,dl->pos.y,dl->pos.z,dl->color.g,dl->color.r,dl->color.b);
+		print("id:%u, pos:x%f,y%fz,%f color:\x1b[31mr%f,\x1b[32mg%f,\x1b[34mb%f\x1b[0m\n",
+		dl->id, dl->pos.x,dl->pos.y,dl->pos.z,dl->color.g,dl->color.r,dl->color.b);
 		ptr = ptr->next;
 	}
 }

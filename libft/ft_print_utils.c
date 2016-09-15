@@ -48,19 +48,21 @@ void		ft_putnbr_base_fd_int(int fd, int nbr, int base)
 static void	ft_print_float(int fd, float nbr)
 {
 	float	tmp;
-	int		l;
+	long	l;
 
 	tmp = nbr;
 	l = 1;
 	while (tmp >= 10)
 	{
 		tmp /= 10;	
+		if (l > 1000000000)
+			return ;
 		l *= 10;
 	}
 	while (l)
 	{
-		ft_putchar_fd(((int)nbr/l)+'0', fd);
-		nbr = nbr - (float)(((int)nbr/l)*(float)l);
+		ft_putchar_fd(((long)nbr/l)+'0', fd);
+		nbr = nbr - (float)(((long)nbr/l)*(float)l);
 		l /= 10;
 	}
 }

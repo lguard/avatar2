@@ -75,29 +75,19 @@ void		read_scene(const char *pathname, t_scene *scene)
 		if (read(fd, &type, sizeof(int16_t)) <= 0)
 			break;
 		if (type == 0)
-		{
 			load_light(fd, scene);
-		}
 		else if (type == 1)
-		{
 			load_sphere(fd, scene);
-		}
 		else if (type == 2)
-		{
 			load_cone(fd, scene);
-		}
 		else if (type == 3)
-		{
 			load_cylindre(fd, scene);
-		}
 		else if (type == 4)
-		{
 			load_hyperbol(fd, scene);
-		}
 		else if (type == 5)
-		{
 			load_plane(fd, scene);
-		}
+		else
+			break ;
 	}
 	close(fd);
 }
