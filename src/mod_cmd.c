@@ -14,6 +14,11 @@ void	mod_vec3d(t_vec3d *matt, char **cmd)
 	vec_init(matt, ft_ftoi(cmd[3]), ft_ftoi(cmd[4]), ft_ftoi(cmd[5]));
 }
 
+void	mod_float(FLOAT *f, char **cmd)
+{
+	*f = ft_ftoi(cmd[3]);
+}
+
 void	mod_obj(t_env *env, char **cmd)
 {
 	t_obj			*obj;
@@ -22,6 +27,8 @@ void	mod_obj(t_env *env, char **cmd)
 	if (!cmd[1] || !cmd[2] || !cmd[3])
 		return ;
 	obj = getobject_by_id(ft_atoi(cmd[1]), env->scene.obj);
+	if (!obj)
+		return ;
 	head = (t_obj_header*)obj->object;
 	if (!ft_strcmp(cmd[2], "color"))
 		mod_color(&head->mtl.color, cmd);
@@ -31,5 +38,7 @@ void	mod_obj(t_env *env, char **cmd)
 		mod_vec3d(&head->matt, cmd);
 	if (!ft_strcmp(cmd[2], "matr"))
 		mod_vec3d(&head->matr, cmd);
+	if (!ft_strcmp(cmd[2], "reflect"))
+		mod_float(&head->mtl.reflect, cmd);
 	env->toraytrace = 1;
 }

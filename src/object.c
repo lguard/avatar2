@@ -18,22 +18,22 @@ void	setobjfun(t_list *obj)
 			((t_obj*)(obj->data))->hit = &surface_sphere;
 			((t_obj*)(obj->data))->normal = &surface_sphere_normal;
 		}
-		if (((t_obj*)(obj->data))->type == CONE)
+		else if (((t_obj*)(obj->data))->type == CONE)
 		{
 			((t_obj*)(obj->data))->hit = &surface_cone;
 			((t_obj*)(obj->data))->normal = &surface_cone_normal;
 		}
-		if (((t_obj*)(obj->data))->type == CYLINDRE)
+		else if (((t_obj*)(obj->data))->type == CYLINDRE)
 		{
 			((t_obj*)(obj->data))->hit = &surface_cylindre;
 			((t_obj*)(obj->data))->normal = &surface_cylindre_normal;
 		}
-		if (((t_obj*)(obj->data))->type == PLANE)
+		else if (((t_obj*)(obj->data))->type == PLANE)
 		{
 			((t_obj*)(obj->data))->hit = &surface_plane;
 			((t_obj*)(obj->data))->normal = &surface_plane_normal;
 		}
-		if (((t_obj*)(obj->data))->type == HYBERBOLE)
+		else if (((t_obj*)(obj->data))->type == HYBERBOLE)
 		{
 			((t_obj*)(obj->data))->hit = &surface_hyperboloid;
 			((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
@@ -51,22 +51,22 @@ void	setobjfun2(t_obj *obj)
 		obj->hit = &surface_sphere;
 		obj->normal = &surface_sphere_normal;
 	}
-	if (obj->type == CONE)
+	else if (obj->type == CONE)
 	{
 		obj->hit = &surface_cone;
 		obj->normal = &surface_cone_normal;
 	}
-	if (obj->type == CYLINDRE)
+	else if (obj->type == CYLINDRE)
 	{
 		obj->hit = &surface_cylindre;
 		obj->normal = &surface_cylindre_normal;
 	}
-	if (obj->type == PLANE)
+	else if (obj->type == PLANE)
 	{
 		obj->hit = &surface_plane;
 		obj->normal = &surface_plane_normal;
 	}
-	if (obj->type == HYBERBOLE)
+	else if (obj->type == HYBERBOLE)
 	{
 		obj->hit = &surface_hyperboloid;
 		obj->normal = &surface_hyperboloid_normal;
