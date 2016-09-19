@@ -40,8 +40,9 @@ int		sdl_main_loop(t_env *e)
 			change_scenewh(e, w, h);
 			e->opti ^= SCREENSIZE;
 		}
-		if (e->toraytrace)
-		{
+		if (e->key || e->rotkey)
+			e->toraytrace = 1;
+		if (e->toraytrace)		{
 			e->toraytrace = 0;
 			opti = e->opti;
 			struct timeval time;
@@ -85,6 +86,7 @@ int		sdl_init(t_env *e, int width, int height)
 	e->lol = 0;
 	e->scene.obj = NULL;
 	e->scene.light = NULL;
+	pthread_mutex_init(&e->mutex_lock, NULL);
 	return (0);
 }
 

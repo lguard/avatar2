@@ -4,6 +4,7 @@ void	exec_cmd(t_env *env, char **cmd)
 {
 	int		i;
 
+	i = 0;
 	if (!ft_strcmp(*cmd, "new"))
 		new_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "list"))
@@ -18,7 +19,6 @@ void	exec_cmd(t_env *env, char **cmd)
 		delete_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "quit"))
 		env->lol = 1;
-	i = 0;
 	while (cmd[i])
 	{
 		free(cmd[i]);
@@ -29,7 +29,8 @@ void	exec_cmd(t_env *env, char **cmd)
 
 void	*parse_cmd(void *env)
 {
-	char *inpt;
+	char	*inpt;
+	char	**cmd;
 
 	while (42)
 	{
@@ -38,7 +39,9 @@ void	*parse_cmd(void *env)
 		if (!*inpt)
 			continue ;
 		pthread_mutex_lock(&((t_env*)env)->mutex_lock);
-		exec_cmd(((t_env*)env), ft_strsplit(inpt, ' '));
+		cmd = ft_strsplit(inpt, ' ');
+		if (cmd)
+			exec_cmd(((t_env*)env), cmd);
 		pthread_mutex_unlock(&((t_env*)env)->mutex_lock);
 	}
 	clear_history();
