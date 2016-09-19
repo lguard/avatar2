@@ -111,5 +111,8 @@ int	main(void)
 	init(&e, &e.scene, &e.buff, 400, 500);
 	pthread_create(&p, NULL, parse_cmd, &e);
 	sdl_main_loop(&e);
+	list_delall(&e.scene.obj, &delete_object);
+	list_delall(&e.scene.light, &light_free);
+	sdl_quit(&e);
 	return (0);
 }

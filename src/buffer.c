@@ -13,6 +13,8 @@ void	buffer_init(t_buffer *buff)
 
 void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa)
 {
+	if (width <= 0 || height <= 0)
+		return ;
 	if (buff->a)
 		buffer_free(buff);
 	buffer_create(buff, width, height, aa);
