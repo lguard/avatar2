@@ -22,7 +22,6 @@ int		sdl_main_loop(t_env *e)
 	e->opti |= DIFFUSE;
 	e->opti |= UNDERSAMPLE;
 	e->opti |= SCREENSIZE;
-	e->opti |= SHADOW;
 
 	SDL_StopTextInput();
 	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
@@ -46,7 +45,8 @@ int		sdl_main_loop(t_env *e)
 		}
 		if (e->key || e->rotkey)
 			e->toraytrace = 1;
-		if (e->toraytrace)		{
+		if (e->toraytrace)
+		{
 			e->toraytrace = 0;
 			opti = e->opti;
 			struct timeval time;
@@ -83,8 +83,6 @@ int		sdl_init(t_env *e, int width, int height)
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
 	e->key = 0;
 	e->rotkey = 0;
-	ft_bzero(e->cmd, 255);
-	e->cmd_cursor = 0;
 	e->toraytrace = 1;
 	e->lol = 0;
 	e->scene.obj = NULL;

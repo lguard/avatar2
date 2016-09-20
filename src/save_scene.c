@@ -88,6 +88,8 @@ void		read_scene(const char *pathname, t_scene *scene)
 	fd = open(pathname, O_RDONLY);
 	if (fd < 0)
 		return ;
+	list_delall(&scene->obj, &delete_object);
+	list_delall(&scene->light, &light_free);
 	while (42)
 	{
 		if (read(fd, &type, sizeof(int16_t)) <= 0)

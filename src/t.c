@@ -142,6 +142,7 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 		ray->dir = vec_reflect(&ray->dir, &hit->normal);
 		ray->pos = hit->hitpoint;
 		hit->didit = 0;
+		hit->t = 2000000;
 		--i;
 	}
 }
