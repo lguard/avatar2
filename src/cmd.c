@@ -42,6 +42,11 @@ void	*parse_cmd(void *env)
 		cmd = ft_strsplit(inpt, ' ');
 		if (cmd)
 			exec_cmd(((t_env*)env), cmd);
+		if (((t_env*)env)->lol)
+		{
+			pthread_mutex_unlock(&((t_env*)env)->mutex_lock);
+			break ;
+		}
 		pthread_mutex_unlock(&((t_env*)env)->mutex_lock);
 	}
 	clear_history();

@@ -8,7 +8,7 @@ void	buffer_init(t_buffer *buff)
 	buff->c = NULL;
 	buff->width = 0;
 	buff->height = 0;
-	buff->aa = 4;
+	buff->aa = 2;
 }
 
 void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa)
