@@ -25,7 +25,6 @@ void	buffer_us(t_buffer *buff);
 void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, FLOAT ratio);
 int		buffer_check_aa(int aa);
 t_color	**buffer_new(size_t width, size_t height);
-void	buffer_test(void);
 void	buffer_reload_ss(t_buffer *buff, int aa);
 void	buffer_reload_us(t_buffer *buff, int pa);
 

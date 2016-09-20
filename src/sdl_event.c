@@ -23,20 +23,22 @@ int		sdl_key_down(t_env *env)
 {
 	if (env->event.key.keysym.sym == SDLK_UP)
 		env->key |= UP;
-	if (env->event.key.keysym.sym == SDLK_DOWN)
+	else if (env->event.key.keysym.sym == SDLK_DOWN)
 		env->key |= DOWN;
-	if (env->event.key.keysym.sym == SDLK_LEFT)
+	else if (env->event.key.keysym.sym == SDLK_LEFT)
 		env->key |= LEFT;
-	if (env->event.key.keysym.sym == SDLK_RIGHT)
+	else if (env->event.key.keysym.sym == SDLK_RIGHT)
 		env->key |= RIGHT;
-	if (env->event.key.keysym.sym == SDLK_a)
+	else if (env->event.key.keysym.sym == SDLK_a)
 		env->rotkey |= ROTPY;
-	if (env->event.key.keysym.sym == SDLK_w)
+	else if (env->event.key.keysym.sym == SDLK_w)
 		env->rotkey |= ROTPX;
-	if (env->event.key.keysym.sym == SDLK_s)
+	else if (env->event.key.keysym.sym == SDLK_s)
 		env->rotkey |= ROTPXB;
-	if (env->event.key.keysym.sym == SDLK_d)
+	else if (env->event.key.keysym.sym == SDLK_d)
 		env->rotkey |= ROTPYB;
+	else
+		return (0);
 	env->toraytrace = 1;
 	return (0);
 }
@@ -67,38 +69,45 @@ int		sdl_key_up(t_env *env)
 {
 	if (env->event.key.keysym.sym == SDLK_ESCAPE)
 		return (1);
+	else if (env->event.key.keysym.sym == SDLK_UP)
+		env->key ^= UP;
+	else if (env->event.key.keysym.sym == SDLK_DOWN)
+		env->key ^= DOWN;
+	else if (env->event.key.keysym.sym == SDLK_LEFT)
+		env->key ^= LEFT;
+	else if (env->event.key.keysym.sym == SDLK_RIGHT)
+		env->key ^= RIGHT;
+	else if (env->event.key.keysym.sym == SDLK_a)
+		env->rotkey ^= ROTPY;
+	else if (env->event.key.keysym.sym == SDLK_w)
+		env->rotkey ^= ROTPX;
+	else if (env->event.key.keysym.sym == SDLK_s)
+		env->rotkey ^= ROTPXB;
+	else if (env->event.key.keysym.sym == SDLK_d)
+		env->rotkey ^= ROTPYB;
+	else
+		return (sdl_key_up2(env));
+	env->toraytrace = 0;
+	return (0);
+}
+
+int		sdl_key_up2(t_env *env)
+{
 	if (env->event.key.keysym.sym == SDLK_0)
 		env->opti ^= DIFFUSE;
-	if (env->event.key.keysym.sym == SDLK_1)
+	else if (env->event.key.keysym.sym == SDLK_1)
 		env->opti ^= SHADOW;
-	if (env->event.key.keysym.sym == SDLK_2)
+	else if (env->event.key.keysym.sym == SDLK_2)
 		env->opti ^= SPECULAR;
-	if (env->event.key.keysym.sym == SDLK_3)
+	else if (env->event.key.keysym.sym == SDLK_3)
 		env->opti ^= REFLECTION;
-	if (env->event.key.keysym.sym == SDLK_4)
+	else if (env->event.key.keysym.sym == SDLK_4)
 		env->opti ^= REFRACTION;
-	if (env->event.key.keysym.sym == SDLK_5)
+	else if (env->event.key.keysym.sym == SDLK_5)
 	{
 		env->opti ^= UNDERSAMPLE;
 		change_sample(env);
 	}
-	if (env->event.key.keysym.sym == SDLK_UP)
-		env->key ^= UP;
-	if (env->event.key.keysym.sym == SDLK_DOWN)
-		env->key ^= DOWN;
-	if (env->event.key.keysym.sym == SDLK_LEFT)
-		env->key ^= LEFT;
-	if (env->event.key.keysym.sym == SDLK_RIGHT)
-		env->key ^= RIGHT;
-	if (env->event.key.keysym.sym == SDLK_a)
-		env->rotkey ^= ROTPY;
-	if (env->event.key.keysym.sym == SDLK_w)
-		env->rotkey ^= ROTPX;
-	if (env->event.key.keysym.sym == SDLK_s)
-		env->rotkey ^= ROTPXB;
-	if (env->event.key.keysym.sym == SDLK_d)
-		env->rotkey ^= ROTPYB;
-	env->toraytrace = 0;
 	return (0);
 }
 
@@ -111,5 +120,6 @@ int		sdl_mouse_down(t_env *env)
 int		sdl_win_ev(t_env *e)
 {
 	e->opti |= SCREENSIZE;
+	e->toraytrace = 1;
 	return (0);
 }

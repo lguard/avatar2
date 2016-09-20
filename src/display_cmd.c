@@ -44,9 +44,11 @@ void	display_object(t_scene *sc)
 	{
 		obj = (t_obj*)ptr->data;
 		head = obj->object;
-		print("id:%u, type:%s, pos x:%f y:%f z:%f\n",
+		print("id:%u, type:%s, pos x:%f y:%f z:%f, ",
 		obj->id, type_to_char(obj->type),
 		head->matt.x, head->matt.y, head->matt.z);
+		print("matr: x:%f y:%f z:%f\n",
+		head->matr.x, head->matr.y, head->matr.z);
 		ptr = ptr->next;
 	}
 }

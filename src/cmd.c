@@ -10,7 +10,7 @@ void	exec_cmd(t_env *env, char **cmd)
 	else if (!ft_strcmp(*cmd, "list"))
 		display_scene(env);
 	else if (!ft_strcmp(*cmd, "mod"))
-		mod_obj(env, cmd);
+		mod_objlight(env, cmd);
 	else if (!ft_strcmp(*cmd, "save"))
 		save_to_file(env, cmd);
 	else if (!ft_strcmp(*cmd, "load"))

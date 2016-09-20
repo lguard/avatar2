@@ -1,43 +1,8 @@
 #include "sphere.h"
 #include "quad.h"
 
-FLOAT	dot_produce_elips2(t_vec3d a, t_vec3d b, t_vec3d c)
-{
-	return (a.x * b.x * c.x + a.y * b.y * c.y + a.z * b.z * c.z);
-}
-
-FLOAT	solve_quadratic(FLOAT a, FLOAT b, FLOAT c)
-{
-	FLOAT	t0;
-	FLOAT	t1;
-	FLOAT	d;
-
-	d = b * b - 4 * a * c;
-	if (d < 0.0f)
-		return 1000000;
-	t0 = (-b + sqrtf(d)) / (2 * a);
-	t1 = (-b - sqrtf(d)) / (2 * a);
-	if (t0 < t1)
-		return (t0);
-	else
-		return (t1);
-}
-
 /*
 2x + 2y + 2z - 2r = 0
-*/
-
-t_vec3d		hit_normal(t_ray *ray, t_sphere *s, t_hit *hit)
-{
-	t_vec3d		normal;
-
-	hit->hitpoint = vec_add(&hit->hitpoint, &ray->pos);
-	normal = vec_sub(&hit->hitpoint, &s->pos);
-	vec_normalize(&normal);
-	return (normal);
-}
-
-/*
 t^2*(dx^2+dy^2+dz^2) +
 t*2*(px*dx+py*dy+pz*dz) +
 (px^2+py^2+pz^2-r^2)

@@ -142,25 +142,3 @@ int		buffer_check_aa(int aa)
 		return (aa);
 	return (1);
 }
-
-void	buffer_test(void)
-{
-	t_buffer buff;
-
-	buffer_init(&buff);
-	buffer_reload(&buff, 2, 2, 2);
-	printf("[%lf][%lf]\n", buff.a[0][0].r, buff.a[0][1].r);
-	printf("[%lf][%lf]\n\n", buff.a[1][0].r, buff.a[1][1].r);
-	buff.b[0][0].r = 1, buff.b[0][1].r = 2; buff.b[0][2].r = 3; buff.b[0][3].r = 4;
-	buff.b[1][0].r = 1, buff.b[1][1].r = 2; buff.b[1][2].r = 3; buff.b[1][3].r = 4;
-	buff.b[2][0].r = 1, buff.b[2][1].r = 2; buff.b[2][2].r = 3; buff.b[2][3].r = 4;
-	buff.b[3][0].r = 1, buff.b[3][1].r = 2; buff.b[3][2].r = 3; buff.b[3][3].r = 4;
-	printf("[%lf][%lf][%lf][%lf]\n", buff.b[0][0].r, buff.b[0][1].r, buff.b[0][2].r, buff.b[0][3].r);
-	printf("[%lf][%lf][%lf][%lf]\n", buff.b[1][0].r, buff.b[1][1].r, buff.b[1][2].r, buff.b[1][3].r);
-	printf("[%lf][%lf][%lf][%lf]\n", buff.b[2][0].r, buff.b[2][1].r, buff.b[2][2].r, buff.b[2][3].r);
-	printf("[%lf][%lf][%lf][%lf]\n\n", buff.b[3][0].r, buff.b[3][1].r, buff.b[3][2].r, buff.b[3][3].r);
-	buffer_ss(&buff);
-	printf("[%lf][%lf]\n", buff.a[0][0].r, buff.a[0][1].r);
-	printf("[%lf][%lf]\n\n", buff.a[1][0].r, buff.a[1][1].r);
-	buffer_free(&buff);
-}

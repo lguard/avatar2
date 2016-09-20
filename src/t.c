@@ -14,8 +14,6 @@
 #include "buffer.h"
 #include "quad.h"
 
-#define DEGREESTORADIANS(x) (x * M_PI / 180.0)
-#define RADIANSTODEGREES(x) (x * 180.0 / M_PI)
 
 void		AA(t_color **src, t_color **rcv, size_t x, size_t y)
 {
@@ -162,7 +160,7 @@ void	rt(t_scene *scene, t_color **a, int opti)
 		y =0;
 		while(y < scene->height) {
 			t_vec3d planepix = getplanepix(&scene->cam, x, y, xindent, yindent);
-			hit.t = 20000;
+			hit.t = 2000000;
 			hit.didit = 0;
 			vec_normalize(&planepix);
 			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
@@ -191,8 +189,8 @@ void	single_rt(t_scene *scene, int x, int y)
 	vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
 
 	light_and_reflect(&ray, &hit, scene, &color, 1 | 64);
-	printf("\033[48;2;%d;%d;%dm", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
-	printf("x:%d, y:%d | r:%d g:%d b:%d\033[0m\n", x, y, (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
+	print("\033[48;2;%d;%d;%dm", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
+	print("x:%d, y:%d | r:%d g:%d b:%d\033[0m\n", x, y, (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
 }
 
 void	render(t_env *e, t_scene *scene, t_color **a)

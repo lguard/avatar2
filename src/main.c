@@ -32,7 +32,11 @@ int		sdl_main_loop(t_env *e)
 	{
 		pthread_mutex_lock(&e->mutex_lock);
 		if (sdl_events(e))
-			return (0);
+		{
+			e->lol = 1;
+			pthread_mutex_unlock(&e->mutex_lock);
+			break ;
+		}
 		if (e->opti & SCREENSIZE)
 		{
 			SDL_GetWindowSize(e->sc, &w, &h);
@@ -55,7 +59,6 @@ int		sdl_main_loop(t_env *e)
 				return -1;
 			cur_time = 1000000 * time.tv_sec + time.tv_usec;
 			double sec2 = cur_time / 1000000.0;
-			/*printf("%f\n", sec2-sec1);*/
 			if (e->key != 0) {
 				handle_move(&e->scene.cam, e->key, (sec2-sec1)*240);
 			}
@@ -115,6 +118,5 @@ int	main(void)
 	list_delall(&e.scene.obj, &delete_object);
 	list_delall(&e.scene.light, &light_free);
 	buffer_free(&e.buff);
-	sdl_quit(&e);
 	return (0);
 }

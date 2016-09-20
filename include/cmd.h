@@ -17,7 +17,9 @@ void	load_from_file(t_env *e, char **cmd);
 
 void	mod_color(t_color *color, char **cmd);
 void	mod_vec3d(t_vec3d *matt, char **cmd);
-void	mod_obj(t_env *env, char **cmd);
+void	mod_obj(t_obj *obj, char **cmd);
+void	mod_light(t_dotlight *obj, char **cmd);
+void	mod_objlight(t_env *env, char **cmd);
 
 void	display_scene(t_env *env);
 void	display_object(t_scene *sc);

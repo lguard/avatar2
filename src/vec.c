@@ -70,7 +70,7 @@ inline void		vec_init(t_vec3d *a, FLOAT x, FLOAT y, FLOAT z)
 
 void		vec_display(t_vec3d *a)
 {
-	print("\033[32mx%lf | \033[31my%lf | \033[33mz%lf\033[0m\n",
+	print("\033[32mx%f | \033[31my%f | \033[33mz%f\033[0m\n",
 	a->x, a->y, a->z);
 }
 

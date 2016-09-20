@@ -41,7 +41,7 @@ void		surface_plane(t_ray *srcray, void *plane, t_hit *hit)
 		return ;
 	t = 0 - ray.pos.y;
 	t /= j;
-	hit_switch(t, 20000000, p->id, hit, &ray);
+	hit_switch(t, 200000000, p->id, hit, &ray);
 }
 
 void	surface_plane_normal(void *plane, t_hit *hit)

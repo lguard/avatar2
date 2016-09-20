@@ -12,7 +12,6 @@ void		load_light(int fd, t_scene *scene)
 
 	light = (t_dotlight*)malloc(sizeof(t_dotlight));
 	read(fd, light, sizeof(t_dotlight));
-	printf("id %d, ", light->id);
 	vec_display(&light->pos);
 	addolight(&scene->light, light);
 }
