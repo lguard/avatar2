@@ -132,12 +132,14 @@ void	sdl_quit(t_env *e)
 	SDL_Quit();
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
 	t_env		e;
 	pthread_t	p;
 
 	init(&e, &e.scene, &e.buff, 400, 500);
+	if (ac > 1)
+		load_from_file(&e, av);
 	pthread_create(&p, NULL, parse_cmd, &e);
 	sdl_main_loop(&e);
 	sdl_quit(&e);
