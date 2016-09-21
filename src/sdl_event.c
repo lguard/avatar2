@@ -11,8 +11,8 @@ int		sdl_events(t_env *env)
 			sdl_key_down(env);
 		if (env->event.type == SDL_KEYUP)
 			return (sdl_key_up(env));
-		if (env->event.type == SDL_MOUSEBUTTONDOWN)
-			sdl_mouse_down(env);
+		/*if (env->event.type == SDL_MOUSEBUTTONDOWN)*/
+			/*sdl_mouse_down(env);*/
 		if (env->event.type == SDL_WINDOWEVENT)
 			sdl_win_ev(env);
 	}
@@ -120,6 +120,5 @@ int		sdl_mouse_down(t_env *env)
 int		sdl_win_ev(t_env *e)
 {
 	e->opti |= SCREENSIZE;
-	e->toraytrace = 1;
 	return (0);
 }

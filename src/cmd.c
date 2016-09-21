@@ -1,5 +1,17 @@
 #include "cmd.h"
 
+void	change_reflect(t_scene *scene, char **cmd)
+{
+	int		r;
+
+	if (!cmd[1])
+		return ;
+	r = ft_ftoi(cmd[1]);
+	if (r < 0 || r > 5)
+		return ;
+	scene->reflect = r+1;
+}
+
 void	exec_cmd(t_env *env, char **cmd)
 {
 	int		i;
@@ -17,6 +29,10 @@ void	exec_cmd(t_env *env, char **cmd)
 		load_from_file(env, cmd);
 	else if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
 		delete_obj(env, cmd);
+	else if (!ft_strcmp(*cmd, "reflect"))
+		change_reflect(&env->scene, cmd);
+	else if (!ft_strcmp(*cmd, "pbar"))
+		env->scene.progressbar = 1;
 	else if (!ft_strcmp(*cmd, "quit"))
 		env->lol = 1;
 	while (cmd[i])

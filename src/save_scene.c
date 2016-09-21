@@ -61,6 +61,11 @@ void		load_plane(int fd, t_scene *scene)
 	addobject(&scene->obj, plane, 5);
 }
 
+void		load_cam(int fd, t_scene *scene)
+{
+	read(fd, &scene->cam, sizeof(t_cam));
+}
+
 int		select_surface(int fd, t_scene *scene, uint16_t type)
 {
 	if (type == 0)
@@ -75,6 +80,8 @@ int		select_surface(int fd, t_scene *scene, uint16_t type)
 		load_hyperbol(fd, scene);
 	else if (type == 5)
 		load_plane(fd, scene);
+	else if (type == 6)
+		load_cam(fd, scene);
 	else
 		return (1);
 	return (0);
@@ -126,4 +133,5 @@ void		write_s(const char *pathname, t_scene *e)
 			((t_obj*)(ptr->data))->type);
 		ptr = ptr->next;
 	}
+	value_to_file(fd, &e->cam, sizeof(t_cam), 6);
 }

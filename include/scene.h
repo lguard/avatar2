@@ -17,6 +17,8 @@ typedef struct	s_scene
 	t_list *light;
 	t_color ambiant;
 	t_cam	cam;
+	int		reflect;
+	int		progressbar;
 }				t_scene;
 
 #endif

@@ -119,7 +119,7 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 
 	color_init(colora, 0, 0, 0);
 	rc = 1.f;
-	int i = 2;
+	int i = scene->reflect;
 	while(i != 0)
 	{
 		color_init(&colorb, 0, 0, 0);
@@ -147,7 +147,7 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 	}
 }
 
-void	rt(t_scene *scene, t_color **a, int opti)
+void	rt(t_scene *sc, t_color **a, int opti)
 {
 	t_hit hit;
 	t_ray ray;
@@ -156,20 +156,30 @@ void	rt(t_scene *scene, t_color **a, int opti)
 	int x=0;
 	int y;
 
-	xyratio(&xindent, &yindent, &scene->cam, scene->width, scene->height);
-	while(x < scene->width) {
+	xyratio(&xindent, &yindent, &sc->cam, sc->width, sc->height);
+	while(x < sc->width)
+	{
 		y =0;
-		while(y < scene->height) {
-			t_vec3d planepix = getplanepix(&scene->cam, x, y, xindent, yindent);
+		while(y < sc->height)
+		{
+			t_vec3d planepix = getplanepix(&sc->cam, x, y, xindent, yindent);
 			hit.t = 2000000;
 			hit.didit = 0;
 			vec_normalize(&planepix);
 			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
-			vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
-			light_and_reflect(&ray, &hit, scene, &a[x][y], opti);
+			vec_init(&ray.pos, sc->cam.pos.x, sc->cam.pos.y, sc->cam.pos.z);
+			light_and_reflect(&ray, &hit, sc, &a[x][y], opti);
 			++y;
 		}
+		if (sc->progressbar)
+			print("\rprogress: %d       ", (int)(((FLOAT)(x * sc->height +
+			y) / (FLOAT)(sc->height * sc->width)) * 100.f));
 		++x;
+	}
+	if (sc->progressbar)
+	{
+		sc->progressbar = 0;
+		print("\n");
 	}
 }
 
