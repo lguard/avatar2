@@ -68,30 +68,30 @@ void	process_hit(t_hit *hit, t_list *objlist)
 	vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);
 }
 
-void		foreach_light(t_scene *sc, t_hit *hit, t_color *colora, FLOAT rc)
+void		foreach_light(t_scene *sc, t_hit *hit, t_color *cla, FLOAT rc)
 {
 	t_list	*ptr;
-	t_color colorb;
+	t_color clb;
 
 	ptr = sc->light;
-	color_init(&colorb, 0, 0, 0);
+	color_init(&clb, 0, 0, 0);
 	while (ptr)
 	{
-		dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc);
+		dotlight(&clb, (t_dotlight*)ptr->data, hit, sc);
 		ptr = ptr->next;
 	}
-	color_scale(&colorb, (rc * (1 - hit->mtl->reflect)));
-	color_add(colora, &colorb);
+	color_scale(&clb, (rc * (1 - hit->mtl->reflect)));
+	color_add(cla, &clb);
 }
 
-void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *colora)
+void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *cla)
 {
 	int		i;
 	FLOAT	rc;
 
 	i = sc->reflect;
 	rc = 1.f;
-	color_init(colora, 0, 0, 0);
+	color_init(cla, 0, 0, 0);
 	while(i != 0)
 	{
 		hit->dir = ray->dir;
@@ -100,7 +100,7 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *colora)
 		if (!hit->didit)
 			return ;
 		process_hit(hit, sc->obj);
-		foreach_light(sc, hit, colora, rc);
+		foreach_light(sc, hit, cla, rc);
 		if (!(sc->opti & REFLECTION))
 			return ;
 		rc *= hit->mtl->reflect;
@@ -213,7 +213,8 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->height = scene->render_height * 1;
 	scene->cam.wfov = 1.0;
 	scene->cam.hfov = 1.0 / ((float)width / (float)height);
-	scene->cam.viewplane_upleft = getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
+	scene->cam.viewplane_upleft =
+	getupleft(&scene->cam, scene->cam.wfov, scene->cam.hfov);
 	scene->cam.distance = 1.f;
 	scene->cam.roty = 0;
 	scene->cam.rotx = 0;

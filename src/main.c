@@ -26,19 +26,53 @@ void	change_screen_check(t_env *e)
 	e->toraytrace = 1;
 }
 
+int		sdl_bukake(t_env *e)
+{
+	if (sdl_events(e))
+	{
+		e->lol = 1;
+		return (1) ;
+	}
+	if (e->opti & SCREENSIZE)
+	{
+		change_screen_check(e);
+		e->opti ^= SCREENSIZE;
+	}
+	if (e->key || e->rotkey)
+		e->toraytrace = 1;
+	if (e->key != 0)
+		handle_move(&e->scene.cam, e->key, 200);
+	if (e->rotkey != 0)
+		handle_rot(&e->scene.cam, e->rotkey, 0.2);
+	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
+	return (0);
+}
+
+double	timer(int set)
+{
+	struct timeval	time;
+	static double	sec1;
+	long			cur_time;
+
+	if(gettimeofday(&time, 0))
+		return (0);
+	if (set)
+	{
+		cur_time = 1000000 * time.tv_sec + time.tv_usec;
+		sec1 = cur_time / 1000000.0;
+	}
+	else
+	{
+		cur_time = 1000000 * time.tv_sec + time.tv_usec;
+		return ((double)(cur_time / 1000000.0) - sec1);
+	}
+	return (0);
+}
+
 int		sdl_main_loop(t_env *e)
 {
 	int		w;
 	int		h;
-
-	e->opti = 0;
-	e->opti |= DIFFUSE;
-	e->opti |= UNDERSAMPLE;
-	e->opti |= SCREENSIZE;
-
-	SDL_StopTextInput();
-	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
-	SDL_RenderClear(e->img);
 
 	SDL_GetWindowSize(e->sc, &w, &h);
 	buffer_reload(&e->buff, w, h, e->buff.aa);
@@ -46,43 +80,22 @@ int		sdl_main_loop(t_env *e)
 	while (!e->lol)
 	{
 		pthread_mutex_lock(&e->mutex_lock);
-		if (sdl_events(e))
+		if (sdl_bukake(e))
 		{
-			e->lol = 1;
 			pthread_mutex_unlock(&e->mutex_lock);
 			break ;
 		}
-		if (e->opti & SCREENSIZE)
-		{
-			change_screen_check(e);
-			e->opti ^= SCREENSIZE;
-		}
-		if (e->key || e->rotkey)
-			e->toraytrace = 1;
 		if (e->toraytrace)
 		{
 			e->toraytrace = 0;
 			e->scene.opti = e->opti;
-			struct timeval time;
-			if(gettimeofday( &time, 0 ))
-				return -1;
-			long cur_time = 1000000 * time.tv_sec + time.tv_usec;
-			double sec1 = cur_time / 1000000.0;
+			timer(1);
 			mainrt(e, &e->scene, &e->buff);
-			if(gettimeofday( &time, 0 ))
-				return -1;
-			cur_time = 1000000 * time.tv_sec + time.tv_usec;
-			double sec2 = cur_time / 1000000.0;
-			if (e->key != 0)
-				handle_move(&e->scene.cam, e->key, (sec2-sec1)*240);
-			if (e->rotkey != 0)
-				handle_rot(&e->scene.cam, e->rotkey, (sec2-sec1)*4);
-			e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
+			print("%f\n", timer(0));
 		}
 		SDL_RenderPresent(e->img);
 		pthread_mutex_unlock(&e->mutex_lock);
 	}
-	sdl_quit(e);
 	return (0);
 }
 
@@ -93,6 +106,8 @@ int		sdl_init(t_env *e, int width, int height)
 	SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 	width, height, SDL_WINDOW_RESIZABLE);
 	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
+	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
+	SDL_RenderClear(e->img);
 	e->key = 0;
 	e->rotkey = 0;
 	e->toraytrace = 1;
@@ -101,6 +116,10 @@ int		sdl_init(t_env *e, int width, int height)
 	e->scene.light = NULL;
 	e->scene.reflect = 2;
 	e->scene.progressbar = 0;
+	e->opti = 0;
+	e->opti |= DIFFUSE;
+	e->opti |= UNDERSAMPLE;
+	e->opti |= SCREENSIZE;
 	pthread_mutex_init(&e->mutex_lock, NULL);
 	return (0);
 }
@@ -126,6 +145,7 @@ int	main(void)
 	init(&e, &e.scene, &e.buff, 400, 500);
 	pthread_create(&p, NULL, parse_cmd, &e);
 	sdl_main_loop(&e);
+	sdl_quit(&e);
 	pthread_join(p, NULL);
 	list_delall(&e.scene.obj, &delete_object);
 	list_delall(&e.scene.light, &light_free);
