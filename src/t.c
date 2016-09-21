@@ -14,49 +14,6 @@
 #include "buffer.h"
 #include "quad.h"
 
-
-void		AA(t_color **src, t_color **rcv, size_t x, size_t y)
-{
-	for (size_t i = 1;i<(x-1);++i) {
-		for (size_t j = 1;j<(y-1);++j) {
-			rcv[i][j].r = (src[i-1][j-1].r+
-						src[i-1][j].r+
-						src[i-1][j+1].r+
-						src[i][j-1].r+
-						src[i][j+1].r+
-						src[i+1][j-1].r+
-						src[i+1][j].r+
-						src[i+1][j+1].r + src[i][j].r*2) / 10;
-			rcv[i][j].g = (src[i-1][j-1].g+
-						src[i-1][j].g+
-						src[i-1][j+1].g+
-						src[i][j-1].g+
-						src[i][j+1].g+
-						src[i+1][j-1].g+
-						src[i+1][j].g+
-						src[i+1][j+1].g + src[i][j].g*2) / 10;
-			rcv[i][j].b = (src[i-1][j-1].b+
-						src[i-1][j].b+
-						src[i-1][j+1].b+
-						src[i][j-1].b+
-						src[i][j+1].b+
-						src[i+1][j-1].b+
-						src[i+1][j].b+
-						src[i+1][j+1].b + src[i][j].b*2) / 10;
-		}
-	}
-}
-
-t_color		**create_buffer(size_t x, size_t y)
-{
-	t_color		*b = (t_color*)malloc(sizeof(t_color) * x * y);
-	t_color		**a = (t_color**)malloc(sizeof(t_color*) * x);
-	for (size_t i = 0;i < x;++i) {
-		a[i] = b + i*y;
-	}
-	return a;
-}
-
 void	write_byte(unsigned char b, int fd)
 {
 	write(fd, &b, 1);
@@ -111,32 +68,39 @@ void	process_hit(t_hit *hit, t_list *objlist)
 	vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);
 }
 
+void		foreach_light(t_scene *sc, t_hit *hit, t_color *colora, FLOAT rc)
+{
+	t_list	*ptr;
+	t_color colorb;
+
+	ptr = sc->light;
+	color_init(&colorb, 0, 0, 0);
+	while (ptr)
+	{
+		dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc->obj, sc->opti);
+		ptr = ptr->next;
+	}
+	color_scale(&colorb, (rc * (1 - hit->mtl->reflect)));
+	color_add(colora, &colorb);
+}
+
 void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *colora)
 {
-	t_color colorb;
-	t_list	*ptr;
+	int		i;
 	FLOAT	rc;
 
-	color_init(colora, 0, 0, 0);
+	i = sc->reflect;
 	rc = 1.f;
-	int i = sc->reflect;
+	color_init(colora, 0, 0, 0);
 	while(i != 0)
 	{
-		color_init(&colorb, 0, 0, 0);
 		hit->dir = ray->dir;
 		hit->raypos = ray->pos;
 		ray_trace(ray, sc->obj, hit);
 		if (!hit->didit)
 			return ;
 		process_hit(hit, sc->obj);
-		ptr = sc->light;
-		while (ptr)
-		{
-			dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc->obj, sc->opti);
-			ptr = ptr->next;
-		}
-		color_scale(&colorb, (rc * (1- hit->mtl->reflect)));
-		color_add(colora, &colorb);
+		foreach_light(sc, hit, colora, rc);
 		if (!(sc->opti & REFLECTION))
 			return ;
 		rc *= hit->mtl->reflect;
@@ -168,24 +132,22 @@ void	pbar(int x, int y, t_scene *sc)
 
 void	rt(t_scene *sc, t_color **a)
 {
-	t_vec3d	planepix;
+	t_vec3d	pps[2];
 	t_hit	hit;
 	t_ray	ray;
-	FLOAT	xindent;
-	FLOAT	yindent;
 	int		x;
 	int		y;
 
 	x = 0;
-	xyratio(&xindent, &yindent, &sc->cam, sc->width, sc->height);
+	xyratio(&pps[0].x, &pps[0].y, &sc->cam, sc->width, sc->height);
 	while(x < sc->width)
 	{
 		y = 0;
 		while(y < sc->height)
 		{
-			planepix = getplanepix(&sc->cam, x, y, xindent, yindent);
+			pps[1] = getplanepix(&sc->cam, x, y, pps[0].x, pps[0].y);
 			hit_clear(&hit);
-			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
+			vec_init(&ray.dir, pps[1].x, pps[1].y, pps[1].z);
 			vec_init(&ray.pos, sc->cam.pos.x, sc->cam.pos.y, sc->cam.pos.z);
 			light_and_reflect(&ray, &hit, sc, &a[x][y]);
 			++y;
