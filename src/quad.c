@@ -1,6 +1,6 @@
 #include "quad.h"
 
-void	solve_quadraticv2(FLOAT *t0, FLOAT *t1, FLOAT a, FLOAT b, FLOAT c)
+void	solve_quadratic(FLOAT *t0, FLOAT *t1, FLOAT a, FLOAT b, FLOAT c)
 {
 	FLOAT	d;
 

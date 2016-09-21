@@ -28,7 +28,7 @@ void	surface_cone(t_ray *srcray, void *quad, t_hit *hit)
 			2 * ray.pos.y * ray.dir.y;
 	abc.z = ray.pos.x * ray.pos.x * hb->a + ray.pos.z * ray.pos.z * hb->c -
 			ray.pos.y * ray.pos.y;
-	solve_quadraticv2(&t0, &t1, abc.x, abc.y, abc.z);
+	solve_quadratic(&t0, &t1, abc.x, abc.y, abc.z);
 	hit_switch(t0, t1, hb->id, hit, &ray);
 	return ;
 }

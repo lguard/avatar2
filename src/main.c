@@ -5,12 +5,7 @@
 #include "light.h"
 #include "cmd.h"
 #include "libft.h"
-
-
-int mainrt(t_env *e, t_scene *scene, t_buffer *buff);
-void	init_scene(t_scene *scene, int width, int height);
-void	handle_move(t_cam *cam, int key, FLOAT frame);
-void	handle_rot(t_cam *cam, int key, FLOAT frame);
+#include "raytrace.h"
 
 void	change_screen_check(t_env *e)
 {

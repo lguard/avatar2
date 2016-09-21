@@ -22,4 +22,6 @@ typedef struct	s_scene
 	int		opti;
 }				t_scene;
 
+void	init_scene(t_scene *scene, int width, int height);
+
 #endif

@@ -13,7 +13,7 @@ void	surface_hyperboloid(t_ray *srcray, void *quad, t_hit *hit)
 	hb = (t_quad*)quad;
 	vec_init(&param, hb->a, hb->b, hb->c);
 	ray = ray_invertmat(srcray, &hb->matt, &hb->matr, &hb->mats);
-	solve_quadraticv2(&t0, &t1, dot_produce_elips(ray.dir, ray.dir, param),
+	solve_quadratic(&t0, &t1, dot_produce_elips(ray.dir, ray.dir, param),
 	2 * dot_produce_elips(ray.dir, ray.pos, param),
 	dot_produce_elips(ray.pos, ray.pos, param) + hb->r);
 	hit_switch(t0, t1, hb->id, hit, &ray);

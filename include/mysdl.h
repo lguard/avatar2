@@ -29,17 +29,27 @@ typedef struct		s_env
 	pthread_mutex_t	mutex_lock;
 }					t_env;
 
+/*
+**	sdl_render.c
+*/
 void	sdl_putpxl(t_env *e, int x, int y, unsigned char r, unsigned char g, unsigned char b);
 
+/*
+**	sdl_events.c
+*/
 int		sdl_events(t_env *env);
 int		sdl_key_down(t_env *env);
 int		sdl_key_up(t_env *env);
 int		sdl_key_up2(t_env *env);
-int		sdl_mouse_down(t_env *env);
 int		sdl_win_ev(t_env *env);
+
 int		sdl_main_loop(t_env *e);
 int		sdl_init(t_env *e, int width, int height);
 void	sdl_quit(t_env *e);
+
+/*
+**	sdl_change_sample.c
+*/
 void	change_scenewh(t_env *e, int width, int height);
 void	change_sample(t_env *e);
 

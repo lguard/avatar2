@@ -22,7 +22,7 @@ void	surface_cylindre(t_ray *srcray, void *quad, t_hit *hit)
 	abc.x = ray.dir.x * ray.dir.x + ray.dir.z * ray.dir.z;
 	abc.y = 2 * (ray.pos.x * ray.dir.x + ray.pos.z * ray.dir.z);
 	abc.z = ray.pos.x * ray.pos.x + ray.pos.z * ray.pos.z - hb->r * hb->r;
-	solve_quadraticv2(&t0, &t1, abc.x, abc.y, abc.z);
+	solve_quadratic(&t0, &t1, abc.x, abc.y, abc.z);
 	hit_switch(t0, t1, hb->id, hit, &ray);
 	return ;
 }

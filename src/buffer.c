@@ -11,33 +11,6 @@ void	buffer_init(t_buffer *buff)
 	buff->aa = 2;
 }
 
-void	buffer_reload(t_buffer *buff, size_t width, size_t height, int aa)
-{
-	if (width <= 0 || height <= 0)
-		return ;
-	if (buff->a)
-		buffer_free(buff);
-	buffer_create(buff, width, height, aa);
-}
-
-void	buffer_reload_ss(t_buffer *buff, int aa)
-{
-	free(buff->b[0]);
-	free(buff->b);
-	aa = buffer_check_aa(aa);
-	buff->b = buffer_new(buff->width * aa, buff->height * aa);
-	buff->aa = aa;
-}
-
-void	buffer_reload_us(t_buffer *buff, int pa)
-{
-	free(buff->c[0]);
-	free(buff->c);
-	pa = buffer_check_aa(pa);
-	buff->c = buffer_new(buff->width / pa, buff->height / pa);
-	buff->pa = pa;
-}
-
 void	buffer_free(t_buffer *buff)
 {
 	free(buff->a[0]);
@@ -75,70 +48,10 @@ void	buffer_create(t_buffer *buff, size_t width, size_t height, int aa)
 	buff->aa = aa;
 }
 
-void	buffer_ss(t_buffer *buff)
-{
-	size_t	x;
-	size_t	y;
-	FLOAT	ratio;
-
-	ratio = 1.f / (FLOAT)(buff->aa * buff->aa);
-	x = 0;
-	while (x < buff->width)
-	{
-		y = 0;
-		while (y < buff->height)
-		{
-			buffer_somme_color(buff, x, y, ratio);
-			++y;
-		}
-		++x;
-	}
-}
-
-void	buffer_us(t_buffer *buff)
-{
-	size_t	x;
-	size_t	y;
-
-	x = 0;
-	while (x < buff->width)
-	{
-		y = 0;
-		while (y < buff->height)
-		{
-			buff->a[x][y] = buff->c[x / 2][y / 2];
-			++y;
-		}
-		++x;
-	}
-}
-
-void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, FLOAT ratio)
-{
-	size_t	x;
-	size_t	y;
-
-	x = i * buff->aa;
-	color_init(&buff->a[i][j], 0, 0, 0);
-	while (x < (i * buff->aa + buff->aa))//todo a opti d'urgence
-	{
-		y = j * buff->aa;
-		while (y < (j * buff->aa + buff->aa))
-		{
-			buff->a[i][j].r += buff->b[x][y].r * ratio;
-			buff->a[i][j].g += buff->b[x][y].g * ratio;
-			buff->a[i][j].b += buff->b[x][y].b * ratio;
-			++y;
-		}
-		++x;
-	}
-	return ;
-}
-
 int		buffer_check_aa(int aa)
 {
 	if ((aa == 1) || (aa == 2) || (aa == 4)
-	|| (aa == 8) || (aa == 16) || (aa == 128))
+	|| (aa == 8) || (aa == 16) || (aa == 32))
 		return (aa);
 	return (1);
 }

@@ -26,7 +26,7 @@ void		surface_sphere(t_ray *srcray, void *quad, t_hit *hit)
 	ray.pos.z * ray.dir.z);
 	abc.z = ray.pos.x * ray.pos.x + ray.pos.y * ray.pos.y
 	+ ray.pos.z * ray.pos.z - hb->r * hb->r;
-	solve_quadraticv2(&t0, &t1, abc.x, abc.y, abc.z);
+	solve_quadratic(&t0, &t1, abc.x, abc.y, abc.z);
 	hit_switch(t0, t1, hb->id, hit, &ray);
 	return ;
 }

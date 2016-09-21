@@ -1,50 +1,6 @@
 #include "object.h"
-#include "stdio.h"
 
-void	hit_error(t_ray *ray, void *non, t_hit *hit)
-{
-	(void)ray;
-	(void)non;
-	(void)hit;
-	print("Error: can't select object function %s\n", __FILE__);
-}
-
-void	setobjfun(t_list *obj)
-{
-	while (obj)
-	{
-		if (((t_obj*)(obj->data))->type == SPHERE)
-		{
-			((t_obj*)(obj->data))->hit = &surface_sphere;
-			((t_obj*)(obj->data))->normal = &surface_sphere_normal;
-		}
-		else if (((t_obj*)(obj->data))->type == CONE)
-		{
-			((t_obj*)(obj->data))->hit = &surface_cone;
-			((t_obj*)(obj->data))->normal = &surface_cone_normal;
-		}
-		else if (((t_obj*)(obj->data))->type == CYLINDRE)
-		{
-			((t_obj*)(obj->data))->hit = &surface_cylindre;
-			((t_obj*)(obj->data))->normal = &surface_cylindre_normal;
-		}
-		else if (((t_obj*)(obj->data))->type == PLANE)
-		{
-			((t_obj*)(obj->data))->hit = &surface_plane;
-			((t_obj*)(obj->data))->normal = &surface_plane_normal;
-		}
-		else if (((t_obj*)(obj->data))->type == HYBERBOLE)
-		{
-			((t_obj*)(obj->data))->hit = &surface_hyperboloid;
-			((t_obj*)(obj->data))->normal = &surface_hyperboloid_normal;
-		}
-		else
-			((t_obj*)(obj->data))->hit = &hit_error;
-		obj = obj->next;
-	}
-}
-
-void	setobjfun2(t_obj *obj)
+void	setobjfun(t_obj *obj)
 {
 	if (obj->type == SPHERE)
 	{
@@ -84,7 +40,7 @@ void	addobject(t_list **objlist, void *object, uint16_t type)
 	new->type = type;
 	new->object = object;
 	new->id = get_id();
-	setobjfun2(new);
+	setobjfun(new);
 	h = (t_obj_header*)object;
 	h->id = new->id;
 	list_pushfront(objlist, (void*)new);

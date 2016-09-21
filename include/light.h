@@ -25,11 +25,17 @@ typedef struct	s_dotlight
 	t_color		color;
 }				t_dotlight;
 
+/*
+**	light.c
+*/
 void	init_dotlight(t_dotlight *light, t_vec3d pos, t_color color);
-void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_scene *sc);
 void	lambert(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray);
 void	phong(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray);
 void	addolight(t_list **lightlist, t_dotlight *object);
+/*
+**	light_handler.c
+*/
+void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_scene *sc);
 void	light_free(void *obj);
 int		remove_light(void *obj, void *id);
 t_dotlight	*getlight_by_id(int id, t_list *lightlst);

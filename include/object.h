@@ -40,11 +40,18 @@ typedef struct	s_obj
 	void		(*normal)(void *, t_hit *);
 }				t_obj;
 
-void		setobjfun(t_list *obj);
-void		hit_error(t_ray *ray, void *non, t_hit *hit);
-void		addobject(t_list **objlist, void *object, uint16_t type);
-void		delete_object(void *obj);
-t_obj		*getobject_by_id(int id, t_list *objlist);
-int			remove_obj(void *obj, void *id);
+/*
+**	object_error.c
+*/
+void	hit_error(t_ray *ray, void *non, t_hit *hit);
+
+/*
+**	object.c
+*/
+void	setobjfun(t_obj *obj);
+void	addobject(t_list **objlist, void *object, uint16_t type);
+void	delete_object(void *obj);
+t_obj	*getobject_by_id(int id, t_list *objlist);
+int		remove_obj(void *obj, void *id);
 
 #endif

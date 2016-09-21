@@ -12,7 +12,4 @@
 # include "object.h"
 # include "light.h"
 
-void		value_to_file(int fd, void *v, int16_t size, int16_t type);
-void		write_s(const char *pathname, t_scene *e);
-
 #endif /* SAVE_H */
