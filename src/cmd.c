@@ -6,10 +6,22 @@ void	change_reflect(t_scene *scene, char **cmd)
 
 	if (!cmd[1])
 		return ;
-	r = ft_ftoi(cmd[1]);
+	r = ft_atoi(cmd[1]);
 	if (r < 0 || r > 5)
 		return ;
 	scene->reflect = r+1;
+}
+
+void	change_ss(t_env *e, char **cmd)
+{
+	int		r;
+
+	if (!cmd[1])
+		return ;
+	r = ft_atoi(cmd[1]);
+	buffer_reload(&e->buff, e->scene.render_width,
+	e->scene.render_height, r);
+	change_scenewh(e, e->scene.render_width, e->scene.render_height);
 }
 
 void	exec_cmd(t_env *env, char **cmd)
@@ -31,8 +43,13 @@ void	exec_cmd(t_env *env, char **cmd)
 		delete_obj(env, cmd);
 	else if (!ft_strcmp(*cmd, "reflect"))
 		change_reflect(&env->scene, cmd);
-	else if (!ft_strcmp(*cmd, "pbar"))
+	else if (!ft_strcmp(*cmd, "ss"))
+		change_ss(env, cmd);
+	else if (!ft_strcmp(*cmd, "trace"))
+	{
+		env->toraytrace = 1;
 		env->scene.progressbar = 1;
+	}
 	else if (!ft_strcmp(*cmd, "quit"))
 		env->lol = 1;
 	while (cmd[i])

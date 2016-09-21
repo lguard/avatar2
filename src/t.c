@@ -111,7 +111,7 @@ void	process_hit(t_hit *hit, t_list *objlist)
 	vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);
 }
 
-void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora, int opti)
+void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *colora)
 {
 	t_color colorb;
 	t_list	*ptr;
@@ -119,68 +119,81 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *scene, t_color *colora,
 
 	color_init(colora, 0, 0, 0);
 	rc = 1.f;
-	int i = scene->reflect;
+	int i = sc->reflect;
 	while(i != 0)
 	{
 		color_init(&colorb, 0, 0, 0);
 		hit->dir = ray->dir;
 		hit->raypos = ray->pos;
-		ray_trace(ray, scene->obj, hit);
+		ray_trace(ray, sc->obj, hit);
 		if (!hit->didit)
 			return ;
-		process_hit(hit, scene->obj);
-		ptr = scene->light;
-		while (ptr) {
-			dotlight(&colorb, (t_dotlight*)ptr->data, hit, scene->obj, opti);
+		process_hit(hit, sc->obj);
+		ptr = sc->light;
+		while (ptr)
+		{
+			dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc->obj, sc->opti);
 			ptr = ptr->next;
 		}
 		color_scale(&colorb, (rc * (1- hit->mtl->reflect)));
 		color_add(colora, &colorb);
-		if (!(opti & REFLECTION))
+		if (!(sc->opti & REFLECTION))
 			return ;
 		rc *= hit->mtl->reflect;
 		ray->dir = vec_reflect(&ray->dir, &hit->normal);
 		ray->pos = hit->hitpoint;
-		hit->didit = 0;
-		hit->t = 2000000;
+		hit_clear(hit);
 		--i;
 	}
 }
 
-void	rt(t_scene *sc, t_color **a, int opti)
+void	pbar2(t_scene *sc)
 {
-	t_hit hit;
-	t_ray ray;
-	FLOAT xindent;
-	FLOAT yindent;
-	int x=0;
-	int y;
-
-	xyratio(&xindent, &yindent, &sc->cam, sc->width, sc->height);
-	while(x < sc->width)
-	{
-		y =0;
-		while(y < sc->height)
-		{
-			t_vec3d planepix = getplanepix(&sc->cam, x, y, xindent, yindent);
-			hit.t = 2000000;
-			hit.didit = 0;
-			vec_normalize(&planepix);
-			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
-			vec_init(&ray.pos, sc->cam.pos.x, sc->cam.pos.y, sc->cam.pos.z);
-			light_and_reflect(&ray, &hit, sc, &a[x][y], opti);
-			++y;
-		}
-		if (sc->progressbar)
-			print("\rprogress: %d       ", (int)(((FLOAT)(x * sc->height +
-			y) / (FLOAT)(sc->height * sc->width)) * 100.f));
-		++x;
-	}
 	if (sc->progressbar)
 	{
 		sc->progressbar = 0;
 		print("\n");
 	}
+}
+
+void	pbar(int x, int y, t_scene *sc)
+{
+	if (sc->progressbar)
+	{
+		print("\rprogress: %%%d       ",
+		(int)(((FLOAT)(x * sc->height +y) /
+		(FLOAT)(sc->height * sc->width)) * 100.f));
+	}
+}
+
+void	rt(t_scene *sc, t_color **a)
+{
+	t_vec3d	planepix;
+	t_hit	hit;
+	t_ray	ray;
+	FLOAT	xindent;
+	FLOAT	yindent;
+	int		x;
+	int		y;
+
+	x = 0;
+	xyratio(&xindent, &yindent, &sc->cam, sc->width, sc->height);
+	while(x < sc->width)
+	{
+		y = 0;
+		while(y < sc->height)
+		{
+			planepix = getplanepix(&sc->cam, x, y, xindent, yindent);
+			hit_clear(&hit);
+			vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
+			vec_init(&ray.pos, sc->cam.pos.x, sc->cam.pos.y, sc->cam.pos.z);
+			light_and_reflect(&ray, &hit, sc, &a[x][y]);
+			++y;
+		}
+		pbar(x, y, sc);
+		++x;
+	}
+	pbar2(sc);
 }
 
 void	single_rt(t_scene *scene, int x, int y)
@@ -199,21 +212,27 @@ void	single_rt(t_scene *scene, int x, int y)
 	vec_init(&ray.dir, planepix.x, planepix.y, planepix.z);
 	vec_init(&ray.pos, scene->cam.pos.x, scene->cam.pos.y, scene->cam.pos.z);
 
-	light_and_reflect(&ray, &hit, scene, &color, 1 | 64);
+	light_and_reflect(&ray, &hit, scene, &color);
 	print("\033[48;2;%d;%d;%dm", (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
 	print("x:%d, y:%d | r:%d g:%d b:%d\033[0m\n", x, y, (unsigned char)(color.r*255.0f), (unsigned char)(color.g*255.0f), (unsigned char)(color.b*255.0f));
 }
 
 void	render(t_env *e, t_scene *scene, t_color **a)
 {
-	int x = 0;
+	int x;
 	int y;
 	
-	while(x < scene->render_width) {
+	x = 0;
+	while(x < scene->render_width)
+	{
 		y = 0;
-		while(y < scene->render_height) {
-				sdl_putpxl(e, x, y, (unsigned char)( a[x][y].r*255.0f), (unsigned char)( a[x][y].g*255.0f), (unsigned char)( a[x][y].b*255.0f));
-				++y;
+		while(y < scene->render_height)
+		{
+			sdl_putpxl(e, x, y,
+			(unsigned char)(a[x][y].r*255.0f),
+			(unsigned char)(a[x][y].g*255.0f),
+			(unsigned char)(a[x][y].b*255.0f));
+			++y;
 		}
 		++x;
 	}
@@ -222,14 +241,6 @@ void	render(t_env *e, t_scene *scene, t_color **a)
 
 void	init_scene(t_scene *scene, int width, int height)
 {
-	/*t_dotlight	*light;*/
-	/*t_dotlight	*light2;*/
-	/*t_mtl		mtl;*/
-
-	/*light = (t_dotlight*)malloc(sizeof(t_dotlight));*/
-	/*light2 = (t_dotlight*)malloc(sizeof(t_dotlight));*/
-	/*scene->obj = NULL;*/
-	/*scene->light = NULL;*/
 	vec_init(&scene->cam.pos, 350.f, 10.f, -3000.f);
 	vec_init(&scene->cam.dirvec, 0.f, 0.f, 1.f);
 	vec_init(&scene->cam.upvec, 0.f, 1.f, 0.f);
@@ -244,43 +255,26 @@ void	init_scene(t_scene *scene, int width, int height)
 	scene->cam.distance = 1.f;
 	scene->cam.roty = 0;
 	scene->cam.rotx = 0;
-	/*init_dotlight(light, (t_vec3d){200.f, 50.f, -1000.f}, (t_color){1.0f, 1.0f, 1.f});*/
-	/*init_dotlight(light2, (t_vec3d){440.f, 200.f, -1000.f}, (t_color){0.1f, 0.1f, 0.1f});*/
-	/*mtl.color.r = 0.7f; mtl.color.g = 1.f; mtl.color.b = 0.2f;*/
-	/*mtl.specular.r = 0.1f; mtl.specular.g = 0.1f; mtl.specular.b = 0.1f; mtl.reflect = 0.3;*/
-	/*t_vec3d		pp = (t_vec3d){1000, -190, 500};*/
-	/*addobject(&scene->obj, surface_default_hyperboloid(&pp), HYBERBOLE);*/
-	/*pp = (t_vec3d){500, -190, 500};*/
-	/*addobject(&scene->obj, surface_default_sphere(&pp), SPHERE);*/
-	/*pp = (t_vec3d){200, -190, 500};*/
-	/*addobject(&scene->obj, surface_default_cone(&pp), CONE);*/
-	/*pp = (t_vec3d){2000, -190, 500};*/
-	/*addobject(&scene->obj, surface_default_cylindre(&pp), CYLINDRE);*/
-	/*pp = (t_vec3d){0, -700, 800};*/
-	/*addobject(&scene->obj, surface_default_plane(&pp), PLANE);*/
-	/*setobjfun(scene->obj);*/
-	/*addolight(&scene->light,light);*/
-	/*addolight(&scene->light,light2);*/
 }
 
-int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti)
+int mainrt(t_env *e, t_scene *scene, t_buffer *buff)
 {
-	if (opti & UNDERSAMPLE)
+	if (scene->opti & UNDERSAMPLE)
 	{
-		rt(scene, buff->c, opti);
+		rt(scene, buff->c);
 		buffer_us(buff);
 		render(e, scene, buff->a);
 	}
-	else if (buff->aa == 1) {
-		rt(scene, buff->b, opti);
+	else if (buff->aa == 1)
+	{
+		rt(scene, buff->b);
 		render(e, scene, buff->b);
 	}
-	else {
-		rt(scene, buff->b, opti);
+	else
+	{
+		rt(scene, buff->b);
 		buffer_ss(buff);
 		render(e, scene, buff->a);
 	}
-	/*list_delall(&scene.obj, delete_object);*/
-	/*list_delall(&scene.light, delete_light);*/
 	return 0;
 }

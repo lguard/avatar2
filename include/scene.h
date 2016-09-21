@@ -19,6 +19,7 @@ typedef struct	s_scene
 	t_cam	cam;
 	int		reflect;
 	int		progressbar;
+	int		opti;
 }				t_scene;
 
 #endif

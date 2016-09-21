@@ -101,9 +101,9 @@ int		sdl_key_up2(t_env *env)
 		env->opti ^= SPECULAR;
 	else if (env->event.key.keysym.sym == SDLK_3)
 		env->opti ^= REFLECTION;
-	else if (env->event.key.keysym.sym == SDLK_4)
-		env->opti ^= REFRACTION;
 	else if (env->event.key.keysym.sym == SDLK_5)
+		env->opti ^= REFRACTION;
+	else if (env->event.key.keysym.sym == SDLK_4)
 	{
 		env->opti ^= UNDERSAMPLE;
 		change_sample(env);

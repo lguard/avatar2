@@ -7,7 +7,7 @@
 #include "libft.h"
 
 
-int mainrt(t_env *e, t_scene *scene, t_buffer *buff, int opti);
+int mainrt(t_env *e, t_scene *scene, t_buffer *buff);
 void	init_scene(t_scene *scene, int width, int height);
 void	handle_move(t_cam *cam, int key, FLOAT frame);
 void	handle_rot(t_cam *cam, int key, FLOAT frame);
@@ -28,7 +28,6 @@ void	change_screen_check(t_env *e)
 
 int		sdl_main_loop(t_env *e)
 {
-	int		opti;
 	int		w;
 	int		h;
 
@@ -63,13 +62,13 @@ int		sdl_main_loop(t_env *e)
 		if (e->toraytrace)
 		{
 			e->toraytrace = 0;
-			opti = e->opti;
+			e->scene.opti = e->opti;
 			struct timeval time;
 			if(gettimeofday( &time, 0 ))
 				return -1;
 			long cur_time = 1000000 * time.tv_sec + time.tv_usec;
 			double sec1 = cur_time / 1000000.0;
-			mainrt(e, &e->scene, &e->buff, opti);
+			mainrt(e, &e->scene, &e->buff);
 			if(gettimeofday( &time, 0 ))
 				return -1;
 			cur_time = 1000000 * time.tv_sec + time.tv_usec;

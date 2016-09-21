@@ -72,6 +72,12 @@ void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray)
 	hit->raypos = ray->pos;
 }
 
+inline void	hit_clear(t_hit *hit)
+{
+	hit->didit = 0;
+	hit->t = 2000000;
+}
+
 uint16_t	get_id(void)
 {
 	static uint16_t i = 0;

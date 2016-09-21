@@ -30,5 +30,6 @@ void	ray_rotate(t_ray *ray, FLOAT rx, FLOAT ry, FLOAT rz);
 void	ray_scale(t_ray *ray, FLOAT tx, FLOAT ty, FLOAT tz);
 t_ray	ray_invertmat(t_ray *srcray, t_vec3d *matt, t_vec3d *matr, t_vec3d *mats);
 void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray);
+void	hit_clear(t_hit *hit);
 
 #endif /* RAY_H */
