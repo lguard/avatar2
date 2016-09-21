@@ -6,13 +6,33 @@ void		init_dotlight(t_dotlight *light, t_vec3d pos, t_color color)
 	light->color = color;
 }
 
-void		dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst, int opti)
+inline void		lambert(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
+{
+	FLOAT	lambert;
+
+	lambert = vec_dotproduct(&ray->dir, &hit->normal);
+	cl->r = MIN(1.0f, cl->r + lambert * light->color.r * hit->mtl->color.r);
+	cl->g = MIN(1.0f, cl->g + lambert * light->color.g * hit->mtl->color.g);
+	cl->b = MIN(1.0f, cl->b + lambert * light->color.b * hit->mtl->color.b);
+}
+
+inline void		phong(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
+{
+	t_vec3d	phongdir;
+	FLOAT	phongterm;
+
+	phongdir = vec_reflect(&ray->dir, &hit->normal);
+	phongterm = MAX(vec_dotproduct(&phongdir, &hit->dir), 0.0f);
+	phongterm = 1.f * powf(phongterm, 60.f);
+	cl->r = MIN(1.f, cl->r + phongterm * light->color.r * hit->mtl->specular.r);
+	cl->g = MIN(1.f, cl->g + phongterm * light->color.g * hit->mtl->specular.g);
+	cl->b = MIN(1.f, cl->b + phongterm * light->color.b * hit->mtl->specular.b);
+}
+
+void		dotlight(t_color *cl, t_dotlight *light, t_hit *hit, t_scene *sc)
 {
 	t_hit	hitshadow;
 	t_ray	ray;
-	t_vec3d	phongdir;
-	FLOAT	lambert;
-	FLOAT	phongterm;
 	t_vec3d	dist;
 
 	hitshadow.didit = 0;
@@ -24,26 +44,14 @@ void		dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst, in
 	if (hitshadow.t <= 0.f)
 		return ;
 	ray.dir = vec_scale(&dist, (1.0f / hitshadow.t));
-	if (opti & SHADOW)
-		ray_trace(&ray, objlst, &hitshadow);
+	if (sc->opti & SHADOW)
+		ray_trace(&ray, sc->obj, &hitshadow);
 	if (!hitshadow.didit)
 	{
-		if (opti & DIFFUSE)
-		{
-			lambert = vec_dotproduct(&ray.dir, &hit->normal);
-			color->r = MIN(1.0f, color->r + lambert * light->color.r * hit->mtl->color.r);
-			color->g = MIN(1.0f, color->g + lambert * light->color.g * hit->mtl->color.g);
-			color->b = MIN(1.0f, color->b + lambert * light->color.b * hit->mtl->color.b);
-		}
-		if (opti & SPECULAR)
-		{
-			phongdir = vec_reflect(&ray.dir, &hit->normal);
-			phongterm = MAX(vec_dotproduct(&phongdir, &hit->dir), 0.0f);
-			phongterm = 1.f * powf(phongterm, 60.f);
-			color->r = MIN(1.f, color->r + phongterm * light->color.r * hit->mtl->specular.r);
-			color->g = MIN(1.f, color->g + phongterm * light->color.g * hit->mtl->specular.g);
-			color->b = MIN(1.f, color->b + phongterm * light->color.b * hit->mtl->specular.b);
-		}
+		if (sc->opti & DIFFUSE)
+			lambert(cl, light, hit, &ray);
+		if (sc->opti & SPECULAR)
+			phong(cl, light, hit, &ray);
 	}
 }
 

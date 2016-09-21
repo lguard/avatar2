@@ -77,7 +77,7 @@ void		foreach_light(t_scene *sc, t_hit *hit, t_color *colora, FLOAT rc)
 	color_init(&colorb, 0, 0, 0);
 	while (ptr)
 	{
-		dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc->obj, sc->opti);
+		dotlight(&colorb, (t_dotlight*)ptr->data, hit, sc);
 		ptr = ptr->next;
 	}
 	color_scale(&colorb, (rc * (1 - hit->mtl->reflect)));

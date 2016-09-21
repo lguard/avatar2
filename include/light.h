@@ -6,6 +6,7 @@
 # include "vec.h"
 # include "ray.h"
 # include "raytrace.h"
+# include "scene.h"
 # include "mtl.h"
 # include "rt.h"
 
@@ -25,7 +26,7 @@ typedef struct	s_dotlight
 }				t_dotlight;
 
 void	init_dotlight(t_dotlight *light, t_vec3d pos, t_color color);
-void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_list *objlst, int opti);
+void	dotlight(t_color *color, t_dotlight *light, t_hit *hit, t_scene *sc);
 void	addolight(t_list **lightlist, t_dotlight *object);
 void	light_free(void *obj);
 int		remove_light(void *obj, void *id);
