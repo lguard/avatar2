@@ -86,7 +86,6 @@ void	rt(t_scene *sc, t_color **a)
 		pbar(x, y, sc);
 		++x;
 	}
-	pbar2(sc);
 }
 
 int mainrt(t_env *e, t_scene *scene, t_buffer *buff)

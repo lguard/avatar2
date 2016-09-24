@@ -46,6 +46,7 @@ void	load_from_file(t_env *e, char **cmd)
 	if (cmd[1])
 	{
 		read_scene(cmd[1], &e->scene);
+		new_file(e);
 		print("load : %s\n", cmd[1]);
 	}
 	e->toraytrace = 1;

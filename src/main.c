@@ -64,17 +64,22 @@ double	timer(int set)
 	return (0);
 }
 
+void	print_timer(t_scene *sc)
+{
+	if (sc->progressbar)
+	{
+		sc->progressbar = 0;
+		print("%f sec\n\x1b[32mavatar2->\x1b[0m", timer(0));
+	}
+}
+
 int		sdl_main_loop(t_env *e)
 {
-	int		w;
-	int		h;
-
-	SDL_GetWindowSize(e->sc, &w, &h);
-	buffer_reload(&e->buff, w, h, e->buff.aa);
-	change_scenewh(e, w, h);
+	new_file(e);
 	while (!e->lol)
 	{
 		pthread_mutex_lock(&e->mutex_lock);
+		SDL_RenderPresent(e->img);
 		if (sdl_bukake(e))
 		{
 			pthread_mutex_unlock(&e->mutex_lock);
@@ -86,9 +91,14 @@ int		sdl_main_loop(t_env *e)
 			e->scene.opti = e->opti;
 			timer(1);
 			mainrt(e, &e->scene, &e->buff);
-			print("%f\n", timer(0));
+			print_timer(&e->scene);
 		}
-		SDL_RenderPresent(e->img);
+		else
+		{
+			pthread_mutex_unlock(&e->mutex_lock);
+			usleep(1000);
+			continue ;
+		}
 		pthread_mutex_unlock(&e->mutex_lock);
 	}
 	return (0);

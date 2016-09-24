@@ -19,7 +19,6 @@ void		write_s(const char *pathname, t_scene *e)
 	ptr = e->light;
 	while (ptr)
 	{
-		vec_display(&((t_dotlight*)ptr->data)->pos);
 		value_to_file(fd, (void*)(ptr->data), sizeof(t_dotlight), 0);
 		ptr = ptr->next;
 	}

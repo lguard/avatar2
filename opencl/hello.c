@@ -50,7 +50,8 @@ int main()
 	context = clCreateContext(NULL, 1, &device_id, NULL, NULL, &ret);
 
 	/* Create Command Queue */
-	command_queue = clCreateCommandQueue(context, device_id, 0, &ret);
+	/*command_queue = clCreateCommandQueue(context, device_id, 0, &ret);*/
+	command_queue = clCreateCommandQueueWithProperties(context, device_id, 0, &ret);
 
 	/* Create Memory Buffer */
 	memobj = clCreateBuffer(context, CL_MEM_READ_WRITE,MEM_SIZE * sizeof(char), NULL, &ret);
@@ -70,6 +71,7 @@ int main()
 
 	/* Execute OpenCL Kernel */
 	ret = clEnqueueTask(command_queue, kernel, 0, NULL,NULL);
+	/*ret = clEnqueueNDRangeKernel(command_queue, kernel, 1, NULL,NULL);*/
 
 	/* Copy results from the memory buffer */
 	ret = clEnqueueReadBuffer(command_queue, memobj, CL_TRUE, 0,

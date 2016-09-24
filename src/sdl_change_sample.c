@@ -1,5 +1,15 @@
 #include "mysdl.h"
 
+void	new_file(t_env *e)
+{
+	int		w;
+	int		h;
+
+	SDL_GetWindowSize(e->sc, &w, &h);
+	buffer_reload(&e->buff, w, h, e->buff.aa);
+	change_scenewh(e, w, h);
+}
+
 void	change_sample(t_env *e)
 {
 	e->scene.width = e->scene.render_width * e->buff.aa;

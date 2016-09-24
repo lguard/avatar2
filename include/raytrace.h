@@ -17,7 +17,6 @@ void	light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *cla);
 void	rt(t_scene *sc, t_color **a);
 int		mainrt(t_env *e, t_scene *scene, t_buffer *buff);
 
-void	pbar2(t_scene *sc);
 void	pbar(int x, int y, t_scene *sc);
 
 void	render(t_env *e, t_scene *scene, t_color **a);

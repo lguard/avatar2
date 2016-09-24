@@ -50,6 +50,7 @@ void	sdl_quit(t_env *e);
 /*
 **	sdl_change_sample.c
 */
+void	new_file(t_env *e);
 void	change_scenewh(t_env *e, int width, int height);
 void	change_sample(t_env *e);
 
