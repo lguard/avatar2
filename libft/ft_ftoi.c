@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ftoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 18:17:50 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 18:18:04 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static float	ft_ftoi_ext(const char **str)
@@ -18,7 +30,7 @@ static float	ft_ftoi_ext(const char **str)
 	return (i);
 }
 
-void		ft_ftoi_ext2(const char *str, float *i)
+void			ft_ftoi_ext2(const char *str, float *i)
 {
 	float	j;
 	int		z;

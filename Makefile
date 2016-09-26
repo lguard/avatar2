@@ -4,7 +4,48 @@ RM = rm -f
 LIB =  -L libft/ -lft -L utilsc/ -lutilsc -lm -lpthread -D_REENTRANT -lreadline $(shell sdl2-config --libs)
 INCLUDE = -I utilsc/include -I include -I libft/includes $(shell sdl2-config --cflags)
 CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
-SRC = $(addprefix src/, $(shell ls src | grep .c -F))
+SRC =	src/buffer.c \
+		src/buffer_reload.c \
+		src/buffer_ss.c \
+		src/cam.c \
+		src/cam_motion.c \
+		src/cmd.c \
+		src/cmd_display.c \
+		src/cmd_load_obj.c \
+		src/cmd_load_scene.c \
+		src/cmd_mod_obj.c \
+		src/cmd_mod_value.c \
+		src/cmd_new_scene.c \
+		src/cmd_read_scene.c \
+		src/cmd_save_scene.c \
+		src/color.c \
+		src/light.c \
+		src/light_handler.c \
+		src/main.c \
+		src/object.c \
+		src/object_delet.c \
+		src/object_error.c \
+		src/quad.c \
+		src/ray.c \
+		src/ray_transform.c \
+		src/raytrace.c \
+		src/raytrace_progressbar.c \
+		src/raytrace_render.c \
+		src/scene.c \
+		src/sdl.c \
+		src/sdl_change_sample.c \
+		src/sdl_event.c \
+		src/sdl_render.c \
+		src/surface_cone.c \
+		src/surface_cylindre.c \
+		src/surface_hyperboloid.c \
+		src/surface_plane.c \
+		src/surface_sphere.c \
+		src/vec.c \
+		src/vec_mat.c \
+		src/vec_op.c \
+		src/vec_transform.c
+
 DEBUG =
 OPTI =# -O2
 

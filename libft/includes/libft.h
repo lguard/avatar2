@@ -29,9 +29,9 @@ typedef struct		s_read
 
 void				print(char *str, ...);
 float				ft_ftoi(const char *str);
-void				ft_putnbr_base_fd_uint(int fd, unsigned int nbr, unsigned int base);
-void				ft_putnbr_base_fd_int(int fd, int nbr, int base);
-void				ft_putnbr_fd_float(int fd, float nbr);
+void				ft_putnbr_base_uint(int f, unsigned int n, unsigned int b);
+void				ft_putnbr_base_int(int fd, int nbr, int base);
+void				ft_putnbr_float(int fd, float nbr);
 int					get_next_line(int const fd, char **line);
 int					ft_testnu(char *str);
 void				*ft_memset(void *b, int c, size_t len);

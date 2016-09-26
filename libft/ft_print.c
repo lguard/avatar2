@@ -1,11 +1,12 @@
-/* ************************************************************************** */ /*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puts.c                                             :+:      :+:    :+:   */
+/*   ft_print.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntibi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/08/29 16:44:53 by ntibi             #+#    #+#             */
-/*   Updated: 2016/08/30 17:55:49 by ntibi            ###   ########.fr       */
+/*   Created: 2016/09/26 18:19:37 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 18:21:25 by lguarda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +30,15 @@ static void		print_s(va_list *ap, char **str, int *fd)
 	if (**str == 'c')
 		ft_putchar_fd(va_arg(*ap, int), *fd);
 	else if (**str == 'b')
-		ft_putnbr_base_fd_uint(*fd, va_arg(*ap, unsigned int), 2);
+		ft_putnbr_base_uint(*fd, va_arg(*ap, unsigned int), 2);
 	else if (**str == 'x')
-		ft_putnbr_base_fd_uint(*fd, va_arg(*ap, unsigned int), 16);
+		ft_putnbr_base_uint(*fd, va_arg(*ap, unsigned int), 16);
 	else if (**str == 'u')
-		ft_putnbr_base_fd_uint(*fd, va_arg(*ap, unsigned int), 10);
+		ft_putnbr_base_uint(*fd, va_arg(*ap, unsigned int), 10);
 	else if (**str == 'd' || **str == 'i')
-		ft_putnbr_base_fd_uint(*fd, va_arg(*ap, unsigned int), 10);
+		ft_putnbr_base_uint(*fd, va_arg(*ap, unsigned int), 10);
 	else if (**str == 'f')
-		ft_putnbr_fd_float(*fd, va_arg(*ap, double));
+		ft_putnbr_float(*fd, va_arg(*ap, double));
 	else if (**str == '%')
 		write(*fd, "%", 1);
 	else if (**str == '2')
