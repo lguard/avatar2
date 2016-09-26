@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:35:46 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:23:17 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "light.h"
 
 void		init_dotlight(t_dotlight *light, t_vec3d pos, t_color color)
@@ -6,9 +18,9 @@ void		init_dotlight(t_dotlight *light, t_vec3d pos, t_color color)
 	light->color = color;
 }
 
-inline void		lambert(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
+inline void	lambert(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
 {
-	FLOAT	lambert;
+	t_flt	lambert;
 
 	lambert = vec_dotproduct(&ray->dir, &hit->normal);
 	cl->r = MIN(1.0f, cl->r + lambert * light->color.r * hit->mtl->color.r);
@@ -16,10 +28,10 @@ inline void		lambert(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
 	cl->b = MIN(1.0f, cl->b + lambert * light->color.b * hit->mtl->color.b);
 }
 
-inline void		phong(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
+inline void	phong(t_color *cl, t_dotlight *light, t_hit *hit, t_ray *ray)
 {
 	t_vec3d	phongdir;
-	FLOAT	phongterm;
+	t_flt	phongterm;
 
 	phongdir = vec_reflect(&ray->dir, &hit->normal);
 	phongterm = MAX(vec_dotproduct(&phongdir, &hit->dir), 0.0f);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   buffer.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:28:45 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:29:38 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "buffer.h"
 #include <stdio.h>
 
@@ -25,7 +37,8 @@ t_color	**buffer_new(size_t width, size_t height)
 {
 	t_color		*b;
 	t_color		**a;
-	size_t	i;
+	size_t		i;
+
 	i = 0;
 	b = (t_color*)malloc(sizeof(t_color) * width * height);
 	a = (t_color**)malloc(sizeof(t_color*) * width);

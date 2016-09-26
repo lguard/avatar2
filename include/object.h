@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   object.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:12:39 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:12:43 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef OBJECT_H
 # define OBJECT_H
 
@@ -43,15 +55,15 @@ typedef struct	s_obj
 /*
 **	object_error.c
 */
-void	hit_error(t_ray *ray, void *non, t_hit *hit);
+void			hit_error(t_ray *ray, void *non, t_hit *hit);
 
 /*
 **	object.c
 */
-void	setobjfun(t_obj *obj);
-void	addobject(t_list **objlist, void *object, uint16_t type);
-void	delete_object(void *obj);
-t_obj	*getobject_by_id(int id, t_list *objlist);
-int		remove_obj(void *obj, void *id);
+void			setobjfun(t_obj *obj);
+void			addobject(t_list **objlist, void *object, uint16_t type);
+void			delete_object(void *obj);
+t_obj			*getobject_by_id(int id, t_list *objlist);
+int				remove_obj(void *obj, void *id);
 
 #endif

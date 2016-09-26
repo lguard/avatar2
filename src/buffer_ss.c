@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   buffer_ss.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 16:01:34 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:01:35 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "buffer.h"
 
 void	buffer_ss(t_buffer *buff)
 {
 	size_t	x;
 	size_t	y;
-	FLOAT	ratio;
+	t_flt	ratio;
 
-	ratio = 1.f / (FLOAT)(buff->aa * buff->aa);
+	ratio = 1.f / (t_flt)(buff->aa * buff->aa);
 	x = 0;
 	while (x < buff->width)
 	{
@@ -38,7 +50,7 @@ void	buffer_us(t_buffer *buff)
 	}
 }
 
-void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, FLOAT ratio)
+void	buffer_somme_color(t_buffer *buff, size_t i, size_t j, t_flt ratio)
 {
 	size_t	x;
 	size_t	y;

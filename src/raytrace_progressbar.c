@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raytrace_progressbar.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:36:54 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:24:49 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raytrace.h"
 
 static char	*color_bar(int progress)
@@ -26,10 +38,8 @@ void		pbar(int x, int y, t_scene *sc)
 
 	if (sc->progressbar)
 	{
-		progress = (int)(((FLOAT)(x * sc->height +y) /
-		(FLOAT)(sc->height * sc->width)) * 100.f);
+		progress = (int)(((t_flt)(x * sc->height + y) /
+		(t_flt)(sc->height * sc->width)) * 100.f);
 		print("\rprogress: %s%d%%\x1b[0m  ", color_bar(progress), progress);
 	}
 }
-
-

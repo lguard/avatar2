@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   surface_cone.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:37:43 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:55:58 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "quad.h"
 
 /*
-[>visible<]
-[>a = 2 c= 2<]
-x^2*a+z^2*a - y^2* = 0
-
-(t^2)*((dx^2)*a+(dy^2)*b+(dz^2))+
-t*(2*dx*px*a+2*dy*py*b+dz*pz)+
-(px^2)*a+(py^2)*b+(pz^2)
+**[>visible<]
+**[>a = 2 c= 2<]
+**x^2*a+z^2*a - y^2* = 0
+**
+**(t^2)*((dx^2)*a+(dy^2)*b+(dz^2))+
+**t*(2*dx*px*a+2*dy*py*b+dz*pz)+
+**(px^2)*a+(py^2)*b+(pz^2)
 */
 
 void	surface_cone(t_ray *srcray, void *quad, t_hit *hit)
@@ -15,21 +27,20 @@ void	surface_cone(t_ray *srcray, void *quad, t_hit *hit)
 	t_quad		*hb;
 	t_ray		ray;
 	t_vec3d		abc;
-	FLOAT		t0;
-	FLOAT		t1;
+	t_flt		t[2];
 
-	t0 = 2000000;
-	t1 = 2000000;
+	t[0] = 2000000;
+	t[1] = 2000000;
 	hb = (t_quad*)quad;
 	ray = ray_invertmat(srcray, &hb->matt, &hb->matr, &hb->mats);
 	abc.x = ray.dir.x * ray.dir.x * hb->a + ray.dir.z * ray.dir.z * hb->c -
 			ray.dir.y * ray.dir.y;
-	abc.y = 2 * ray.pos.x * ray.dir.x * hb->a + 2 * ray.pos.z * ray.dir.z * hb->c -
-			2 * ray.pos.y * ray.dir.y;
+	abc.y = 2 * ray.pos.x * ray.dir.x * hb->a + 2 * ray.pos.z * ray.dir.z
+			* hb->c - 2 * ray.pos.y * ray.dir.y;
 	abc.z = ray.pos.x * ray.pos.x * hb->a + ray.pos.z * ray.pos.z * hb->c -
 			ray.pos.y * ray.pos.y;
-	solve_quadratic(&t0, &t1, abc.x, abc.y, abc.z);
-	hit_switch(t0, t1, hb->id, hit, &ray);
+	solve_quadratic(t, abc.x, abc.y, abc.z);
+	hit_switch(t, hb->id, hit, &ray);
 	return ;
 }
 

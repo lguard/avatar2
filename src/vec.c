@@ -1,46 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vec.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:38:09 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 17:08:02 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "vec.h"
 
-inline t_vec3d		vec_add(const t_vec3d *a, const t_vec3d *b)
-{
-	t_vec3d	c;
-
-	c.x = a->x + b->x;
-	c.y = a->y + b->y;
-	c.z = a->z + b->z;
-	return (c);
-}
-
-inline t_vec3d		vec_sub(const t_vec3d *a, const t_vec3d *b)
-{
-	t_vec3d	c;
-
-	c.x = a->x - b->x;
-	c.y = a->y - b->y;
-	c.z = a->z - b->z;
-	return (c);
-}
-
-inline t_vec3d		vec_mul(const t_vec3d *a, const t_vec3d *b)
-{
-	t_vec3d	c;
-
-	c.x = (a->y * b->z) - (a->z * b->y);
-	c.y = (a->z * b->x) - (a->x * b->z);
-	c.z = (a->x * b->y) - (a->y * b->x);
-	return (c);
-}
-
-inline t_vec3d		vec_scale(const t_vec3d *a, const FLOAT f)
-{
-	t_vec3d	c;
-
-	c.x = a->x * f;
-	c.y = a->y * f;
-	c.z = a->z * f;
-	return (c);
-}
-
-inline t_vec3d		vec_reflect(const t_vec3d *a, const t_vec3d *b)
+inline t_vec3d	vec_reflect(const t_vec3d *a, const t_vec3d *b)
 {
 	t_vec3d	c;
 
@@ -50,17 +22,12 @@ inline t_vec3d		vec_reflect(const t_vec3d *a, const t_vec3d *b)
 	return (c);
 }
 
-inline FLOAT		vec_getsquare_length(const t_vec3d *a)
+inline t_flt	vec_getsquare_length(const t_vec3d *a)
 {
 	return (a->x * a->x + a->y * a->y + a->z * a->z);
 }
 
-inline FLOAT		vec_dotproduct(const t_vec3d *a, const t_vec3d *b)
-{
-	return (a->x * b->x + a->y * b->y + a->z * b->z);
-}
-
-inline void		vec_init(t_vec3d *a, FLOAT x, FLOAT y, FLOAT z)
+inline void		vec_init(t_vec3d *a, t_flt x, t_flt y, t_flt z)
 {
 	a->x = x;
 	a->y = y;
@@ -68,15 +35,9 @@ inline void		vec_init(t_vec3d *a, FLOAT x, FLOAT y, FLOAT z)
 	return ;
 }
 
-void		vec_display(t_vec3d *a)
-{
-	print("\033[32mx%f | \033[31my%f | \033[33mz%f\033[0m\n",
-	a->x, a->y, a->z);
-}
-
 inline void		vec_normalize(t_vec3d *a)
 {
-	FLOAT	mag;
+	t_flt	mag;
 
 	mag = sqrtf(a->x * a->x + a->y * a->y + a->z * a->z);
 	if (mag == 0)
@@ -87,69 +48,8 @@ inline void		vec_normalize(t_vec3d *a)
 	return ;
 }
 
-/* Xrot mat
- * [  1   0    0  ]
- * [  0  cos  -sin]
- * [  0  sin  cos ]
-*/
-
-t_vec3d	vec_rotaion_x(t_vec3d *a, FLOAT angle)
+void			vec_display(t_vec3d *a)
 {
-	t_vec3d	b;
-
-	b.x = a->x;
-	b.y = cos(angle) * a->y - sin(angle) * a->z;
-	b.z = sin(angle) * a->y + cos(angle) * a->z;
-	return b;
-}
-
-/* Yrot mat
- * [ cos  0  sin ]
- * [  0   1   0  ]
- * [-sin  0  cos ]
-*/
-t_vec3d	vec_rotaion_y(t_vec3d *a, FLOAT angle)
-{
-	t_vec3d	b;
-
-	b.x = cos(angle) * a->x + sin(angle) * a->z;
-	b.y = a->y;
-	b.z = -(sin(angle) * a->x) + cos(angle) * a->z;
-	return b;
-}
-
-/* Zrot mat
- * [ cos  -sin 0  ]
- * [ sin  cos  0  ]
- * [  0   0    1  ]
-*/
-t_vec3d	vec_rotaion_z(t_vec3d *a, FLOAT angle)
-{
-	t_vec3d	b;
-
-	b.x = cos(angle) * a->x - sin(angle) * a->y;
-	b.y = sin(angle) * a->x + cos(angle) * a->y;
-	b.z = a->z;
-	return b;
-}
-
-void	vec_translate(t_vec3d *vec, FLOAT tx, FLOAT ty, FLOAT tz)
-{
-	vec->x += tx;
-	vec->y += ty;
-	vec->z += tz;
-}
-
-void	vec_rotate(t_vec3d *vec, FLOAT rx, FLOAT ry, FLOAT rz)
-{
-	*vec = vec_rotaion_x(vec, rx);
-	*vec = vec_rotaion_y(vec, ry);
-	*vec = vec_rotaion_z(vec, rz);
-}
-
-void	vec_matscale(t_vec3d *vec, FLOAT tx, FLOAT ty, FLOAT tz)
-{
-	vec->x *= tx;
-	vec->y *= ty;
-	vec->z *= tz;
+	print("\033[32mx%f | \033[31my%f | \033[33mz%f\033[0m\n",
+	a->x, a->y, a->z);
 }

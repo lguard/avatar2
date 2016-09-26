@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raytrace.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:36:50 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:59:03 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raytrace.h"
 
 void	process_hit(t_hit *hit, t_list *objlist)
 {
-	t_obj		*obj;
+	t_obj			*obj;
 	t_obj_header	*idobj;
-	
+
 	obj = getobject_by_id(hit->id, objlist);
 	idobj = (t_obj_header*)obj->object;
-
 	hit->mtl = &(idobj->mtl);
 	hit->hitpoint = vec_scale(&hit->dir, hit->t);
 	hit->hitpoint = vec_add(&hit->hitpoint, &hit->raypos);
@@ -17,7 +28,7 @@ void	process_hit(t_hit *hit, t_list *objlist)
 	vec_translate(&hit->hitpoint, idobj->matt.x, idobj->matt.y, idobj->matt.z);
 }
 
-void		foreach_light(t_scene *sc, t_hit *hit, t_color *cla, FLOAT rc)
+void	foreach_light(t_scene *sc, t_hit *hit, t_color *cla, t_flt rc)
 {
 	t_list	*ptr;
 	t_color clb;
@@ -33,15 +44,15 @@ void		foreach_light(t_scene *sc, t_hit *hit, t_color *cla, FLOAT rc)
 	color_add(cla, &clb);
 }
 
-void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *cla)
+void	light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *cla)
 {
 	int		i;
-	FLOAT	rc;
+	t_flt	rc;
 
 	i = sc->reflect;
 	rc = 1.f;
 	color_init(cla, 0, 0, 0);
-	while(i != 0)
+	while (i != 0)
 	{
 		hit->dir = ray->dir;
 		hit->raypos = ray->pos;
@@ -60,7 +71,6 @@ void		light_and_reflect(t_ray *ray, t_hit *hit, t_scene *sc, t_color *cla)
 	}
 }
 
-
 void	rt(t_scene *sc, t_color **a)
 {
 	t_vec3d	pps[2];
@@ -70,13 +80,13 @@ void	rt(t_scene *sc, t_color **a)
 	int		y;
 
 	x = 0;
-	xyratio(&pps[0].x, &pps[0].y, &sc->cam, sc->width, sc->height);
-	while(x < sc->width)
+	xyratio(&pps[0], &sc->cam, sc->width, sc->height);
+	while (x < sc->width)
 	{
 		y = 0;
-		while(y < sc->height)
+		while (y < sc->height)
 		{
-			pps[1] = getplanepix(&sc->cam, x, y, pps[0].x, pps[0].y);
+			pps[1] = getplanepix(&sc->cam, x, y, &pps[0]);
 			hit_clear(&hit);
 			vec_init(&ray.dir, pps[1].x, pps[1].y, pps[1].z);
 			vec_init(&ray.pos, sc->cam.pos.x, sc->cam.pos.y, sc->cam.pos.z);
@@ -88,8 +98,9 @@ void	rt(t_scene *sc, t_color **a)
 	}
 }
 
-int mainrt(t_env *e, t_scene *scene, t_buffer *buff)
+int		mainrt(t_env *e, t_scene *scene, t_buffer *buff)
 {
+	timer(1);
 	if (scene->opti & UNDERSAMPLE)
 	{
 		rt(scene, buff->c);
@@ -107,5 +118,6 @@ int mainrt(t_env *e, t_scene *scene, t_buffer *buff)
 		buffer_ss(buff);
 		render(e, scene, buff->a);
 	}
-	return 0;
+	print_timer(&e->scene);
+	return (0);
 }

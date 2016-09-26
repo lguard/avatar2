@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   surface_hyperboloid.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:37:50 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:06:10 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "quad.h"
 
 void	surface_hyperboloid(t_ray *srcray, void *quad, t_hit *hit)
@@ -5,18 +17,17 @@ void	surface_hyperboloid(t_ray *srcray, void *quad, t_hit *hit)
 	t_quad		*hb;
 	t_ray		ray;
 	t_vec3d		param;
-	FLOAT		t0;
-	FLOAT		t1;
+	t_flt		t[2];
 
-	t0 = 2000000;
-	t1 = 2000000;
+	t[0] = 2000000;
+	t[1] = 2000000;
 	hb = (t_quad*)quad;
 	vec_init(&param, hb->a, hb->b, hb->c);
 	ray = ray_invertmat(srcray, &hb->matt, &hb->matr, &hb->mats);
-	solve_quadratic(&t0, &t1, dot_produce_elips(ray.dir, ray.dir, param),
+	solve_quadratic(t, dot_produce_elips(ray.dir, ray.dir, param),
 	2 * dot_produce_elips(ray.dir, ray.pos, param),
 	dot_produce_elips(ray.pos, ray.pos, param) + hb->r);
-	hit_switch(t0, t1, hb->id, hit, &ray);
+	hit_switch(t, hb->id, hit, &ray);
 	return ;
 }
 

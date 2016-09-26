@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cam_motion.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:32:58 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:33:03 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cam.h"
 
-void	move_cam(t_cam *cam, t_vec3d *dir, FLOAT a)
+void	move_cam(t_cam *cam, t_vec3d *dir, t_flt a)
 {
 	cam->pos.x += dir->x * a;
 	cam->pos.y += dir->y * a;
 	cam->pos.z += dir->z * a;
 }
 
-void	handle_move(t_cam *cam, int key, FLOAT frame)
+void	handle_move(t_cam *cam, int key, t_flt frame)
 {
 	t_vec3d		dir;
 
@@ -29,6 +41,7 @@ void	handle_move(t_cam *cam, int key, FLOAT frame)
 **cam->upvec = vec_rotaion_z(&cam->upvec, za);
 **cam->rightvec = vec_rotaion_z(&cam->rightvec, za);
 */
+
 void	rot_cam(t_cam *cam)
 {
 	vec_init(&cam->dirvec, 0.f, 0.f, 1.f);
@@ -42,7 +55,7 @@ void	rot_cam(t_cam *cam)
 	cam->rightvec = vec_rotaion_y(&cam->rightvec, cam->roty);
 }
 
-void	handle_rot(t_cam *cam, int key, FLOAT frame)
+void	handle_rot(t_cam *cam, int key, t_flt frame)
 {
 	frame *= 0.4;
 	if (key & ROTPX)

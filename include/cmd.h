@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:01:23 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:21:31 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CMD_H
 # define CMD_H
 
@@ -56,7 +68,7 @@ void	delete_light(t_env *env, char **cmd);
 */
 void	mod_color(t_color *color, char **cmd);
 void	mod_vec3d(t_vec3d *matt, char **cmd);
-void	mod_float(FLOAT *f, char **cmd);
+void	mod_float(t_flt *f, char **cmd);
 
 /*
 **	cmd_mod_object.c
@@ -83,4 +95,4 @@ void	iforest(t_env *env, char **cmd);
 void	exec_cmd(t_env *env, char **cmd);
 void	*parse_cmd(void	*env);
 
-#endif /* CMD_H */
+#endif

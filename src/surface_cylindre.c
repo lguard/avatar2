@@ -1,29 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   surface_cylindre.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:37:46 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:56:48 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "quad.h"
 
-/*[>visible<]*/
-/*[>r = 10<]*/
-
-/*x^2+z^2 = r^2*/
-/*(px+dx*t)^2 + (pz+dz*t)^2 = r^2*/
-/*t^2*(dx^2+dz^2) + t*2*(px*dx+pz*dz)+ px^2+pz^2 -r^2= 0*/
+/*
+**	visible
+**	r = 10
+**	x^2+z^2 = r^2
+**	(px+dx*t)^2 + (pz+dz*t)^2 = r^2
+**	t^2*(dx^2+dz^2) + t*2*(px*dx+pz*dz)+ px^2+pz^2 -r^2= 0
+*/
 
 void	surface_cylindre(t_ray *srcray, void *quad, t_hit *hit)
 {
 	t_quad		*hb;
 	t_ray		ray;
 	t_vec3d		abc;
-	FLOAT		t0;
-	FLOAT		t1;
+	t_flt		t[2];
 
-	t0 = 2000000;
-	t1 = 2000000;
+	t[0] = 2000000;
+	t[1] = 2000000;
 	hb = (t_quad*)quad;
 	ray = ray_invertmat(srcray, &hb->matt, &hb->matr, &hb->mats);
 	abc.x = ray.dir.x * ray.dir.x + ray.dir.z * ray.dir.z;
 	abc.y = 2 * (ray.pos.x * ray.dir.x + ray.pos.z * ray.dir.z);
 	abc.z = ray.pos.x * ray.pos.x + ray.pos.z * ray.pos.z - hb->r * hb->r;
-	solve_quadratic(&t0, &t1, abc.x, abc.y, abc.z);
-	hit_switch(t0, t1, hb->id, hit, &ray);
+	solve_quadratic(t, abc.x, abc.y, abc.z);
+	hit_switch(t, hb->id, hit, &ray);
 	return ;
 }
 

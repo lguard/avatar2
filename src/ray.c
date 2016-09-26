@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:36:43 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:06:42 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raytrace.h"
 #include "ray.h"
 
-void	ray_trace(t_ray *ray, t_list *obj, t_hit *hit)
+void		ray_trace(t_ray *ray, t_list *obj, t_hit *hit)
 {
 	while (obj)
 	{
@@ -12,15 +24,15 @@ void	ray_trace(t_ray *ray, t_list *obj, t_hit *hit)
 	}
 }
 
-inline void	hit_switch(FLOAT t0, FLOAT t1, int id, t_hit *hit, t_ray *ray)
+inline void	hit_switch(t_flt *t, int id, t_hit *hit, t_ray *ray)
 {
-	if (t0 > 0.1f && t0 < t1 && t0 < hit->t)
+	if (t[0] > 0.1f && t[0] < t[1] && t[0] < hit->t)
 	{
-		hit->t = t0;
+		hit->t = t[0];
 	}
-	else if (t1 > 0.1f && t1 < hit->t)
+	else if (t[1] > 0.1f && t[1] < hit->t)
 	{
-		hit->t = t1;
+		hit->t = t[1];
 	}
 	else
 	{

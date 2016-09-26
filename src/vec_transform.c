@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_mod_value.c                                    :+:      :+:    :+:   */
+/*   vec_transform.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/26 15:39:14 by lguarda           #+#    #+#             */
-/*   Updated: 2016/09/26 15:39:15 by lguarda          ###   ########.fr       */
+/*   Created: 2016/09/26 17:05:38 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 17:06:11 by lguarda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "vec.h"
 
-void	mod_color(t_color *color, char **cmd)
+inline void	vec_translate(t_vec3d *vec, t_flt tx, t_flt ty, t_flt tz)
 {
-	if (!cmd[4] || !cmd[5] || !color)
-		return ;
-	color_init(color, ft_ftoi(cmd[3]), ft_ftoi(cmd[4]), ft_ftoi(cmd[5]));
+	vec->x += tx;
+	vec->y += ty;
+	vec->z += tz;
 }
 
-void	mod_vec3d(t_vec3d *matt, char **cmd)
+inline void	vec_rotate(t_vec3d *vec, t_flt rx, t_flt ry, t_flt rz)
 {
-	if (!cmd[4] || !cmd[5] || !matt)
-		return ;
-	vec_init(matt, ft_ftoi(cmd[3]), ft_ftoi(cmd[4]), ft_ftoi(cmd[5]));
+	*vec = vec_rotaion_x(vec, rx);
+	*vec = vec_rotaion_y(vec, ry);
+	*vec = vec_rotaion_z(vec, rz);
 }
 
-void	mod_float(t_flt *f, char **cmd)
+inline void	vec_matscale(t_vec3d *vec, t_flt tx, t_flt ty, t_flt tz)
 {
-	*f = ft_ftoi(cmd[3]);
+	vec->x *= tx;
+	vec->y *= ty;
+	vec->z *= tz;
 }

@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   surface_plane.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:37:53 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 17:00:03 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "plane.h"
 
 void		hit_plane(t_ray *ray, void *plane, t_hit *hit)
 {
 	t_plane	*p;
-	FLOAT	t;
-	FLOAT	j;
-	p = (t_plane*)plane;
+	t_flt	t;
+	t_flt	j;
 	t_vec3d	a;
 
+	p = (t_plane*)plane;
 	j = vec_dotproduct(&p->normal, &ray->dir);
 	if (j == 0.f)
 		return ;
@@ -30,21 +42,22 @@ void		hit_plane(t_ray *ray, void *plane, t_hit *hit)
 void		surface_plane(t_ray *srcray, void *plane, t_hit *hit)
 {
 	t_plane	*p;
-	FLOAT	t;
-	FLOAT	j;
+	t_flt	t[2];
+	t_flt	j;
 	t_ray	ray;
 
+	t[1] = 200000000;
 	p = (t_plane*)plane;
 	ray = ray_invertmat(srcray, &p->matt, &p->matr, &p->mats);
 	j = ray.dir.y;
 	if (j == 0.f)
 		return ;
-	t = 0 - ray.pos.y;
-	t /= j;
-	hit_switch(t, 200000000, p->id, hit, &ray);
+	t[0] = 0 - ray.pos.y;
+	t[0] /= j;
+	hit_switch(t, p->id, hit, &ray);
 }
 
-void	surface_plane_normal(void *plane, t_hit *hit)
+void		surface_plane_normal(void *plane, t_hit *hit)
 {
 	(void)plane;
 	vec_init(&hit->normal, 0, 1.f, 0);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:33:14 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:33:52 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
 void	change_reflect(t_scene *scene, char **cmd)
@@ -9,7 +21,7 @@ void	change_reflect(t_scene *scene, char **cmd)
 	r = ft_atoi(cmd[1]);
 	if (r < 0 || r > 5)
 		return ;
-	scene->reflect = r+1;
+	scene->reflect = r + 1;
 }
 
 void	change_ss(t_env *e, char **cmd)
@@ -56,7 +68,8 @@ void	exec_cmd(t_env *env, char **cmd)
 	int		i;
 
 	i = 0;
-	iforest(env, cmd);
+	if (*cmd)
+		iforest(env, cmd);
 	while (cmd[i])
 	{
 		free(cmd[i]);
@@ -75,9 +88,9 @@ void	*parse_cmd(void *env)
 	while (42)
 	{
 		inpt = readline("\x1b[32mavatar2->\x1b[0m");
-		add_history(inpt);
-		if (!*inpt)
+		if (!inpt)
 			continue ;
+		add_history(inpt);
 		pthread_mutex_lock(&e->mutex_lock);
 		cmd = ft_strsplit(inpt, ' ');
 		if (cmd)

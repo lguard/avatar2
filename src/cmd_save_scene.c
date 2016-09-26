@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_save_scene.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:35:41 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:44:04 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
-void		value_to_file(int fd, void *v, int16_t size, int16_t type)
+void	value_to_file(int fd, void *v, int16_t size, int16_t type)
 {
 	write(fd, &type, (sizeof(int16_t)));
 	write(fd, v, size);
 }
 
-
-
-void		write_s(const char *pathname, t_scene *e)
+void	write_s(const char *pathname, t_scene *e)
 {
 	int		fd;
 	t_list	*ptr;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:36:05 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 16:52:21 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
@@ -5,7 +17,6 @@
 #include "light.h"
 #include "cmd.h"
 #include "libft.h"
-#include "raytrace.h"
 
 void	change_screen_check(t_env *e)
 {
@@ -21,35 +32,13 @@ void	change_screen_check(t_env *e)
 	e->toraytrace = 1;
 }
 
-int		sdl_bukake(t_env *e)
-{
-	if (sdl_events(e))
-	{
-		e->lol = 1;
-		return (1) ;
-	}
-	if (e->opti & SCREENSIZE)
-	{
-		change_screen_check(e);
-		e->opti ^= SCREENSIZE;
-	}
-	if (e->key || e->rotkey)
-		e->toraytrace = 1;
-	if (e->key != 0)
-		handle_move(&e->scene.cam, e->key, 200);
-	if (e->rotkey != 0)
-		handle_rot(&e->scene.cam, e->rotkey, 0.2);
-	e->scene.cam.viewplane_upleft = getupleft(&e->scene.cam, e->scene.cam.wfov, e->scene.cam.hfov);
-	return (0);
-}
-
 double	timer(int set)
 {
 	struct timeval	time;
 	static double	sec1;
 	long			cur_time;
 
-	if(gettimeofday(&time, 0))
+	if (gettimeofday(&time, 0))
 		return (0);
 	if (set)
 	{
@@ -73,81 +62,19 @@ void	print_timer(t_scene *sc)
 	}
 }
 
-int		sdl_main_loop(t_env *e)
-{
-	new_file(e);
-	while (!e->lol)
-	{
-		pthread_mutex_lock(&e->mutex_lock);
-		SDL_RenderPresent(e->img);
-		if (sdl_bukake(e))
-		{
-			pthread_mutex_unlock(&e->mutex_lock);
-			break ;
-		}
-		if (e->toraytrace)
-		{
-			e->toraytrace = 0;
-			e->scene.opti = e->opti;
-			timer(1);
-			mainrt(e, &e->scene, &e->buff);
-			print_timer(&e->scene);
-		}
-		else
-		{
-			pthread_mutex_unlock(&e->mutex_lock);
-			usleep(1000);
-			continue ;
-		}
-		pthread_mutex_unlock(&e->mutex_lock);
-	}
-	return (0);
-}
-
-int		sdl_init(t_env *e, int width, int height)
-{
-	SDL_Init(SDL_INIT_VIDEO);
-	e->sc = SDL_CreateWindow("avatar2",
-	SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-	width, height, SDL_WINDOW_RESIZABLE);
-	e->img = SDL_CreateRenderer(e->sc, 1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawColor(e->img, 0, 0, 0, 255);
-	SDL_RenderClear(e->img);
-	e->key = 0;
-	e->rotkey = 0;
-	e->toraytrace = 1;
-	e->lol = 0;
-	e->scene.obj = NULL;
-	e->scene.light = NULL;
-	e->scene.reflect = 2;
-	e->scene.progressbar = 0;
-	e->opti = 0;
-	e->opti |= DIFFUSE;
-	e->opti |= UNDERSAMPLE;
-	e->opti |= SCREENSIZE;
-	pthread_mutex_init(&e->mutex_lock, NULL);
-	return (0);
-}
-
-void	init(t_env *e, t_scene *sc, t_buffer *buff, int width, int height)
+void	init(t_env *e, t_scene *sc, int width, int height)
 {
 	sdl_init(e, width, height);
 	init_scene(sc, width, height);
-	buffer_init(buff);
+	buffer_init(&e->buff);
 }
 
-void	sdl_quit(t_env *e)
-{
-	SDL_DestroyWindow(e->sc);
-	SDL_Quit();
-}
-
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	t_env		e;
 	pthread_t	p;
 
-	init(&e, &e.scene, &e.buff, 400, 500);
+	init(&e, &e.scene, 400, 500);
 	if (ac > 1)
 		load_from_file(&e, av);
 	pthread_create(&p, NULL, parse_cmd, &e);

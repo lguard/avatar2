@@ -1,4 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   object.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:36:32 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 17:10:11 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "object.h"
+
+void	setobjfun2(t_obj *obj)
+{
+	if (obj->type == PLANE)
+	{
+		obj->hit = &surface_plane;
+		obj->normal = &surface_plane_normal;
+	}
+	else if (obj->type == HYBERBOLE)
+	{
+		obj->hit = &surface_hyperboloid;
+		obj->normal = &surface_hyperboloid_normal;
+	}
+	else
+		obj->hit = &hit_error;
+}
 
 void	setobjfun(t_obj *obj)
 {
@@ -17,18 +45,8 @@ void	setobjfun(t_obj *obj)
 		obj->hit = &surface_cylindre;
 		obj->normal = &surface_cylindre_normal;
 	}
-	else if (obj->type == PLANE)
-	{
-		obj->hit = &surface_plane;
-		obj->normal = &surface_plane_normal;
-	}
-	else if (obj->type == HYBERBOLE)
-	{
-		obj->hit = &surface_hyperboloid;
-		obj->normal = &surface_hyperboloid_normal;
-	}
 	else
-		obj->hit = &hit_error;
+		setobjfun2(obj);
 }
 
 void	addobject(t_list **objlist, void *object, uint16_t type)
@@ -58,18 +76,4 @@ t_obj	*getobject_by_id(int id, t_list *objlist)
 		objlist = objlist->next;
 	}
 	return (NULL);
-}
-
-void	delete_object(void *obj)
-{
-	t_obj	*object;
-
-	object = (t_obj*)obj;
-	free(object->object);
-	free(obj);
-}
-
-int		remove_obj(void *obj, void *id)
-{
-	return (((t_id*)obj)->id - *(uint16_t*)id);
 }

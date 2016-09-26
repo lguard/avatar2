@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_read_scene.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/09/26 15:35:37 by lguarda           #+#    #+#             */
+/*   Updated: 2016/09/26 15:43:27 by lguarda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
 int		select_surface(int fd, t_scene *scene, uint16_t type)
@@ -21,7 +33,7 @@ int		select_surface(int fd, t_scene *scene, uint16_t type)
 	return (0);
 }
 
-void		read_scene(const char *pathname, t_scene *scene)
+void	read_scene(const char *pathname, t_scene *scene)
 {
 	int		fd;
 	int16_t	type;
