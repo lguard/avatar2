@@ -6,7 +6,7 @@
 /*   By: lguarda <lguarda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/10 09:15:12 by lguarda           #+#    #+#             */
-/*   Updated: 2015/02/13 23:30:48 by lguarda          ###   ########.fr       */
+/*   Updated: 2016/09/26 19:52:47 by lguarda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static size_t		ft_strlenc(const char *str, char c)
 
 char				**ft_strsplit(char const *s, char c)
 {
+	return(NULL);
 	char	**str;
 	char	**temp;
 	size_t	n;

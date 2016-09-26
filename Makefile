@@ -2,6 +2,8 @@ NAME = avatar2
 CC = gcc
 RM = rm -f
 LIB =  -L libft/ -lft -L utilsc/ -lutilsc -lm -lpthread -D_REENTRANT -lreadline $(shell sdl2-config --libs)
+LIBFTDIR = libft
+UTILSCDIR = utilsc
 INCLUDE = -I utilsc/include -I include -I libft/includes $(shell sdl2-config --cflags)
 CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
 SRC =	src/buffer.c \
@@ -61,13 +63,21 @@ debug: DEBUG += debug
 debug: CFLAGS += -g3
 debug: $(NAME)
 
-$(NAME): $(OBJ)
-	make -j -C utilsc $(DEBUG)
-	make -j -C libft $(DEBUG)
+$(NAME): $(OBJ) $(UTILSCDIR) $(LIBFTDIR) 
 	$(CC) $(OPTI) -o $(NAME) $(OBJ) $(CFLAGS) $(LIB)
 
 %.o: %.c
 	$(CC) $(OPTI) -o $@ -c $< $(CFLAGS)
+
+$(LIBFTDIR): ft
+
+ft:
+	make -j -C $(LIBFTDIR)/ $(DEBUG)
+
+$(UTILSCDIR): ut
+
+ut:
+	make -j -C $(UTILSCDIR)/ $(DEBUG)
 
 clean:
 	make -C utilsc clean
