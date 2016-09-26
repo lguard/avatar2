@@ -4,8 +4,8 @@ RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 OPTI = -O2
 OBJ = $(SRC:.c=.o)
-SRC = $(addprefix src/, $(shell ls src | grep .c -F))
-TEST = $(addprefix test/, $(shell ls test | grep .c -F))
+SRC =	src/list.c \
+		src/list_del.c
 
 all: $(NAME)
 
