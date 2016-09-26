@@ -3,10 +3,10 @@ CC = gcc
 RM = rm -f
 CFLAGS = -Wall -Werror -Wextra
 OPTI = -O2
-OBJ = $(SRC:.c=.o)
 SRC =	src/list.c \
 		src/list_del.c
 
+OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 debug: CFLAGS += -g3

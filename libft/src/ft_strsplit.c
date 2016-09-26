@@ -38,7 +38,6 @@ static size_t		ft_strlenc(const char *str, char c)
 
 char				**ft_strsplit(char const *s, char c)
 {
-	return(NULL);
 	char	**str;
 	char	**temp;
 	size_t	n;
