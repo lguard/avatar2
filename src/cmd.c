@@ -19,7 +19,7 @@ void	change_reflect(t_scene *scene, char **cmd)
 	if (!cmd[1])
 		return ;
 	r = ft_atoi(cmd[1]);
-	if (r < 0 || r > 5)
+	if (r < 0 || r > 10)
 		return ;
 	scene->reflect = r + 1;
 }
