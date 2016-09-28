@@ -38,11 +38,11 @@ void	change_ss(t_env *e, char **cmd)
 
 void	iforest(t_env *env, char **cmd)
 {
-	if (!ft_strcmp(*cmd, "new"))
+	if (!ft_strcmp(*cmd, "new") || !ft_strcmp(*cmd, "n"))
 		new_obj(env, cmd);
-	else if (!ft_strcmp(*cmd, "list"))
+	else if (!ft_strcmp(*cmd, "list") || !ft_strcmp(*cmd, "l"))
 		display_scene(env);
-	else if (!ft_strcmp(*cmd, "mod"))
+	else if (!ft_strcmp(*cmd, "mod") || !ft_strcmp(*cmd, "m"))
 		mod_objlight(env, cmd);
 	else if (!ft_strcmp(*cmd, "save"))
 		save_to_file(env, cmd);
@@ -50,13 +50,13 @@ void	iforest(t_env *env, char **cmd)
 		load_from_file(env, cmd);
 	else if (!ft_strcmp(*cmd, "delete") || !ft_strcmp(*cmd, "d"))
 		delete_obj(env, cmd);
-	else if (!ft_strcmp(*cmd, "reflect"))
+	else if (!ft_strcmp(*cmd, "reflect") || !ft_strcmp(*cmd, "r"))
 		change_reflect(&env->scene, cmd);
 	else if (!ft_strcmp(*cmd, "ss"))
 		change_ss(env, cmd);
-	else if (!ft_strcmp(*cmd, "quit"))
+	else if (!ft_strcmp(*cmd, "quit") || !ft_strcmp(*cmd, "q"))
 		env->lol = 1;
-	else if (!ft_strcmp(*cmd, "trace"))
+	else if (!ft_strcmp(*cmd, "rt"))
 	{
 		env->toraytrace = 1;
 		env->scene.progressbar = 1;

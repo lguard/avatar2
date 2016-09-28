@@ -58,7 +58,7 @@ void	print_timer(t_scene *sc)
 	if (sc->progressbar)
 	{
 		sc->progressbar = 0;
-		print("%f sec\n\x1b[32mavatar2->\x1b[0m", timer(0));
+		print("\ndone in %f sec\n\x1b[32mavatar2->\x1b[0m", timer(0));
 	}
 }
 
@@ -74,7 +74,7 @@ int		main(int ac, char **av)
 	t_env		e;
 	pthread_t	p;
 
-	init(&e, &e.scene, 400, 500);
+	init(&e, &e.scene, 500, 400);
 	if (ac > 1)
 		load_from_file(&e, av);
 	pthread_create(&p, NULL, parse_cmd, &e);
