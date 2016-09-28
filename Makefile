@@ -1,4 +1,4 @@
-NAME = avatar2
+NAME = rtv1
 CC = gcc
 RM = rm -f
 LIB =  -L libft/ -lft -L utilsc/ -lutilsc -lm -lpthread -D_REENTRANT -lreadline $(shell sdl2-config --libs)
