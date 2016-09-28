@@ -21,12 +21,12 @@ void	ray_translate(t_ray *ray, t_flt tx, t_flt ty, t_flt tz)
 
 void	ray_rotate(t_ray *ray, t_flt rx, t_flt ry, t_flt rz)
 {
-	ray->pos = vec_rotaion_x(&ray->pos, rx);
-	ray->pos = vec_rotaion_y(&ray->pos, ry);
 	ray->pos = vec_rotaion_z(&ray->pos, rz);
-	ray->dir = vec_rotaion_x(&ray->dir, rx);
-	ray->dir = vec_rotaion_y(&ray->dir, ry);
+	ray->pos = vec_rotaion_y(&ray->pos, ry);
+	ray->pos = vec_rotaion_x(&ray->pos, rx);
 	ray->dir = vec_rotaion_z(&ray->dir, rz);
+	ray->dir = vec_rotaion_y(&ray->dir, ry);
+	ray->dir = vec_rotaion_x(&ray->dir, rx);
 }
 
 void	ray_scale(t_ray *ray, t_flt tx, t_flt ty, t_flt tz)
