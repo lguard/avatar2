@@ -33,7 +33,7 @@ inline void	color_init(t_color *color, t_flt r, t_flt g, t_flt b)
 	color->b = b;
 }
 
-inline void		color_normalize(t_color *a)
+inline void	color_normalize(t_color *a)
 {
 	t_flt	mag;
 
