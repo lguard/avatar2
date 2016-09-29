@@ -62,4 +62,5 @@ void	load_from_file(t_env *e, char **cmd)
 		print("load : %s\n", cmd[1]);
 	}
 	e->toraytrace = 1;
+	e->scene.progressbar = 1;
 }
