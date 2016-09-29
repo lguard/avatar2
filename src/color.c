@@ -32,3 +32,16 @@ inline void	color_init(t_color *color, t_flt r, t_flt g, t_flt b)
 	color->g = g;
 	color->b = b;
 }
+
+inline void		color_normalize(t_color *a)
+{
+	t_flt	mag;
+
+	mag = sqrtf(a->r * a->r + a->g * a->g + a->b * a->b);
+	if (mag == 0)
+		return ;
+	a->r /= mag;
+	a->g /= mag;
+	a->b /= mag;
+	return ;
+}

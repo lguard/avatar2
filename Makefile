@@ -5,7 +5,13 @@ LIB =  -L libft/ -lft -L utilsc/ -lutilsc -lm -lpthread -D_REENTRANT -lreadline 
 LIBFTDIR = libft
 UTILSCDIR = utilsc
 INCLUDE = -I utilsc/include -I include -I libft/includes $(shell sdl2-config --cflags)
-CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CFLAGS = -pipe -Wall -Wextra $(INCLUDE)
+endif
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS = -pipe -Wall -Werror -Wextra $(INCLUDE)
+endif
 SRC =	src/buffer.c \
 		src/buffer_reload.c \
 		src/buffer_ss.c \

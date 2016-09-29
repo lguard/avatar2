@@ -13,6 +13,7 @@
 #ifndef COLOR_H
 # define COLOR_H
 
+# include <math.h>
 # include "rt.h"
 
 # ifndef MIN
@@ -29,5 +30,6 @@ typedef struct	s_color
 void			color_scale(t_color *color, t_flt x);
 void			color_add(t_color *colora, t_color *colorb);
 void			color_init(t_color *color, t_flt r, t_flt g, t_flt b);
+void			color_normalize(t_color *a);
 
 #endif

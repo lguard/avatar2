@@ -56,7 +56,7 @@ void	display_object(t_scene *sc)
 	{
 		obj = (t_obj*)ptr->data;
 		head = obj->object;
-		print("id:%u, type:\x1b[48;2;%d;%d;%d;m%s\x1b[0m, pos x:%f y:%f z:%f, ",
+		print("id:%u, type:\x1b[48;2;%d;%d;%dm%s\x1b[0m, pos x:%f y:%f z:%f, ",
 		obj->id, (int)(head->mtl.color.r * 255.f),
 		(int)(head->mtl.color.g * 255.f),
 		(int)(head->mtl.color.b * 255.f), type_to_char(obj->type),
